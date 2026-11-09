@@ -1,6 +1,6 @@
 @model TourismMvc.Models.ViewModels.AdminBookingIndexViewModel
 @{
-    ViewData["Title"] = "Quản lý booking";
+    ViewData["Title"] = L["Quản lý booking"];
     var currentUrl = Context.Request.Path + Context.Request.QueryString;
     string Link(int page) => "/admin/bookings" + Microsoft.AspNetCore.Http.QueryString.Create(new Dictionary<string, string?>
     {
@@ -10,34 +10,34 @@
     }.Where(x => !string.IsNullOrEmpty(x.Value)));
 }
 <link rel="stylesheet" href="~/css/admin-bookings.css" asp-append-version="true" />
-<header class="page-header"><div class="title-block"><div class="title-icon"><i data-lucide="tickets"></i></div><div><h1>Quản lý booking</h1><p>Theo dõi đơn đặt tour, hành khách và trạng thái thanh toán</p></div></div></header>
-<section class="stats-grid" aria-label="Thống kê booking">
-    <div class="stat-card"><div class="stat-icon stat-blue"><i data-lucide="tickets"></i></div><div><div class="stat-label">Tổng booking</div><div class="stat-value">@Model.StatTotal</div></div></div>
-    <div class="stat-card"><div class="stat-icon stat-amber"><i data-lucide="clock"></i></div><div><div class="stat-label">Đang chờ xử lý</div><div class="stat-value">@Model.StatPending</div></div></div>
-    <div class="stat-card"><div class="stat-icon booking-paid"><i data-lucide="circle-check"></i></div><div><div class="stat-label">Đã thanh toán</div><div class="stat-value">@Model.StatPaid</div></div></div>
-    <div class="stat-card"><div class="stat-icon booking-cancelled"><i data-lucide="circle-x"></i></div><div><div class="stat-label">Đã hủy / hết hạn</div><div class="stat-value">@Model.StatClosed</div></div></div>
+<header class="page-header"><div class="title-block"><div class="title-icon"><i data-lucide="tickets"></i></div><div><h1>@L["Quản lý booking"]</h1><p>@L["Theo dõi đơn đặt tour, hành khách và trạng thái thanh toán"]</p></div></div></header>
+<section class="stats-grid" aria-label="@L["Thống kê booking"]">
+    <div class="stat-card"><div class="stat-icon stat-blue"><i data-lucide="tickets"></i></div><div><div class="stat-label">@L["Tổng booking"]</div><div class="stat-value">@Model.StatTotal</div></div></div>
+    <div class="stat-card"><div class="stat-icon stat-amber"><i data-lucide="clock"></i></div><div><div class="stat-label">@L["Đang chờ xử lý"]</div><div class="stat-value">@Model.StatPending</div></div></div>
+    <div class="stat-card"><div class="stat-icon booking-paid"><i data-lucide="circle-check"></i></div><div><div class="stat-label">@L["Đã thanh toán"]</div><div class="stat-value">@Model.StatPaid</div></div></div>
+    <div class="stat-card"><div class="stat-icon booking-cancelled"><i data-lucide="circle-x"></i></div><div><div class="stat-label">@L["Đã hủy / hết hạn"]</div><div class="stat-value">@Model.StatClosed</div></div></div>
 </section>
 <form method="get" action="/admin/bookings" class="booking-filter">
     <div asp-validation-summary="All" class="booking-validation" role="alert"></div>
-    <div class="booking-filter-main"><div class="form-group"><label for="search">Tìm booking</label><input id="search" name="search" value="@Model.Filter.Search" maxlength="150" placeholder="Mã đơn, tour, tên khách, email hoặc SĐT…" /></div><div class="form-group"><label for="status">Trạng thái</label><select name="status" id="status" class="select"><option value="">Tất cả trạng thái</option>@foreach (var status in Enum.GetValues<BookingStatus>()) { <option value="@status" selected="@(Model.Filter.Status == status)">@status.Label()</option> }</select></div></div>
-    <div class="booking-filter-bottom"><div class="form-group"><label for="fromDate">Ngày đặt từ</label><input type="date" id="fromDate" name="fromDate" value="@Model.Filter.FromDate?.ToString("yyyy-MM-dd")" /></div><div class="form-group"><label for="toDate">Đến ngày</label><input type="date" id="toDate" name="toDate" value="@Model.Filter.ToDate?.ToString("yyyy-MM-dd")" /></div><div class="form-group"><label for="pageSize">Số đơn / trang</label><select class="select" id="pageSize" name="pageSize">@foreach (var size in new[] { 10, 20, 50 }) { <option value="@size" selected="@(Model.Filter.PageSize == size)">@size / trang</option> }</select></div><button type="submit" class="btn btn-primary"><i data-lucide="search"></i>Tìm kiếm</button><a href="/admin/bookings" class="btn btn-ghost"><i data-lucide="rotate-ccw"></i>Đặt lại</a></div>
+    <div class="booking-filter-main"><div class="form-group"><label for="search">@L["Tìm booking"]</label><input id="search" name="search" value="@Model.Filter.Search" maxlength="150" placeholder="@L["Mã đơn, tour, tên khách, email hoặc SĐT…"]" /></div><div class="form-group"><label for="status">@L["Trạng thái"]</label><select name="status" id="status" class="select"><option value="">@L["Tất cả trạng thái"]</option>@foreach (var status in Enum.GetValues<BookingStatus>()) { <option value="@status" selected="@(Model.Filter.Status == status)">@L[status.Label()]</option> }</select></div></div>
+    <div class="booking-filter-bottom"><div class="form-group"><label for="fromDate">@L["Ngày đặt từ"]</label><input type="date" id="fromDate" name="fromDate" value="@Model.Filter.FromDate?.ToString("yyyy-MM-dd")" /></div><div class="form-group"><label for="toDate">@L["Đến ngày"]</label><input type="date" id="toDate" name="toDate" value="@Model.Filter.ToDate?.ToString("yyyy-MM-dd")" /></div><div class="form-group"><label for="pageSize">@L["Số đơn / trang"]</label><select class="select" id="pageSize" name="pageSize">@foreach (var size in new[] { 10, 20, 50 }) { <option value="@size" selected="@(Model.Filter.PageSize == size)">@size @L["/ trang"]</option> }</select></div><button type="submit" class="btn btn-primary"><i data-lucide="search"></i>@L["Tìm kiếm"]</button><a href="/admin/bookings" class="btn btn-ghost"><i data-lucide="rotate-ccw"></i>@L["Đặt lại"]</a></div>
 </form>
-<p class="booking-result-count" role="status">Tìm thấy <strong>@Model.TotalItems</strong> booking</p>
+<p class="booking-result-count" role="status">@L["Tìm thấy"] <strong>@Model.TotalItems</strong> booking</p>
 @if (Model.Items.Count == 0)
 {
-    <div class="empty"><div class="empty-icon"><i data-lucide="tickets"></i></div><h3>Không tìm thấy booking phù hợp</h3><p>Thử thay đổi từ khóa, trạng thái hoặc khoảng ngày đặt.</p><a href="/admin/bookings" class="btn btn-ghost">Xóa bộ lọc</a></div>
+    <div class="empty"><div class="empty-icon"><i data-lucide="tickets"></i></div><h3>@L["Không tìm thấy booking phù hợp"]</h3><p>@L["Thử thay đổi từ khóa, trạng thái hoặc khoảng ngày đặt."]</p><a href="/admin/bookings" class="btn btn-ghost">@L["Xóa bộ lọc"]</a></div>
 }
 else
 {
-    <div class="table-card booking-table-card"><div class="table-wrap"><table class="table booking-table"><thead><tr><th>Mã đơn / Ngày đặt</th><th>Khách liên hệ</th><th>Tour / Khởi hành</th><th>Hành khách / Tổng tiền</th><th>Trạng thái</th><th></th></tr></thead><tbody>
+    <div class="table-card booking-table-card"><div class="table-wrap"><table class="table booking-table"><thead><tr><th>@L["Mã đơn / Ngày đặt"]</th><th>@L["Khách liên hệ"]</th><th>@L["Tour / Khởi hành"]</th><th>@L["Hành khách / Tổng tiền"]</th><th>@L["Trạng thái"]</th><th></th></tr></thead><tbody>
     @foreach (var item in Model.Items)
     {
-        <tr data-booking-id="@item.Id"><td><a class="booking-code" href="@Url.Action("Details", "Bookings", new { id = item.Id, returnUrl = currentUrl })">@item.Code</a><small class="booking-cell-note">@item.BookingDate.ToString("dd/MM/yyyy HH:mm")</small></td><td><strong>@item.ContactName</strong><small class="booking-cell-note">@item.ContactPhone</small><small class="booking-cell-note booking-email">@item.ContactEmail</small></td><td><strong class="booking-tour-name">@item.TourName</strong><small class="booking-cell-note">@item.TourCode</small><small class="booking-cell-note">@item.DepartureDate.ToString("dd/MM/yyyy HH:mm")</small></td><td>@item.TotalPassengers người<strong class="booking-cell-note booking-money">@item.TotalPrice.ToString("N0", System.Globalization.CultureInfo.GetCultureInfo("vi-VN")) ₫</strong></td><td><span class="booking-status @item.Status.CssClass()">@item.Status.Label()</span></td><td><a class="btn btn-ghost" href="@Url.Action("Details", "Bookings", new { id = item.Id, returnUrl = currentUrl })"><i data-lucide="eye"></i>Chi tiết</a></td></tr>
+        <tr data-booking-id="@item.Id"><td><a class="booking-code" href="@Url.Action("Details", "Bookings", new { id = item.Id, returnUrl = currentUrl })">@item.Code</a><small class="booking-cell-note">@item.BookingDate.ToString(L.DateTimeFormat, L.Culture)</small></td><td><strong>@item.ContactName</strong><small class="booking-cell-note">@item.ContactPhone</small><small class="booking-cell-note booking-email">@item.ContactEmail</small></td><td><strong class="booking-tour-name">@item.TourName</strong><small class="booking-cell-note">@item.TourCode</small><small class="booking-cell-note">@item.DepartureDate.ToString(L.DateTimeFormat, L.Culture)</small></td><td>@item.TotalPassengers @L["người"]<strong class="booking-cell-note booking-money">@item.TotalPrice.ToString("N0", L.Culture) ₫</strong></td><td><span class="booking-status @item.Status.CssClass()">@L[item.Status.Label()]</span></td><td><a class="btn btn-ghost" href="@Url.Action("Details", "Bookings", new { id = item.Id, returnUrl = currentUrl })"><i data-lucide="eye"></i>@L["Chi tiết"]</a></td></tr>
     }
-    </tbody></table></div><footer class="table-foot booking-pagination"><span class="muted">Hiển thị @((Model.Filter.Page - 1) * Model.Filter.PageSize + 1)–@Math.Min(Model.Filter.Page * Model.Filter.PageSize, Model.TotalItems) / @Model.TotalItems booking</span>
+    </tbody></table></div><footer class="table-foot booking-pagination"><span class="muted">@L["Hiển thị"] @((Model.Filter.Page - 1) * Model.Filter.PageSize + 1)–@Math.Min(Model.Filter.Page * Model.Filter.PageSize, Model.TotalItems) / @Model.TotalItems booking</span>
     @if (Model.TotalPages > 1)
     {
-        <nav class="pagination" aria-label="Phân trang booking">@if (Model.Filter.Page > 1) { <a class="page-btn" rel="prev" href="@Link(Model.Filter.Page - 1)">Trước</a> } @for (var p = Math.Max(1, Model.Filter.Page - 2); p <= Math.Min(Model.TotalPages, Model.Filter.Page + 2); p++) { <a class="page-num @(p == Model.Filter.Page ? "active" : "")" aria-current="@(p == Model.Filter.Page ? "page" : null)" href="@Link(p)">@p</a> } @if (Model.Filter.Page < Model.TotalPages) { <a class="page-btn" rel="next" href="@Link(Model.Filter.Page + 1)">Sau</a> }</nav>
+        <nav class="pagination" aria-label="@L["Phân trang booking"]">@if (Model.Filter.Page > 1) { <a class="page-btn" rel="prev" href="@Link(Model.Filter.Page - 1)">@L["Trước"]</a> } @for (var p = Math.Max(1, Model.Filter.Page - 2); p <= Math.Min(Model.TotalPages, Model.Filter.Page + 2); p++) { <a class="page-num @(p == Model.Filter.Page ? "active" : "")" aria-current="@(p == Model.Filter.Page ? "page" : null)" href="@Link(p)">@p</a> } @if (Model.Filter.Page < Model.TotalPages) { <a class="page-btn" rel="next" href="@Link(Model.Filter.Page + 1)">@L["Sau"]</a> }</nav>
     }
     </footer></div>
 }

@@ -16,6 +16,6 @@ public sealed class LanguageController : Controller
             HttpOnly = true, IsEssential = true, SameSite = SameSiteMode.Lax, Secure = Request.IsHttps,
             Path = "/", MaxAge = TimeSpan.FromDays(365)
         });
-        return LocalRedirect(!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl) && !returnUrl.StartsWith("/admin", StringComparison.OrdinalIgnoreCase) ? returnUrl : "/");
+        return LocalRedirect(!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl) ? returnUrl : "/");
     }
 }

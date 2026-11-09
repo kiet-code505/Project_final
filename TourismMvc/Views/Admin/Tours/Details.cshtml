@@ -1,36 +1,36 @@
 @model TourDetailViewModel
 @{
-    ViewData["Title"] = "Chi tiết tour";
-    ViewData["Description"] = $"Chi tiết tour {Model.TourCode} - {Model.TourName}";
+    ViewData["Title"] = L["Chi tiết tour"];
+    ViewData["Description"] = L["Chi tiết tour {0} - {1}", Model.TourCode, Model.TourName];
 
     var info = new (string Icon, string Label, string? Value)[]
     {
-        ("clock", "Thời lượng", Model.Duration),
-        ("plane", "Phương tiện", Model.Transportation),
-        ("plane-takeoff", "Điểm khởi hành", Model.StartLocationName),
-        ("map-pin", "Điểm đến", Model.EndLocationName),
-        ("hotel", "Khách sạn", Model.Hotel),
-        ("utensils", "Ẩm thực", Model.Meals),
-        ("sun", "Thời gian lý tưởng", Model.IdealTime),
-        ("bus", "Di chuyển trong tour", Model.TripTransportation),
-        ("users", "Đối tượng phù hợp", Model.SuitableCustomer),
-        ("calendar-days", "Lịch khởi hành", $"{Model.DepartureCount} lịch"),
-        ("calendar-plus", "Ngày tạo", Model.CreatedAt?.ToString("dd/MM/yyyy HH:mm")),
-        ("calendar-check", "Cập nhật", Model.UpdatedAt?.ToString("dd/MM/yyyy HH:mm")),
+        ("clock", L["Thời lượng"], Model.Duration),
+        ("plane", L["Phương tiện"], Model.Transportation),
+        ("plane-takeoff", L["Điểm khởi hành"], Model.StartLocationName),
+        ("map-pin", L["Điểm đến"], Model.EndLocationName),
+        ("hotel", L["Khách sạn"], Model.Hotel),
+        ("utensils", L["Ẩm thực"], Model.Meals),
+        ("sun", L["Thời gian lý tưởng"], Model.IdealTime),
+        ("bus", L["Di chuyển trong tour"], Model.TripTransportation),
+        ("users", L["Đối tượng phù hợp"], Model.SuitableCustomer),
+        ("calendar-days", L["Lịch khởi hành"], L["{0} lịch", Model.DepartureCount]),
+        ("calendar-plus", L["Ngày tạo"], Model.CreatedAt?.ToString(L.DateTimeFormat, L.Culture)),
+        ("calendar-check", L["Cập nhật"], Model.UpdatedAt?.ToString(L.DateTimeFormat, L.Culture)),
     };
 }
 
 <header class="page-header">
     <div class="title-block">
-        <a href="/admin/tours" class="back-btn" title="Quay lại danh sách" id="btnBack"><i data-lucide="arrow-left"></i></a>
+        <a href="/admin/tours" class="back-btn" title="@L["Quay lại danh sách"]" id="btnBack"><i data-lucide="arrow-left"></i></a>
         <div>
             <h1>@Model.TourName</h1>
             <p><span class="slug-chip"><i data-lucide="hash"></i>@Model.TourCode</span></p>
         </div>
     </div>
     <div class="header-actions">
-        <a href="/admin/departures?tourId=@Model.TourID" class="btn btn-ghost"><i data-lucide="calendar-days"></i> Lịch khởi hành</a>
-        <a href="/admin/tours/@Model.TourID/edit" class="btn btn-primary" id="btnEditTour"><i data-lucide="pencil"></i> Chỉnh sửa</a>
+        <a href="/admin/departures?tourId=@Model.TourID" class="btn btn-ghost"><i data-lucide="calendar-days"></i> @L["Lịch khởi hành"]</a>
+        <a href="/admin/tours/@Model.TourID/edit" class="btn btn-primary" id="btnEditTour"><i data-lucide="pencil"></i> @L["Chỉnh sửa"]</a>
     </div>
 </header>
 
@@ -50,7 +50,7 @@
         </div>
         <span class="status-pill @(Model.Status ? "status-on" : "status-off")">
             <i data-lucide="@(Model.Status ? "check-circle-2" : "power-off")"></i>
-            @(Model.Status ? "Đang hoạt động" : "Tạm dừng")
+            @(Model.Status ? L["Đang hoạt động"] : L["Tạm dừng"])
         </span>
         <div class="info-grid">
             @foreach (var (icon, label, value) in info)
@@ -65,15 +65,15 @@
 </section>
 
 <section class="card">
-    <h3 class="card-title"><i data-lucide="compass"></i> Điểm tham quan</h3>
+    <h3 class="card-title"><i data-lucide="compass"></i> @L["Điểm tham quan"]</h3>
     <div class="prose">@Model.Attractions</div>
 </section>
 
 <section class="card">
-    <h3 class="card-title"><i data-lucide="list-ordered"></i> Lịch trình (@Model.ItineraryDays.Count ngày)</h3>
+    <h3 class="card-title"><i data-lucide="list-ordered"></i> @L["Lịch trình ("]@Model.ItineraryDays.Count @L["ngày"])</h3>
     @if (Model.ItineraryDays.Count == 0)
     {
-        <p class="muted">Chưa có lịch trình.</p>
+        <p class="muted">@L["Chưa có lịch trình."]</p>
     }
     else
     {
@@ -82,7 +82,7 @@
             {
                 <details class="timeline-item" open="@(d.DayNumber == 1)">
                     <summary>
-                        <span class="day-badge">Ngày @d.DayNumber</span>
+                        <span class="day-badge">@L["Ngày"] @d.DayNumber</span>
                         <strong>@d.Title</strong>
                         <i data-lucide="chevron-down" class="accordion-arrow"></i>
                     </summary>
@@ -103,10 +103,10 @@
 </section>
 
 <section class="card">
-    <h3 class="card-title"><i data-lucide="images"></i> Thư viện ảnh (@Model.Images.Count)</h3>
+    <h3 class="card-title"><i data-lucide="images"></i> @L["Thư viện ảnh ("]@Model.Images.Count)</h3>
     @if (Model.Images.Count == 0)
     {
-        <p class="muted">Chưa có hình ảnh.</p>
+        <p class="muted">@L["Chưa có hình ảnh."]</p>
     }
     else
     {
@@ -114,8 +114,8 @@
             @foreach (var img in Model.Images)
             {
                 <a class="gallery-item" href="@img.ImageURL" target="_blank" rel="noopener">
-                    <img src="@img.ImageURL" alt="Ảnh tour" loading="lazy" />
-                    @if (img.IsMainImage) { <span class="main-chip"><i data-lucide="star"></i> Ảnh chính</span> }
+                    <img src="@img.ImageURL" alt="@L["Ảnh tour"]" loading="lazy" />
+                    @if (img.IsMainImage) { <span class="main-chip"><i data-lucide="star"></i> @L["Ảnh chính"]</span> }
                 </a>
             }
         </div>

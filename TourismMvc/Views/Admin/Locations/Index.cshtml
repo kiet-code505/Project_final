@@ -1,13 +1,13 @@
 @model LocationIndexViewModel
 @{
-    ViewData["Title"] = "Quản lý địa điểm";
-    ViewData["Description"] = "Quản lý tỉnh/thành phố, khu vực và thông tin sân bay cho các tour du lịch.";
+    ViewData["Title"] = L["Quản lý địa điểm"];
+    ViewData["Description"] = L["Quản lý tỉnh/thành phố, khu vực và thông tin sân bay cho các tour du lịch."];
 
     var regionInfo = new Dictionary<Region, (string Label, string Css)>
     {
-        [Region.NORTH] = ("Miền Bắc", "badge-north"),
-        [Region.CENTRAL] = ("Miền Trung", "badge-central"),
-        [Region.SOUTH] = ("Miền Nam", "badge-south"),
+        [Region.NORTH] = (L["Miền Bắc"], "badge-north"),
+        [Region.CENTRAL] = (L["Miền Trung"], "badge-central"),
+        [Region.SOUTH] = (L["Miền Nam"], "badge-south"),
     };
 
     // Tạo URL giữ nguyên các bộ lọc hiện tại, chỉ đổi vài tham số
@@ -40,13 +40,13 @@
     <div class="title-block">
         <div class="title-icon"><i data-lucide="globe-2"></i></div>
         <div>
-            <h1>Quản lý địa điểm</h1>
-            <p>Tỉnh / thành phố, khu vực và thông tin sân bay</p>
+            <h1>@L["Quản lý địa điểm"]</h1>
+            <p>@L["Tỉnh / thành phố, khu vực và thông tin sân bay"]</p>
         </div>
     </div>
     <div class="header-actions">
-        <button type="button" class="btn btn-ghost" id="exportCsv"><i data-lucide="download"></i> Xuất CSV</button>
-        <a href="/admin/locations/create" class="btn btn-primary" id="btnCreateLocation"><i data-lucide="plus"></i> Thêm địa điểm</a>
+        <button type="button" class="btn btn-ghost" id="exportCsv"><i data-lucide="download"></i> @L["Xuất CSV"]</button>
+        <a href="/admin/locations/create" class="btn btn-primary" id="btnCreateLocation"><i data-lucide="plus"></i> @L["Thêm địa điểm"]</a>
     </div>
 </header>
 
@@ -55,29 +55,29 @@
     <div class="stat-card">
         <div class="stat-icon stat-blue"><i data-lucide="map-pin"></i></div>
         <div>
-            <div class="stat-label">Tổng địa điểm</div>
+            <div class="stat-label">@L["Tổng địa điểm"]</div>
             <div class="stat-value" data-count="@Model.StatTotal">@Model.StatTotal</div>
         </div>
     </div>
     <div class="stat-card">
         <div class="stat-icon stat-rose"><i data-lucide="mountain-snow"></i></div>
         <div>
-            <div class="stat-label">Miền Bắc</div>
+            <div class="stat-label">@L["Miền Bắc"]</div>
             <div class="stat-value" data-count="@Model.StatNorth">@Model.StatNorth</div>
         </div>
     </div>
     <div class="stat-card">
         <div class="stat-icon stat-amber"><i data-lucide="sunrise"></i></div>
         <div>
-            <div class="stat-label">Miền Trung / Nam</div>
+            <div class="stat-label">@L["Miền Trung / Nam"]</div>
             <div class="stat-value" data-count="@(Model.StatCentral + Model.StatSouth)">@(Model.StatCentral + Model.StatSouth)</div>
-            <div class="stat-hint">@Model.StatCentral Trung · @Model.StatSouth Nam</div>
+            <div class="stat-hint">@Model.StatCentral @L["Miền Trung"] · @Model.StatSouth @L["Miền Nam"]</div>
         </div>
     </div>
     <div class="stat-card">
         <div class="stat-icon stat-green"><i data-lucide="plane"></i></div>
         <div>
-            <div class="stat-label">Có sân bay</div>
+            <div class="stat-label">@L["Có sân bay"]</div>
             <div class="stat-value" data-count="@Model.StatWithAirport">@Model.StatWithAirport</div>
         </div>
     </div>
@@ -92,17 +92,17 @@
     <label class="search-box">
         <i data-lucide="search"></i>
         <input type="search" name="search" id="searchInput" value="@Model.Search"
-               placeholder="Tìm theo tên, slug, mô tả…" autocomplete="off" />
+               placeholder="@L["Tìm theo tên, slug, mô tả…"]" autocomplete="off" />
         @if (!string.IsNullOrEmpty(Model.Search))
         {
-            <a class="clear-btn" href="@Link(page: 1, search: null)" title="Xoá tìm kiếm"><i data-lucide="x"></i></a>
+            <a class="clear-btn" href="@Link(page: 1, search: null)" title="@L["Xoá tìm kiếm"]"><i data-lucide="x"></i></a>
         }
     </label>
 
     <div class="filter-group">
         <i data-lucide="filter"></i>
         <div class="segmented" role="tablist">
-            <a class="@(Model.Region == null ? "seg-active" : "")" href="@Link(page: 1, region: null)">Tất cả</a>
+            <a class="@(Model.Region == null ? "seg-active" : "")" href="@Link(page: 1, region: null)">@L["Tất cả"]</a>
             @foreach (var (r, info) in regionInfo)
             {
                 <a class="@(Model.Region == r ? "seg-active" : "")" href="@Link(page: 1, region: r.ToString())">@info.Label</a>
@@ -111,7 +111,7 @@
         <select name="pageSize" class="select" id="pageSizeSelect">
             @foreach (var s in new[] { 10, 20, 50 })
             {
-                <option value="@s" selected="@(Model.PageSize == s)">@s / trang</option>
+                <option value="@s" selected="@(Model.PageSize == s)">@s @L["/ trang"]</option>
             }
         </select>
     </div>
@@ -119,10 +119,10 @@
 
 @* ── BULK BAR ── *@
 <section class="bulk-bar" id="bulkBar" hidden>
-    <span><strong id="bulkCount">0</strong> địa điểm đã chọn</span>
+    <span><strong id="bulkCount">0</strong> @L["địa điểm đã chọn"]</span>
     <div>
-        <button type="button" class="btn btn-ghost btn-sm" id="bulkClear"><i data-lucide="x"></i> Bỏ chọn</button>
-        <button type="button" class="btn btn-danger btn-sm" id="bulkDelete"><i data-lucide="trash-2"></i> Xoá đã chọn</button>
+        <button type="button" class="btn btn-ghost btn-sm" id="bulkClear"><i data-lucide="x"></i> @L["Bỏ chọn"]</button>
+        <button type="button" class="btn btn-danger btn-sm" id="bulkDelete"><i data-lucide="trash-2"></i> @L["Xoá đã chọn"]</button>
     </div>
 </section>
 
@@ -132,15 +132,15 @@
         <div class="empty-icon"><i data-lucide="map"></i></div>
         @if (!string.IsNullOrEmpty(Model.Search) || Model.Region != null)
         {
-            <h3>Không tìm thấy địa điểm phù hợp</h3>
-            <p>Thử đổi từ khoá hoặc bỏ bộ lọc khu vực</p>
-            <a href="/admin/locations" class="btn btn-ghost"><i data-lucide="rotate-ccw"></i> Xoá bộ lọc</a>
+            <h3>@L["Không tìm thấy địa điểm phù hợp"]</h3>
+            <p>@L["Thử đổi từ khoá hoặc bỏ bộ lọc khu vực"]</p>
+            <a href="/admin/locations" class="btn btn-ghost"><i data-lucide="rotate-ccw"></i> @L["Xoá bộ lọc"]</a>
         }
         else
         {
-            <h3>Chưa có địa điểm nào</h3>
-            <p>Thêm địa điểm đầu tiên để bắt đầu xây dựng catalog</p>
-            <a href="/admin/locations/create" class="btn btn-primary"><i data-lucide="plus"></i> Thêm địa điểm đầu tiên</a>
+            <h3>@L["Chưa có địa điểm nào"]</h3>
+            <p>@L["Thêm địa điểm đầu tiên để bắt đầu xây dựng catalog"]</p>
+            <a href="/admin/locations/create" class="btn btn-primary"><i data-lucide="plus"></i> @L["Thêm địa điểm đầu tiên"]</a>
         }
     </div>
 }
@@ -151,15 +151,15 @@ else
             <table class="table" id="locationsTable">
                 <thead>
                     <tr>
-                        <th class="cb-col"><input type="checkbox" id="checkAll" aria-label="Chọn tất cả" /></th>
-                        <th>Ảnh</th>
-                        <th><a class="sortable @(Model.SortBy == "name" ? "sorted" : "")" href="@SortLink("name")">Tên địa điểm <i data-lucide="@SortIcon("name")"></i></a></th>
-                        <th>Khu vực</th>
-                        <th>Sân bay</th>
-                        <th>Mô tả</th>
+                        <th class="cb-col"><input type="checkbox" id="checkAll" aria-label="@L["Chọn tất cả"]" /></th>
+                        <th>@L["Ảnh"]</th>
+                        <th><a class="sortable @(Model.SortBy == "name" ? "sorted" : "")" href="@SortLink("name")">@L["Tên địa điểm"] <i data-lucide="@SortIcon("name")"></i></a></th>
+                        <th>@L["Khu vực"]</th>
+                        <th>@L["Sân bay"]</th>
+                        <th>@L["Mô tả"]</th>
                         <th>Tours</th>
-                        <th><a class="sortable @(Model.SortBy == "updatedAt" ? "sorted" : "")" href="@SortLink("updatedAt")">Cập nhật <i data-lucide="@SortIcon("updatedAt")"></i></a></th>
-                        <th class="actions-col">Thao tác</th>
+                        <th><a class="sortable @(Model.SortBy == "updatedAt" ? "sorted" : "")" href="@SortLink("updatedAt")">@L["Cập nhật"] <i data-lucide="@SortIcon("updatedAt")"></i></a></th>
+                        <th class="actions-col">@L["Thao tác"]</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -173,7 +173,7 @@ else
                             data-id="@l.LocationID" data-name="@l.LocationName" data-slug="@l.Slug"
                             data-region="@region.Item1" data-airport-code="@l.AirportCode" data-airport-name="@l.AirportName"
                             data-start="@item.ToursAsStartPoint" data-end="@item.ToursAsEndPoint" data-desc="@desc">
-                            <td class="cb-col"><input type="checkbox" class="row-check" value="@l.LocationID" aria-label="Chọn @l.LocationName" /></td>
+                            <td class="cb-col"><input type="checkbox" class="row-check" value="@l.LocationID" aria-label="@L["Chọn {0}", l.LocationName]" /></td>
                             <td>
                                 <div class="thumb">
                                     @if (!string.IsNullOrEmpty(l.ImageURL))
@@ -207,7 +207,7 @@ else
                                 <div class="desc-cell" title="@desc">
                                     @if (desc.Length == 0)
                                     {
-                                        <span class="muted">Chưa có mô tả</span>
+                                        <span class="muted">@L["Chưa có mô tả"]</span>
                                     }
                                     else
                                     {
@@ -217,17 +217,17 @@ else
                             </td>
                             <td>
                                 <div class="tour-stats">
-                                    <span class="tour-stat" title="Tour khởi hành từ đây"><i data-lucide="plane-takeoff"></i>@item.ToursAsStartPoint</span>
-                                    <span class="tour-stat" title="Tour có điểm đến ở đây"><i data-lucide="map-pin"></i>@item.ToursAsEndPoint</span>
+                                    <span class="tour-stat" title="@L["Tour khởi hành từ đây"]"><i data-lucide="plane-takeoff"></i>@item.ToursAsStartPoint</span>
+                                    <span class="tour-stat" title="@L["Tour có điểm đến ở đây"]"><i data-lucide="map-pin"></i>@item.ToursAsEndPoint</span>
                                 </div>
                             </td>
-                            <td class="meta-cell">@(l.UpdatedAt?.ToString("dd/MM/yyyy") ?? "—")</td>
+                            <td class="meta-cell">@(l.UpdatedAt?.ToString(L.DateFormat, L.Culture) ?? "—")</td>
                             <td class="actions-col">
                                 <div class="row-actions">
-                                    <a class="icon-btn icon-edit" href="/admin/locations/@l.LocationID/edit" title="Chỉnh sửa" id="edit-@l.LocationID"><i data-lucide="pencil"></i></a>
+                                    <a class="icon-btn icon-edit" href="/admin/locations/@l.LocationID/edit" title="@L["Chỉnh sửa"]" id="edit-@l.LocationID"><i data-lucide="pencil"></i></a>
                                     <button type="button" class="icon-btn icon-delete js-delete-one" data-id="@l.LocationID"
                                             data-name="@l.LocationName" data-inuse="@(item.ToursAsStartPoint + item.ToursAsEndPoint)"
-                                            title="Xoá" id="delete-@l.LocationID"><i data-lucide="trash-2"></i></button>
+                                            title="@L["Xoá"]" id="delete-@l.LocationID"><i data-lucide="trash-2"></i></button>
                                 </div>
                             </td>
                         </tr>
@@ -237,13 +237,13 @@ else
         </div>
 
         <footer class="table-foot">
-            <span class="muted">Hiển thị <strong>@fromItem–@toItem</strong> trên <strong>@Model.TotalItems</strong> địa điểm</span>
+            <span class="muted">@L["Hiển thị"] <strong>@fromItem–@toItem</strong> @L["trên"] <strong>@Model.TotalItems</strong> @L["địa điểm"]</span>
             @if (Model.TotalPages > 1)
             {
                 var start = Math.Max(1, Math.Min(Model.Page - 3, Model.TotalPages - 6));
                 var end = Math.Min(Model.TotalPages, start + 6);
-                <nav class="pagination" aria-label="Phân trang">
-                    <a class="page-btn @(Model.Page <= 1 ? "disabled" : "")" href="@Link(page: Model.Page - 1)"><i data-lucide="chevron-left"></i> Trước</a>
+                <nav class="pagination" aria-label="@L["Phân trang"]">
+                    <a class="page-btn @(Model.Page <= 1 ? "disabled" : "")" href="@Link(page: Model.Page - 1)"><i data-lucide="chevron-left"></i> @L["Trước"]</a>
                     @for (var p = start; p <= end; p++)
                     {
                         <a class="page-num @(p == Model.Page ? "active" : "")" href="@Link(page: p)">@p</a>
@@ -262,11 +262,11 @@ else
         <input type="hidden" name="returnUrl" value="@currentUrl" />
         <div id="deleteIds"></div>
         <div class="confirm-icon"><i data-lucide="alert-triangle"></i></div>
-        <h3 id="confirmTitle">Xoá địa điểm này?</h3>
-        <p id="confirmMessage">Hành động này không thể hoàn tác.</p>
+        <h3 id="confirmTitle">@L["Xoá địa điểm này?"]</h3>
+        <p id="confirmMessage">@L["Hành động này không thể hoàn tác."]</p>
         <div class="confirm-actions">
-            <button type="button" class="btn btn-ghost" data-close>Huỷ</button>
-            <button type="submit" class="btn btn-danger" id="confirmDeleteBtn"><i data-lucide="trash-2"></i> Xác nhận xoá</button>
+            <button type="button" class="btn btn-ghost" data-close>@L["Huỷ"]</button>
+            <button type="submit" class="btn btn-danger" id="confirmDeleteBtn"><i data-lucide="trash-2"></i> @L["Xác nhận xoá"]</button>
         </div>
     </form>
 </div>

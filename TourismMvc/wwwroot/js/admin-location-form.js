@@ -42,8 +42,8 @@
     input.addEventListener('change', () => {
         const f = input.files[0];
         if (!f) return;
-        if (!f.type.startsWith('image/')) { adminToast('Vui lòng chọn file ảnh', 'error'); input.value = ''; return; }
-        if (f.size > 5 * 1024 * 1024) { adminToast('Kích thước ảnh tối đa 5MB', 'error'); input.value = ''; return; }
+        if (!f.type.startsWith('image/')) { adminToast(UserI18n.t("Vui lòng chọn file ảnh"), 'error'); input.value = ''; return; }
+        if (f.size > 5 * 1024 * 1024) { adminToast(UserI18n.t("Kích thước ảnh tối đa 5MB"), 'error'); input.value = ''; return; }
         const r = new FileReader();
         r.onload = () => { preview.src = r.result; preview.hidden = false; area.classList.add('has-image'); };
         r.readAsDataURL(f);
@@ -53,6 +53,6 @@
 
     // Chống bấm submit 2 lần
     $('locationForm').addEventListener('submit', () => {
-        const b = $('btnSubmit'); b.disabled = true; b.innerHTML = 'Đang lưu…';
+        const b = $('btnSubmit'); b.disabled = true; b.innerHTML = UserI18n.t("Đang lưu…");
     });
 })();

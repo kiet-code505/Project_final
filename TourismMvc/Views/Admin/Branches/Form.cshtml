@@ -1,15 +1,15 @@
 @model BranchFormViewModel
 @{
-    ViewData["Title"] = Model.IsEdit ? "Chỉnh sửa Chi nhánh" : "Thêm Chi nhánh mới";
-    ViewData["Description"] = "Quản lý thông tin liên hệ và địa chỉ của văn phòng chi nhánh.";
+    ViewData["Title"] = Model.IsEdit ? L["Chỉnh sửa Chi nhánh"] : L["Thêm Chi nhánh mới"];
+    ViewData["Description"] = L["Quản lý thông tin liên hệ và địa chỉ của văn phòng chi nhánh."];
 }
 
 <header class="page-header">
     <div class="title-block">
-        <a href="/admin/branches" class="back-btn" title="Quay lại danh sách" id="btnBack"><i data-lucide="arrow-left"></i></a>
+        <a href="/admin/branches" class="back-btn" title="@L["Quay lại danh sách"]" id="btnBack"><i data-lucide="arrow-left"></i></a>
         <div>
             <h1>@ViewData["Title"]</h1>
-            <p>@(Model.IsEdit ? $"ID: {Model.ContactID} · {Model.BranchName}" : "Điền thông tin văn phòng / chi nhánh")</p>
+            <p>@(Model.IsEdit ? $"ID: {Model.ContactID} · {Model.BranchName}" : L["Điền thông tin văn phòng / chi nhánh"])</p>
         </div>
     </div>
 </header>
@@ -20,37 +20,37 @@
 
     <div asp-validation-summary="ModelOnly" class="alert alert-error"></div>
 
-    <h3 class="card-title"><i data-lucide="building-2"></i> Thông tin chi nhánh</h3>
+    <h3 class="card-title"><i data-lucide="building-2"></i> @L["Thông tin chi nhánh"]</h3>
 
     <div class="form-group">
-        <label asp-for="BranchName">Tên chi nhánh <span class="req">*</span></label>
-        <input asp-for="BranchName" placeholder="VD: Chi nhánh TP. Hồ Chí Minh, Chi nhánh Hà Nội…" autocomplete="off" autofocus />
+        <label asp-for="BranchName">@L["Tên chi nhánh"] <span class="req">*</span></label>
+        <input asp-for="BranchName" placeholder="@L["VD: Chi nhánh TP. Hồ Chí Minh, Chi nhánh Hà Nội…"]" autocomplete="off" autofocus />
         <span asp-validation-for="BranchName" class="field-error"></span>
     </div>
 
     <div class="form-row">
         <div class="form-group">
-            <label asp-for="Phone">Số điện thoại <span class="req">*</span></label>
-            <input asp-for="Phone" type="tel" placeholder="VD: 02839123456 hoặc 0908123456" />
+            <label asp-for="Phone">@L["Số điện thoại"] <span class="req">*</span></label>
+            <input asp-for="Phone" type="tel" placeholder="@L["VD: 02839123456 hoặc 0908123456"]" />
             <span asp-validation-for="Phone" class="field-error"></span>
         </div>
         <div class="form-group">
-            <label asp-for="Email">Email liên hệ <span class="req">*</span></label>
+            <label asp-for="Email">@L["Email liên hệ"] <span class="req">*</span></label>
             <input asp-for="Email" type="email" placeholder="VD: contact@tourism-hcm.com" />
             <span asp-validation-for="Email" class="field-error"></span>
         </div>
     </div>
 
     <div class="form-group">
-        <label asp-for="Address">Địa chỉ văn phòng <span class="req">*</span></label>
-        <textarea asp-for="Address" rows="3" placeholder="Nhập địa chỉ đầy đủ (số nhà, tên đường, phường/xã, quận/huyện, tỉnh/thành)..."></textarea>
+        <label asp-for="Address">@L["Địa chỉ văn phòng"] <span class="req">*</span></label>
+        <textarea asp-for="Address" rows="3" placeholder="@L["Nhập địa chỉ đầy đủ (số nhà, tên đường, phường/xã, quận/huyện, tỉnh/thành)..."]"></textarea>
         <span asp-validation-for="Address" class="field-error"></span>
     </div>
 
     <div class="form-actions" style="margin-top: 24px; border-top: 1px solid var(--border); padding-top: 16px;">
-        <a href="/admin/branches" class="btn btn-ghost">Huỷ</a>
+        <a href="/admin/branches" class="btn btn-ghost">@L["Huỷ"]</a>
         <button type="submit" class="btn btn-primary">
-            <i data-lucide="check-circle-2"></i> @(Model.IsEdit ? "Cập nhật chi nhánh" : "Tạo chi nhánh")
+            <i data-lucide="check-circle-2"></i> @(Model.IsEdit ? L["Cập nhật chi nhánh"] : L["Tạo chi nhánh"])
         </button>
     </div>
 </form>

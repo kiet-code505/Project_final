@@ -18,6 +18,7 @@
             <div class="brandFooter"><i data-lucide="shield-check"></i><span>@(Model.IsAdminLogin ? L["Khu vực dành cho quản trị viên"] : L["Đồng hành cùng bạn trên mọi chuyến đi"])</span></div>
         </div></section>
         <section class="formSide"><div class="formCard">
+            @if (Model.IsAdminLogin) { <div style="display:flex;justify-content:flex-end;margin-bottom:16px">@await Html.PartialAsync("_UserLanguageSelector")</div> }
             <div class="formHeader"><h2 class="formTitle">@ViewData["Title"]</h2><p class="formSubtitle">@(Model.IsAdminLogin ? L["Vui lòng sử dụng tài khoản có quyền quản trị."] : L["Chào mừng quay lại! Tiếp tục hành trình của bạn."])</p></div>
             @if (!ViewData.ModelState.IsValid) { <div class="errorBox" role="alert"><div asp-validation-summary="All"></div></div> }
             @if (TempData["AuthSuccess"] is string success) { <div class="successBox" role="status">@success</div> }
@@ -30,7 +31,7 @@
                 <button class="submitBtn" type="submit">@(Model.IsAdminLogin ? L["Truy cập hệ thống"] : L["Đăng nhập"]) <i data-lucide="arrow-right"></i></button>
             </form>
             @if (Model.IsAdminLogin)
-            { <div class="warningNote"><i data-lucide="shield-check"></i><span>Chưa có tài khoản admin? Liên hệ quản trị viên hệ thống để được cấp quyền.</span></div><p class="formFooter"><a href="/login">@L["Đăng nhập người dùng"]</a> · <a href="/">@L["Về trang chủ"]</a></p> }
+            { <div class="warningNote"><i data-lucide="shield-check"></i><span>@L["Chưa có tài khoản admin? Liên hệ quản trị viên hệ thống để được cấp quyền."]</span></div><p class="formFooter"><a href="/login">@L["Đăng nhập người dùng"]</a> · <a href="/">@L["Về trang chủ"]</a></p> }
             else
             { <p class="formFooter">@L["Chưa có tài khoản?"] <a class="linkAccent" href="/register">@L["Đăng ký ngay"]</a></p><p class="auth-admin-link"><a href="/admin/login">@L["Đăng nhập quản trị viên"]</a></p> }
         </div></section>

@@ -1,7 +1,7 @@
 @model PolicyIndexViewModel
 @{
-    ViewData["Title"] = "Quản lý Chính sách";
-    ViewData["Description"] = "Quản lý các mẫu điều khoản và chính sách áp dụng cho tour du lịch.";
+    ViewData["Title"] = L["Quản lý Chính sách"];
+    ViewData["Description"] = L["Quản lý các mẫu điều khoản và chính sách áp dụng cho tour du lịch."];
 
     string Link(int? page = null, string? search = "__keep", int? contactId = -999, int? pageSize = null)
     {
@@ -24,13 +24,13 @@
     <div class="title-block">
         <div class="title-icon"><i data-lucide="file-text"></i></div>
         <div>
-            <h1>Quản lý Chi nhánh & Chính sách</h1>
-            <p>Văn phòng phụ trách và các mẫu điều khoản áp dụng cho tour</p>
+            <h1>@L["Quản lý Chi nhánh & Chính sách"]</h1>
+            <p>@L["Văn phòng phụ trách và các mẫu điều khoản áp dụng cho tour"]</p>
         </div>
     </div>
     <div class="header-actions">
         <a href="/admin/policies/create" class="btn btn-primary" id="btnCreatePolicy">
-            <i data-lucide="plus"></i> Thêm mẫu chính sách
+            <i data-lucide="plus"></i> @L["Thêm mẫu chính sách"]
         </a>
     </div>
 </header>
@@ -38,10 +38,10 @@
 @* ── NAVIGATION TABS (Chi nhánh / Chính sách) ── *@
 <div class="sub-tabs">
     <a href="/admin/branches" class="sub-tab">
-        <i data-lucide="building-2"></i> Chi nhánh
+        <i data-lucide="building-2"></i> @L["Chi nhánh"]
     </a>
     <a href="/admin/policies" class="sub-tab sub-tab-active">
-        <i data-lucide="file-text"></i> Mẫu chính sách (Policy)
+        <i data-lucide="file-text"></i> @L["Mẫu chính sách (Policy)"]
         <span class="sub-tab-badge">@Model.TotalItems</span>
     </a>
 </div>
@@ -51,33 +51,33 @@
     <div class="stat-card">
         <div class="stat-icon stat-blue"><i data-lucide="file-text"></i></div>
         <div>
-            <div class="stat-label">Tổng policy</div>
+            <div class="stat-label">@L["Tổng policy"]</div>
             <div class="stat-value" data-count="@Model.StatTotal">@Model.StatTotal</div>
-            <div class="stat-hint">Mẫu chính sách đã tạo</div>
+            <div class="stat-hint">@L["Mẫu chính sách đã tạo"]</div>
         </div>
     </div>
     <div class="stat-card">
         <div class="stat-icon stat-green"><i data-lucide="building-2"></i></div>
         <div>
-            <div class="stat-label">Đã gắn chi nhánh</div>
+            <div class="stat-label">@L["Đã gắn chi nhánh"]</div>
             <div class="stat-value" data-count="@Model.StatLinkedBranch">@Model.StatLinkedBranch</div>
-            <div class="stat-hint">@(Model.StatTotal - Model.StatLinkedBranch) chưa gắn</div>
+            <div class="stat-hint">@(Model.StatTotal - Model.StatLinkedBranch) @L["chưa gắn"]</div>
         </div>
     </div>
     <div class="stat-card">
         <div class="stat-icon stat-amber"><i data-lucide="trending-up"></i></div>
         <div>
-            <div class="stat-label">Chuyến khởi hành áp dụng</div>
+            <div class="stat-label">@L["Chuyến khởi hành áp dụng"]</div>
             <div class="stat-value" data-count="@Model.StatTotalUsage">@Model.StatTotalUsage</div>
-            <div class="stat-hint">Tổng số tour departure sử dụng</div>
+            <div class="stat-hint">@L["Tổng số tour departure sử dụng"]</div>
         </div>
     </div>
     <div class="stat-card">
         <div class="stat-icon stat-rose"><i data-lucide="shield-alert"></i></div>
         <div>
-            <div class="stat-label">Chưa dùng</div>
+            <div class="stat-label">@L["Chưa dùng"]</div>
             <div class="stat-value" data-count="@Model.StatUnused">@Model.StatUnused</div>
-            <div class="stat-hint">Chính sách nháp / chưa gán tour</div>
+            <div class="stat-hint">@L["Chính sách nháp / chưa gán tour"]</div>
         </div>
     </div>
 </section>
@@ -87,16 +87,16 @@
     <label class="search-box">
         <i data-lucide="search"></i>
         <input type="search" name="search" id="searchInput" value="@Model.Search"
-               placeholder="Tìm theo tên chính sách hoặc chi nhánh…" autocomplete="off" />
+               placeholder="@L["Tìm theo tên chính sách hoặc chi nhánh…"]" autocomplete="off" />
         @if (!string.IsNullOrEmpty(Model.Search))
         {
-            <a class="clear-btn" href="@Link(page: 1, search: null)" title="Xoá tìm kiếm"><i data-lucide="x"></i></a>
+            <a class="clear-btn" href="@Link(page: 1, search: null)" title="@L["Xoá tìm kiếm"]"><i data-lucide="x"></i></a>
         }
     </label>
 
     <div class="filter-group">
         <select name="contactId" class="select" onchange="this.form.submit()">
-            <option value="">-- Tất cả chi nhánh --</option>
+            <option value="">@L["-- Tất cả chi nhánh --"]</option>
             @foreach (var b in Model.Branches)
             {
                 <option value="@b.ContactID" selected="@(Model.ContactId == b.ContactID)">@b.BranchName</option>
@@ -106,7 +106,7 @@
         <select name="pageSize" class="select" onchange="this.form.submit()">
             @foreach (var s in new[] { 5, 10, 20 })
             {
-                <option value="@s" selected="@(Model.PageSize == s)">@s / trang</option>
+                <option value="@s" selected="@(Model.PageSize == s)">@s @L["/ trang"]</option>
             }
         </select>
     </div>
@@ -118,15 +118,15 @@
         <div class="empty-icon"><i data-lucide="file-text"></i></div>
         @if (!string.IsNullOrEmpty(Model.Search) || Model.ContactId.HasValue)
         {
-            <h3>Không tìm thấy mẫu chính sách phù hợp</h3>
-            <p>Thử đổi từ khoá hoặc bỏ chọn chi nhánh lọc</p>
-            <a href="/admin/policies" class="btn btn-ghost"><i data-lucide="rotate-ccw"></i> Xoá bộ lọc</a>
+            <h3>@L["Không tìm thấy mẫu chính sách phù hợp"]</h3>
+            <p>@L["Thử đổi từ khoá hoặc bỏ chọn chi nhánh lọc"]</p>
+            <a href="/admin/policies" class="btn btn-ghost"><i data-lucide="rotate-ccw"></i> @L["Xoá bộ lọc"]</a>
         }
         else
         {
-            <h3>Chưa có mẫu chính sách nào</h3>
-            <p>Tạo mẫu chính sách đầu tiên để liên kết áp dụng cho các chuyến tour</p>
-            <a href="/admin/policies/create" class="btn btn-primary"><i data-lucide="plus"></i> Tạo chính sách đầu tiên</a>
+            <h3>@L["Chưa có mẫu chính sách nào"]</h3>
+            <p>@L["Tạo mẫu chính sách đầu tiên để liên kết áp dụng cho các chuyến tour"]</p>
+            <a href="/admin/policies/create" class="btn btn-primary"><i data-lucide="plus"></i> @L["Tạo chính sách đầu tiên"]</a>
         }
     </div>
 }
@@ -138,10 +138,10 @@ else
             var p = item.Policy;
             var fields = new[]
             {
-                ("Giá tour bao gồm", p.TourPriceIncludes, "check-circle-2"),
-                ("Giá tour không bao gồm", p.TourPriceExcludes, "x-circle"),
-                ("Điều kiện thanh toán", p.PaymentConditions, "credit-card"),
-                ("Quy định huỷ tour", p.CancellationRules, "alert-octagon")
+                (L["Giá tour bao gồm"], p.TourPriceIncludes, "check-circle-2"),
+                (L["Giá tour không bao gồm"], p.TourPriceExcludes, "x-circle"),
+                (L["Điều kiện thanh toán"], p.PaymentConditions, "credit-card"),
+                (L["Quy định huỷ tour"], p.CancellationRules, "alert-octagon")
             };
             var filledCount = fields.Count(f => !string.IsNullOrWhiteSpace(f.Item2));
 
@@ -154,7 +154,7 @@ else
                             <div class="policy-meta">
                                 <span class="branch-tag">
                                     <i data-lucide="building-2"></i>
-                                    @(item.BranchName ?? "Chưa gắn chi nhánh")
+                                    @(item.BranchName ?? L["Chưa gắn chi nhánh"])
                                 </span>
                                 <span class="id-chip"><i data-lucide="hash"></i>ID: @p.PolicyTemplateID</span>
                             </div>
@@ -167,13 +167,13 @@ else
                             <small>tour</small>
                         </span>
                         <span class="complete-chip" title="@filledCount/4 mục điều khoản đã điền">
-                            @filledCount/4 điều khoản
+                            @filledCount/4 @L["điều khoản"]
                         </span>
                         <div class="row-actions">
-                            <a class="icon-btn icon-edit" href="/admin/policies/@p.PolicyTemplateID/edit" title="Chỉnh sửa"><i data-lucide="pencil"></i></a>
+                            <a class="icon-btn icon-edit" href="/admin/policies/@p.PolicyTemplateID/edit" title="@L["Chỉnh sửa"]"><i data-lucide="pencil"></i></a>
                             <button type="button" class="icon-btn icon-delete js-delete-policy"
                                     data-id="@p.PolicyTemplateID" data-name="@p.TemplateName" data-usage="@item.UsageCount"
-                                    title="Xoá"><i data-lucide="trash-2"></i></button>
+                                    title="@L["Xoá"]"><i data-lucide="trash-2"></i></button>
                         </div>
                     </div>
                 </div>
@@ -203,9 +203,9 @@ else
     @if (Model.TotalPages > 1)
     {
         <footer class="table-foot" style="margin-top: 20px; background: var(--surface); border-radius: var(--radius);">
-            <span class="muted">Hiển thị <strong>@fromItem–@toItem</strong> trên <strong>@Model.TotalItems</strong> chính sách</span>
-            <nav class="pagination" aria-label="Phân trang">
-                <a class="page-btn @(Model.Page <= 1 ? "disabled" : "")" href="@Link(page: Model.Page - 1)"><i data-lucide="chevron-left"></i> Trước</a>
+            <span class="muted">@L["Hiển thị"] <strong>@fromItem–@toItem</strong> @L["trên"] <strong>@Model.TotalItems</strong> @L["chính sách"]</span>
+            <nav class="pagination" aria-label="@L["Phân trang"]">
+                <a class="page-btn @(Model.Page <= 1 ? "disabled" : "")" href="@Link(page: Model.Page - 1)"><i data-lucide="chevron-left"></i> @L["Trước"]</a>
                 @for (var pg = 1; pg <= Model.TotalPages; pg++)
                 {
                     <a class="page-num @(pg == Model.Page ? "active" : "")" href="@Link(page: pg)">@pg</a>
@@ -222,11 +222,11 @@ else
         @Html.AntiForgeryToken()
         <input type="hidden" name="returnUrl" value="@currentUrl" />
         <div class="confirm-icon"><i data-lucide="alert-triangle"></i></div>
-        <h3 id="confirmTitle">Xoá mẫu chính sách này?</h3>
-        <p id="confirmMessage">Hành động này không thể hoàn tác.</p>
+        <h3 id="confirmTitle">@L["Xoá mẫu chính sách này?"]</h3>
+        <p id="confirmMessage">@L["Hành động này không thể hoàn tác."]</p>
         <div class="confirm-actions">
-            <button type="button" class="btn btn-ghost" data-close>Huỷ</button>
-            <button type="submit" class="btn btn-danger" id="confirmDeleteBtn"><i data-lucide="trash-2"></i> Xác nhận xoá</button>
+            <button type="button" class="btn btn-ghost" data-close>@L["Huỷ"]</button>
+            <button type="submit" class="btn btn-danger" id="confirmDeleteBtn"><i data-lucide="trash-2"></i> @L["Xác nhận xoá"]</button>
         </div>
     </form>
 </div>
@@ -246,11 +246,11 @@ else
                     const usage = +btn.dataset.usage;
 
                     form.action = `/admin/policies/${id}/delete`;
-                    title.textContent = `Xoá "${name}"?`;
+                    title.textContent = UserI18n.t("Xoá \"{0}\"?" ,name);
                     if (usage > 0) {
-                        msg.textContent = `Mẫu chính sách này đang được ${usage} chuyến khởi hành áp dụng. Hệ thống sẽ chặn xoá để tránh làm mất thông tin tour.`;
+                        msg.textContent = UserI18n.t("Mẫu chính sách này đang được {0} chuyến khởi hành áp dụng. Hệ thống sẽ chặn xoá để tránh làm mất thông tin tour." ,usage);
                     } else {
-                        msg.textContent = 'Hành động này không thể hoàn tác.';
+                        msg.textContent = UserI18n.t("Hành động này không thể hoàn tác.");
                     }
                     modal.removeAttribute('hidden');
                 });

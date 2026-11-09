@@ -1,77 +1,77 @@
 @model DepartureFormViewModel
 @{
-    ViewData["Title"] = Model.Id.HasValue ? "Sửa lịch khởi hành" : "Thêm lịch khởi hành";
+    ViewData["Title"] = Model.Id.HasValue ? L["Sửa lịch khởi hành"] : L["Thêm lịch khởi hành"];
     var back = Model.ReturnUrl ?? "/admin/departures";
     var action = Model.Id.HasValue ? $"/admin/departures/{Model.Id}/edit" : "/admin/departures/create";
-    string VehicleName(VehicleType type) => type switch { VehicleType.PLANE => "Máy bay", VehicleType.BUS => "Xe khách", VehicleType.TRAIN => "Tàu hỏa", VehicleType.SHIP => "Tàu thủy", _ => "Ô tô" };
+    string VehicleName(VehicleType type) => type switch { VehicleType.PLANE => L["Máy bay"], VehicleType.BUS => L["Xe khách"], VehicleType.TRAIN => L["Tàu hỏa"], VehicleType.SHIP => L["Tàu thủy"], _ => L["Ô tô"] };
 }
 <link rel="stylesheet" href="~/css/admin-departures.css" asp-append-version="true" />
-<header class="page-header"><div class="title-block"><a class="back-btn" href="@back" aria-label="Quay lại"><i data-lucide="arrow-left"></i></a><div><h1>@ViewData["Title"]</h1><p>Thông tin chung, bảng giá và vận chuyển</p></div></div></header>
+<header class="page-header"><div class="title-block"><a class="back-btn" href="@back" aria-label="@L["Quay lại"]"><i data-lucide="arrow-left"></i></a><div><h1>@ViewData["Title"]</h1><p>@L["Thông tin chung, bảng giá và vận chuyển"]</p></div></div></header>
 <form method="post" action="@action" class="departure-form">
     @Html.AntiForgeryToken()
     <input asp-for="ReturnUrl" type="hidden" /><input asp-for="Revision" type="hidden" />
     <div asp-validation-summary="All" class="departure-validation" role="alert"></div>
-    <nav class="departure-section-links" aria-label="Các phần của lịch"><a href="#basic">Thông tin chung</a><a href="#pricing">Bảng giá</a><a href="#transport">Vận chuyển</a></nav>
+    <nav class="departure-section-links" aria-label="@L["Các phần của lịch"]"><a href="#basic">@L["Thông tin chung"]</a><a href="#pricing">@L["Bảng giá"]</a><a href="#transport">@L["Vận chuyển"]</a></nav>
     <section class="card" id="basic">
-        <h2 class="card-title">Thông tin chung</h2>
+        <h2 class="card-title">@L["Thông tin chung"]</h2>
         <div class="form-group"><label asp-for="TourId">Tour <span class="req">*</span></label>
             @if (Model.Id.HasValue)
             {
                 <input asp-for="TourId" type="hidden" /><p class="departure-readonly">@Model.Tours.FirstOrDefault(t => t.Value == Model.TourId.ToString())?.Text</p>
             }
-            else { <select asp-for="TourId" asp-items="Model.Tours" class="select" required><option value="">Chọn tour</option></select> }
+            else { <select asp-for="TourId" asp-items="Model.Tours" class="select" required><option value="">@L["Chọn tour"]</option></select> }
             <span asp-validation-for="TourId" class="field-error"></span>
         </div>
         <div class="form-row">
-            <div class="form-group"><label asp-for="DepartureDate">Ngày giờ khởi hành <span class="req">*</span></label><input asp-for="DepartureDate" type="datetime-local" asp-format="{0:yyyy-MM-ddTHH:mm:ss}" step="1" required /><span asp-validation-for="DepartureDate" class="field-error"></span></div>
-            <div class="form-group"><label asp-for="AvailableSlots">Số chỗ còn trống <span class="req">*</span></label><input asp-for="AvailableSlots" type="number" min="0" step="1" required /><span class="hint">Chỉ nhập số chỗ còn có thể bán, không gồm chỗ khách đã đặt.</span><span asp-validation-for="AvailableSlots" class="field-error"></span></div>
+            <div class="form-group"><label asp-for="DepartureDate">@L["Ngày giờ khởi hành"] <span class="req">*</span></label><input asp-for="DepartureDate" type="datetime-local" asp-format="{0:yyyy-MM-ddTHH:mm:ss}" step="1" required /><span asp-validation-for="DepartureDate" class="field-error"></span></div>
+            <div class="form-group"><label asp-for="AvailableSlots">@L["Số chỗ còn trống"] <span class="req">*</span></label><input asp-for="AvailableSlots" type="number" min="0" step="1" required /><span class="hint">@L["Chỉ nhập số chỗ còn có thể bán, không gồm chỗ khách đã đặt."]</span><span asp-validation-for="AvailableSlots" class="field-error"></span></div>
         </div>
         <div class="form-row">
-            <div class="form-group"><label asp-for="PolicyTemplateId">Chính sách áp dụng <span class="req">*</span></label><select asp-for="PolicyTemplateId" asp-items="Model.Policies" class="select" required><option value="">Chọn mẫu chính sách</option></select><span asp-validation-for="PolicyTemplateId" class="field-error"></span></div>
-            <div class="form-group"><label asp-for="Status">Trạng thái</label><select asp-for="Status" class="select"><option value="true">Hoạt động</option><option value="false">Tạm dừng</option></select><span class="hint">Tạm dừng để ngừng nhận booking mới.</span></div>
+            <div class="form-group"><label asp-for="PolicyTemplateId">@L["Chính sách áp dụng"] <span class="req">*</span></label><select asp-for="PolicyTemplateId" asp-items="Model.Policies" class="select" required><option value="">@L["Chọn mẫu chính sách"]</option></select><span asp-validation-for="PolicyTemplateId" class="field-error"></span></div>
+            <div class="form-group"><label asp-for="Status">@L["Trạng thái"]</label><select asp-for="Status" class="select"><option value="true">@L["Hoạt động"]</option><option value="false">@L["Tạm dừng"]</option></select><span class="hint">@L["Tạm dừng để ngừng nhận booking mới."]</span></div>
         </div>
-        <div class="form-group"><label asp-for="TourGuideInfo">Thông tin hướng dẫn viên <span class="req">*</span></label><textarea asp-for="TourGuideInfo" rows="3" maxlength="4000" required></textarea><span asp-validation-for="TourGuideInfo" class="field-error"></span></div>
+        <div class="form-group"><label asp-for="TourGuideInfo">@L["Thông tin hướng dẫn viên"] <span class="req">*</span></label><textarea asp-for="TourGuideInfo" rows="3" maxlength="4000" required></textarea><span asp-validation-for="TourGuideInfo" class="field-error"></span></div>
     </section>
     <section class="card" id="pricing">
-        <h2 class="card-title">Bảng giá (VND)</h2><p class="hint">Bắt buộc có giá người lớn. Để trống giá gốc để không bán loại khách đó; để trống giá bán để dùng giá gốc.</p>
+        <h2 class="card-title">@L["Bảng giá (VND)"]</h2><p class="hint">@L["Bắt buộc có giá người lớn. Để trống giá gốc để không bán loại khách đó; để trống giá bán để dùng giá gốc."]</p>
         @for (var i = 0; i < Model.Pricings.Count; i++)
         {
-            <fieldset class="departure-price"><legend>@DeparturePriceInput.Name(Model.Pricings[i].PassengerType)</legend>
+            <fieldset class="departure-price"><legend>@L[DeparturePriceInput.Name(Model.Pricings[i].PassengerType)]</legend>
                 <input asp-for="Pricings[i].PassengerType" type="hidden" />
                 <div class="departure-price-grid">
-                    <div class="form-group"><label asp-for="Pricings[i].AgeDescription">Mô tả độ tuổi</label><input asp-for="Pricings[i].AgeDescription" maxlength="255" /></div>
-                    <div class="form-group"><label asp-for="Pricings[i].OriginalPrice">Giá gốc</label><input asp-for="Pricings[i].OriginalPrice" type="number" min="0" step="1" /><span asp-validation-for="Pricings[i].OriginalPrice" class="field-error"></span></div>
-                    <div class="form-group"><label asp-for="Pricings[i].SalePrice">Giá bán</label><input asp-for="Pricings[i].SalePrice" type="number" min="0" step="1" /><span asp-validation-for="Pricings[i].SalePrice" class="field-error"></span></div>
+                    <div class="form-group"><label asp-for="Pricings[i].AgeDescription">@L["Mô tả độ tuổi"]</label><input asp-for="Pricings[i].AgeDescription" maxlength="255" /></div>
+                    <div class="form-group"><label asp-for="Pricings[i].OriginalPrice">@L["Giá gốc"]</label><input asp-for="Pricings[i].OriginalPrice" type="number" min="0" step="1" /><span asp-validation-for="Pricings[i].OriginalPrice" class="field-error"></span></div>
+                    <div class="form-group"><label asp-for="Pricings[i].SalePrice">@L["Giá bán"]</label><input asp-for="Pricings[i].SalePrice" type="number" min="0" step="1" /><span asp-validation-for="Pricings[i].SalePrice" class="field-error"></span></div>
                 </div>
             </fieldset>
         }
     </section>
     <section class="card" id="transport">
-        <h2 class="card-title">Vận chuyển</h2><p class="hint">Bật chiều cần nhập. Với máy bay, có thể chọn mã sân bay từ gợi ý.</p>
+        <h2 class="card-title">@L["Vận chuyển"]</h2><p class="hint">@L["Bật chiều cần nhập. Với máy bay, có thể chọn mã sân bay từ gợi ý."]</p>
         <datalist id="departure-airports">@foreach (var airport in Model.Airports) { <option value="@airport.Value">@airport.Text</option> }</datalist>
         @for (var i = 0; i < Model.Transports.Count; i++)
         {
             <div class="departure-transport departure-transport-editor">
                 <input asp-for="Transports[i].Type" type="hidden" />
-                <label class="departure-check"><input asp-for="Transports[i].Enabled" data-transport-toggle /> @(Model.Transports[i].Type == TransportType.OUTBOUND ? "Chiều đi" : "Chiều về")</label>
+                <label class="departure-check"><input asp-for="Transports[i].Enabled" data-transport-toggle /> @(Model.Transports[i].Type == TransportType.OUTBOUND ? L["Chiều đi"] : L["Chiều về"])</label>
                 <div class="departure-transport-fields">
                     <div class="form-row">
-                        <div class="form-group"><label asp-for="Transports[i].VehicleType">Loại phương tiện</label><select asp-for="Transports[i].VehicleType" class="select">@foreach (var type in Enum.GetValues<VehicleType>()) { <option value="@type">@VehicleName(type)</option> }</select></div>
-                        <div class="form-group"><label asp-for="Transports[i].VehicleName">Tên hãng / phương tiện</label><input asp-for="Transports[i].VehicleName" maxlength="255" /></div>
+                        <div class="form-group"><label asp-for="Transports[i].VehicleType">@L["Loại phương tiện"]</label><select asp-for="Transports[i].VehicleType" class="select">@foreach (var type in Enum.GetValues<VehicleType>()) { <option value="@type">@VehicleName(type)</option> }</select></div>
+                        <div class="form-group"><label asp-for="Transports[i].VehicleName">@L["Tên hãng / phương tiện"]</label><input asp-for="Transports[i].VehicleName" maxlength="255" /></div>
                     </div>
                     <div class="form-row">
-                        <div class="form-group"><label asp-for="Transports[i].TransportCode">Mã chuyến</label><input asp-for="Transports[i].TransportCode" maxlength="255" /></div>
-                        <div class="form-group"><label asp-for="Transports[i].StartPoint">Điểm đi / mã sân bay</label><input asp-for="Transports[i].StartPoint" list="departure-airports" maxlength="255" /></div>
+                        <div class="form-group"><label asp-for="Transports[i].TransportCode">@L["Mã chuyến"]</label><input asp-for="Transports[i].TransportCode" maxlength="255" /></div>
+                        <div class="form-group"><label asp-for="Transports[i].StartPoint">@L["Điểm đi / mã sân bay"]</label><input asp-for="Transports[i].StartPoint" list="departure-airports" maxlength="255" /></div>
                     </div>
                     <div class="form-row">
-                        <div class="form-group"><label asp-for="Transports[i].EndPoint">Điểm đến / mã sân bay</label><input asp-for="Transports[i].EndPoint" list="departure-airports" maxlength="255" /></div>
-                        <div class="form-group"><label asp-for="Transports[i].DepartTime">Giờ đi</label><input asp-for="Transports[i].DepartTime" type="datetime-local" asp-format="{0:yyyy-MM-ddTHH:mm:ss}" step="1" /></div>
+                        <div class="form-group"><label asp-for="Transports[i].EndPoint">@L["Điểm đến / mã sân bay"]</label><input asp-for="Transports[i].EndPoint" list="departure-airports" maxlength="255" /></div>
+                        <div class="form-group"><label asp-for="Transports[i].DepartTime">@L["Giờ đi"]</label><input asp-for="Transports[i].DepartTime" type="datetime-local" asp-format="{0:yyyy-MM-ddTHH:mm:ss}" step="1" /></div>
                     </div>
-                    <div class="form-group"><label asp-for="Transports[i].ArrivalTime">Giờ đến</label><input asp-for="Transports[i].ArrivalTime" type="datetime-local" asp-format="{0:yyyy-MM-ddTHH:mm:ss}" step="1" /><span asp-validation-for="Transports[i].ArrivalTime" class="field-error"></span></div>
+                    <div class="form-group"><label asp-for="Transports[i].ArrivalTime">@L["Giờ đến"]</label><input asp-for="Transports[i].ArrivalTime" type="datetime-local" asp-format="{0:yyyy-MM-ddTHH:mm:ss}" step="1" /><span asp-validation-for="Transports[i].ArrivalTime" class="field-error"></span></div>
                 </div>
             </div>
         }
     </section>
-    <div class="departure-form-actions"><a href="@back" class="btn btn-ghost">Hủy</a><button type="submit" class="btn btn-primary"><i data-lucide="save"></i> Lưu lịch khởi hành</button></div>
+    <div class="departure-form-actions"><a href="@back" class="btn btn-ghost">@L["Hủy"]</a><button type="submit" class="btn btn-primary"><i data-lucide="save"></i> @L["Lưu lịch khởi hành"]</button></div>
 </form>
 @section Scripts { <script src="~/js/admin-departures.js" asp-append-version="true"></script> }

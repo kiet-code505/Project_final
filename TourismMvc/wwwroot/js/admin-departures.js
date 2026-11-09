@@ -8,7 +8,7 @@
     const updateSelection = () => {
         const count = selected.filter(input => input.checked).length;
         const label = document.querySelector('[data-selected-count]');
-        if (label) label.textContent = `Đã chọn ${count} lịch`;
+        if (label) label.textContent = UserI18n.t("Đã chọn {0} lịch" ,count);
         const button = document.querySelector('[data-delete-selected]');
         if (button) button.disabled = count === 0;
         if (all) { all.checked = count > 0 && count === selected.length; all.indeterminate = count > 0 && count < selected.length; }
@@ -22,9 +22,9 @@
     document.querySelectorAll('[data-departure-delete]').forEach(form => form.addEventListener('submit', event => {
         const count = form.id === 'departure-bulk-delete' ? selected.filter(input => input.checked).length : 1;
         if (!count) { event.preventDefault(); return; }
-        if (!dialog?.showModal) { if (!window.confirm(`Xóa ${count} lịch khởi hành?`)) event.preventDefault(); return; }
+        if (!dialog?.showModal) { if (!window.confirm(UserI18n.t("Xóa {0} lịch khởi hành?" ,count))) event.preventDefault(); return; }
         event.preventDefault(); pending = form;
-        dialog.querySelector('[data-delete-description]').textContent = `Bạn sắp xóa ${count} lịch cùng bảng giá và thông tin vận chuyển. Thao tác này không thể hoàn tác.`;
+        dialog.querySelector('[data-delete-description]').textContent = UserI18n.t("Bạn sắp xóa {0} lịch cùng bảng giá và thông tin vận chuyển. Thao tác này không thể hoàn tác." ,count);
         dialog.returnValue = ''; dialog.showModal();
     }));
     dialog?.addEventListener('close', () => {

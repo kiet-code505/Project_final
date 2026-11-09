@@ -3,26 +3,26 @@
 @{
     var locking = Model.Status == false;
     var self = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value == Model.Account.Id.ToString();
-    ViewData["Title"] = locking ? "Khóa tài khoản" : "Mở khóa tài khoản";
+    ViewData["Title"] = locking ? L["Khóa tài khoản"] : L["Mở khóa tài khoản"];
 }
 <link rel="stylesheet" href="~/css/admin-users.css" asp-append-version="true" />
-<a class="btn btn-ghost" href="@Model.ReturnUrl"><i data-lucide="arrow-left"></i>Quay lại</a>
+<a class="btn btn-ghost" href="@Model.ReturnUrl"><i data-lucide="arrow-left"></i>@L["Quay lại"]</a>
 <section class="user-status-panel">
     <div class="user-status-icon @(locking ? "user-locked" : "user-active")"><i data-lucide="@(locking ? "lock-keyhole" : "unlock-keyhole")"></i></div>
     <h1>@ViewData["Title"]</h1>
     <p class="user-status-account"><strong>@Model.Account.FullName</strong><br />@Model.Account.Email</p>
     @if (self && locking)
     {
-        <p role="alert">Bạn không thể tự khóa tài khoản đang đăng nhập.</p><a class="btn btn-primary" href="@Model.ReturnUrl">Quay lại danh sách</a>
+        <p role="alert">@L["Bạn không thể tự khóa tài khoản đang đăng nhập."]</p><a class="btn btn-primary" href="@Model.ReturnUrl">@L["Quay lại danh sách"]</a>
     }
     else
     {
-        <p>@(locking ? "Người dùng sẽ không thể đăng nhập và phiên đăng nhập hiện tại sẽ bị thu hồi. Các đơn đặt tour được giữ nguyên." : "Người dùng có thể đăng nhập lại sau khi tài khoản được mở khóa.")</p>
+        <p>@(locking ? L["Người dùng sẽ không thể đăng nhập và phiên đăng nhập hiện tại sẽ bị thu hồi. Các đơn đặt tour được giữ nguyên."] : L["Người dùng có thể đăng nhập lại sau khi tài khoản được mở khóa."])</p>
         <form method="post" action="/admin/users/@Model.Account.Id/status">
             @Html.AntiForgeryToken()
             <input type="hidden" name="Status" value="@(Model.Status == true ? "true" : "false")" />
             <input type="hidden" name="ReturnUrl" value="@Model.ReturnUrl" />
-            <div class="user-status-actions"><a class="btn btn-ghost" href="@Model.ReturnUrl">Hủy</a><button class="btn @(locking ? "btn-danger" : "btn-primary")" type="submit">@(locking ? "Xác nhận khóa" : "Xác nhận mở khóa")</button></div>
+            <div class="user-status-actions"><a class="btn btn-ghost" href="@Model.ReturnUrl">@L["Hủy"]</a><button class="btn @(locking ? "btn-danger" : "btn-primary")" type="submit">@(locking ? L["Xác nhận khóa"] : L["Xác nhận mở khóa"])</button></div>
         </form>
     }
 </section>

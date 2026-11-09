@@ -1,5 +1,6 @@
-<!DOCTYPE html><html lang="vi"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><title>@ViewData["Title"] · Future Travel</title><link rel="icon" href="/images/home/favicon.svg" /><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet" /><link rel="stylesheet" href="~/css/home.css" asp-append-version="true" /></head><body class="user-home">
+<!DOCTYPE html><html lang="@L.Language"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><title>@ViewData["Title"] · Future Travel</title><link rel="icon" href="/images/home/favicon.svg" /><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet" /><link rel="stylesheet" href="~/css/home.css" asp-append-version="true" /><link rel="stylesheet" href="~/css/user-language.css" asp-append-version="true" /></head><body class="user-home">
     <main>@RenderBody()</main>
     <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script><script>window.lucide?.createIcons();</script>
+    @await Html.PartialAsync("_UserTranslations")
     <script src="~/js/auth.js" asp-append-version="true"></script>@await RenderSectionAsync("Scripts", required: false)
 </body></html>

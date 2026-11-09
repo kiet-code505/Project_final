@@ -2,11 +2,12 @@ using Microsoft.AspNetCore.Mvc;
 using TourismMvc.Models.ViewModels;
 using TourismMvc.Services;
 using System.Text;
+using TourismMvc.Localization;
 
 namespace TourismMvc.Controllers.Admin;
 
 [Route("admin/departures")]
-public class DeparturesController(IDepartureService departureService) : AdminControllerBase
+public class DeparturesController(IDepartureService departureService, UserText text) : AdminControllerBase
 {
     private const string FormView = "~/Views/Admin/Departures/Form.cshtml";
     [HttpGet("")]
@@ -30,7 +31,7 @@ public class DeparturesController(IDepartureService departureService) : AdminCon
     public async Task<IActionResult> Details(int id, string? returnUrl)
     {
         var vm = await departureService.GetDetailAsync(id);
-        if (vm == null) return NotFound("Không tìm thấy lịch khởi hành.");
+        if (vm == null) return NotFound(text["Không tìm thấy lịch khởi hành."]);
         vm.ReturnUrl = returnUrl != null && Url.IsLocalUrl(returnUrl) ? returnUrl : "/admin/departures";
         return View("~/Views/Admin/Departures/Details.cshtml", vm);
     }
@@ -119,9 +120,9 @@ public class DeparturesController(IDepartureService departureService) : AdminCon
             if (value.TrimStart().StartsWith('=') || value.TrimStart().StartsWith('+') || value.TrimStart().StartsWith('-') || value.TrimStart().StartsWith('@')) value = "'" + value;
             return "\"" + value.Replace("\"", "\"\"") + "\"";
         }
-        var rows = new List<string> { "ID,Mã tour,Tên tour,Ngày khởi hành,Thời lượng,Chỗ trống,Đã đặt,Giá người lớn,Trạng thái" };
-        rows.AddRange(model.Items.Select(d => string.Join(",", new[] { d.DepartureId.ToString(), d.TourCode, d.TourName, d.DepartureDate.ToString("dd/MM/yyyy HH:mm"), d.Duration,
-            d.AvailableSlots.ToString(), d.BookedSlots.ToString(), d.LowestPrice?.ToString(System.Globalization.CultureInfo.InvariantCulture), d.Active ? "Hoạt động" : "Tạm dừng" }.Select(Cell))));
+        var rows = new List<string> { text["ID,Mã tour,Tên tour,Ngày khởi hành,Thời lượng,Chỗ trống,Đã đặt,Giá người lớn,Trạng thái"] };
+        rows.AddRange(model.Items.Select(d => string.Join(",", new[] { d.DepartureId.ToString(), d.TourCode, d.TourName, d.DepartureDate.ToString(text.DateTimeFormat, text.Culture), d.Duration,
+            d.AvailableSlots.ToString(), d.BookedSlots.ToString(), d.LowestPrice?.ToString(System.Globalization.CultureInfo.InvariantCulture), text[d.Active ? "Hoạt động" : "Tạm dừng"] }.Select(Cell))));
         return File(Encoding.UTF8.GetPreamble().Concat(Encoding.UTF8.GetBytes(string.Join("\r\n", rows))).ToArray(), "text/csv; charset=utf-8", $"lich-khoi-hanh-trang-{model.Page}.csv");
     }
 

@@ -24,7 +24,7 @@ public sealed class UserLocalizationFilter(UserText text, ITempDataDictionaryFac
             foreach (var key in new[] { "Title", "Description", "Message" })
                 if (view.ViewData?[key] is string value) view.ViewData[key] = text[value];
             var tempData = tempDataFactory.GetTempData(context.HttpContext);
-            foreach (var key in new[] { "AuthSuccess", "PaymentError", "PaymentNotice" })
+            foreach (var key in new[] { "AuthSuccess", "PaymentError", "PaymentNotice", "Success", "Error" })
                 if (tempData.Peek(key) is string value) tempData[key] = text[value];
         }
         await next();

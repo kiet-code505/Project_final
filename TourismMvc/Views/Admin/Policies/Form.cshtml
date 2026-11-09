@@ -1,15 +1,15 @@
 @model PolicyFormViewModel
 @{
-    ViewData["Title"] = Model.IsEdit ? "Chỉnh sửa Mẫu chính sách" : "Thêm Mẫu chính sách mới";
-    ViewData["Description"] = "Tạo mẫu chính sách và điều khoản áp dụng cho các tour du lịch.";
+    ViewData["Title"] = Model.IsEdit ? L["Chỉnh sửa Mẫu chính sách"] : L["Thêm Mẫu chính sách mới"];
+    ViewData["Description"] = L["Tạo mẫu chính sách và điều khoản áp dụng cho các tour du lịch."];
 }
 
 <header class="page-header">
     <div class="title-block">
-        <a href="/admin/policies" class="back-btn" title="Quay lại danh sách" id="btnBack"><i data-lucide="arrow-left"></i></a>
+        <a href="/admin/policies" class="back-btn" title="@L["Quay lại danh sách"]" id="btnBack"><i data-lucide="arrow-left"></i></a>
         <div>
             <h1>@ViewData["Title"]</h1>
-            <p>@(Model.IsEdit ? $"ID: {Model.PolicyTemplateID} · {Model.TemplateName}" : "Điền thông tin và quy định điều khoản tour")</p>
+            <p>@(Model.IsEdit ? $"ID: {Model.PolicyTemplateID} · {Model.TemplateName}" : L["Điền thông tin và quy định điều khoản tour"])</p>
         </div>
     </div>
 </header>
@@ -22,19 +22,19 @@
 
     @* ── Section: Thông tin cơ bản ── *@
     <div class="form-section">
-        <h3 class="card-title"><i data-lucide="info"></i> Thông tin cơ bản</h3>
+        <h3 class="card-title"><i data-lucide="info"></i> @L["Thông tin cơ bản"]</h3>
         
         <div class="form-row">
             <div class="form-group" style="flex: 2;">
-                <label asp-for="TemplateName">Tên mẫu chính sách <span class="req">*</span></label>
-                <input asp-for="TemplateName" placeholder="VD: Chính sách tour tiêu chuẩn 2026, Điều khoản tour VIP…" autocomplete="off" autofocus />
+                <label asp-for="TemplateName">@L["Tên mẫu chính sách"] <span class="req">*</span></label>
+                <input asp-for="TemplateName" placeholder="@L["VD: Chính sách tour tiêu chuẩn 2026, Điều khoản tour VIP…"]" autocomplete="off" autofocus />
                 <span asp-validation-for="TemplateName" class="field-error"></span>
             </div>
 
             <div class="form-group" style="flex: 1.2;">
-                <label asp-for="ContactId">Chi nhánh phụ trách <span class="req">*</span></label>
+                <label asp-for="ContactId">@L["Chi nhánh phụ trách"] <span class="req">*</span></label>
                 <select asp-for="ContactId" class="select" style="width: 100%;">
-                    <option value="">-- Chọn chi nhánh --</option>
+                    <option value="">@L["-- Chọn chi nhánh --"]</option>
                     @foreach (var b in Model.AvailableBranches)
                     {
                         <option value="@b.ContactID" selected="@(Model.ContactId == b.ContactID)">@b.BranchName</option>
@@ -47,43 +47,43 @@
 
     @* ── Section: Giá tour ── *@
     <div class="form-section" style="margin-top: 24px;">
-        <h3 class="card-title"><i data-lucide="badge-dollar-sign"></i> Giá tour bao gồm & không bao gồm</h3>
+        <h3 class="card-title"><i data-lucide="badge-dollar-sign"></i> @L["Giá tour bao gồm & không bao gồm"]</h3>
 
         <div class="form-group">
-            <label asp-for="TourPriceIncludes">Giá tour bao gồm</label>
-            <textarea asp-for="TourPriceIncludes" rows="5" placeholder="Nhập danh sách dịch vụ đã bao gồm trong giá tour (vé máy bay, khách sạn, xe đưa đón, bữa ăn, bảo hiểm...)..."></textarea>
-            <span class="hint">Hỗ trợ nhập văn bản có xuống dòng hoặc mã HTML cơ bản.</span>
+            <label asp-for="TourPriceIncludes">@L["Giá tour bao gồm"]</label>
+            <textarea asp-for="TourPriceIncludes" rows="5" placeholder="@L["Nhập danh sách dịch vụ đã bao gồm trong giá tour (vé máy bay, khách sạn, xe đưa đón, bữa ăn, bảo hiểm...)..."]"></textarea>
+            <span class="hint">@L["Hỗ trợ nhập văn bản có xuống dòng hoặc mã HTML cơ bản."]</span>
             <span asp-validation-for="TourPriceIncludes" class="field-error"></span>
         </div>
 
         <div class="form-group">
-            <label asp-for="TourPriceExcludes">Giá tour không bao gồm</label>
-            <textarea asp-for="TourPriceExcludes" rows="4" placeholder="Nhập các chi phí phát sinh khách tự chi trả (chi phí cá nhân, đồ uống, phòng đơn, tiền tip HDV...)..."></textarea>
+            <label asp-for="TourPriceExcludes">@L["Giá tour không bao gồm"]</label>
+            <textarea asp-for="TourPriceExcludes" rows="4" placeholder="@L["Nhập các chi phí phát sinh khách tự chi trả (chi phí cá nhân, đồ uống, phòng đơn, tiền tip HDV...)..."]"></textarea>
             <span asp-validation-for="TourPriceExcludes" class="field-error"></span>
         </div>
     </div>
 
     @* ── Section: Thanh toán & Huỷ tour ── *@
     <div class="form-section" style="margin-top: 24px;">
-        <h3 class="card-title"><i data-lucide="scale"></i> Điều kiện thanh toán & Quy định huỷ tour</h3>
+        <h3 class="card-title"><i data-lucide="scale"></i> @L["Điều kiện thanh toán & Quy định huỷ tour"]</h3>
 
         <div class="form-group">
-            <label asp-for="PaymentConditions">Điều kiện thanh toán</label>
-            <textarea asp-for="PaymentConditions" rows="5" placeholder="Quy định đặt cọc và thanh toán số tiền còn lại trước ngày khởi hành..."></textarea>
+            <label asp-for="PaymentConditions">@L["Điều kiện thanh toán"]</label>
+            <textarea asp-for="PaymentConditions" rows="5" placeholder="@L["Quy định đặt cọc và thanh toán số tiền còn lại trước ngày khởi hành..."]"></textarea>
             <span asp-validation-for="PaymentConditions" class="field-error"></span>
         </div>
 
         <div class="form-group">
-            <label asp-for="CancellationRules">Quy định huỷ tour</label>
-            <textarea asp-for="CancellationRules" rows="5" placeholder="Quy định mức phạt khi huỷ tour theo số ngày trước chuyến đi (sau khi đăng ký, trước 15 ngày, 7 ngày...)..."></textarea>
+            <label asp-for="CancellationRules">@L["Quy định huỷ tour"]</label>
+            <textarea asp-for="CancellationRules" rows="5" placeholder="@L["Quy định mức phạt khi huỷ tour theo số ngày trước chuyến đi (sau khi đăng ký, trước 15 ngày, 7 ngày...)..."]"></textarea>
             <span asp-validation-for="CancellationRules" class="field-error"></span>
         </div>
     </div>
 
     <div class="form-actions" style="margin-top: 24px; border-top: 1px solid var(--border); padding-top: 16px;">
-        <a href="/admin/policies" class="btn btn-ghost">Huỷ</a>
+        <a href="/admin/policies" class="btn btn-ghost">@L["Huỷ"]</a>
         <button type="submit" class="btn btn-primary">
-            <i data-lucide="check-circle-2"></i> @(Model.IsEdit ? "Cập nhật mẫu chính sách" : "Tạo mẫu chính sách")
+            <i data-lucide="check-circle-2"></i> @(Model.IsEdit ? L["Cập nhật mẫu chính sách"] : L["Tạo mẫu chính sách"])
         </button>
     </div>
 </form>

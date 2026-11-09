@@ -1,7 +1,7 @@
 @model TourFormViewModel
 @{
-    ViewData["Title"] = Model.IsEdit ? "Chỉnh sửa tour" : "Thêm tour mới";
-    ViewData["Description"] = "Tạo / cập nhật tour: thông tin chung, lịch trình theo ngày và thư viện ảnh.";
+    ViewData["Title"] = Model.IsEdit ? L["Chỉnh sửa tour"] : L["Thêm tour mới"];
+    ViewData["Description"] = L["Tạo / cập nhật tour: thông tin chung, lịch trình theo ngày và thư viện ảnh."];
     var action = Model.IsEdit ? $"/admin/tours/{Model.TourID}/edit" : "/admin/tours/create";
     var generalErrorKeys = new[] { "TourCode", "TourName", "Duration", "Transportation", "StartLocationId", "EndLocationId", "Attractions" };
     var generalHasError = generalErrorKeys.Any(k => ViewData.ModelState[k]?.Errors.Count > 0);
@@ -11,10 +11,10 @@
 
 <header class="page-header">
     <div class="title-block">
-        <a href="/admin/tours" class="back-btn" title="Quay lại danh sách" id="btnBack"><i data-lucide="arrow-left"></i></a>
+        <a href="/admin/tours" class="back-btn" title="@L["Quay lại danh sách"]" id="btnBack"><i data-lucide="arrow-left"></i></a>
         <div>
             <h1>@ViewData["Title"]</h1>
-            <p>@(Model.IsEdit ? $"ID: {Model.TourID} · {Model.TourCode}" : "Điền thông tin chung, lịch trình và hình ảnh")</p>
+            <p>@(Model.IsEdit ? $"ID: {Model.TourID} · {Model.TourCode}" : L["Điền thông tin chung, lịch trình và hình ảnh"])</p>
         </div>
     </div>
 </header>
@@ -25,14 +25,14 @@
 
     <nav class="sub-tabs" role="tablist">
         <button type="button" class="sub-tab sub-tab-active" data-tab="general" id="tabGeneral">
-            <i data-lucide="info"></i> Thông tin chung @if (generalHasError) { <span class="tab-dot"></span> }
+            <i data-lucide="info"></i> @L["Thông tin chung"] @if (generalHasError) { <span class="tab-dot"></span> }
         </button>
         <button type="button" class="sub-tab" data-tab="itinerary" id="tabItinerary">
-            <i data-lucide="list-ordered"></i> Lịch trình <span class="sub-tab-badge js-count-days">@Model.ItineraryDays.Count</span>
+            <i data-lucide="list-ordered"></i> @L["Lịch trình"] <span class="sub-tab-badge js-count-days">@Model.ItineraryDays.Count</span>
             @if (itineraryHasError) { <span class="tab-dot"></span> }
         </button>
         <button type="button" class="sub-tab" data-tab="gallery" id="tabGallery">
-            <i data-lucide="images"></i> Thư viện ảnh <span class="sub-tab-badge js-count-images">@Model.Images.Count</span>
+            <i data-lucide="images"></i> @L["Thư viện ảnh"] <span class="sub-tab-badge js-count-images">@Model.Images.Count</span>
             @if (imagesHasError) { <span class="tab-dot"></span> }
         </button>
     </nav>
@@ -40,25 +40,25 @@
     @* ── TAB 1: THÔNG TIN CHUNG ── *@
     <section class="tab-panel" data-panel="general">
         <div class="card">
-            <h3 class="card-title"><i data-lucide="tag"></i> Định danh</h3>
+            <h3 class="card-title"><i data-lucide="tag"></i> @L["Định danh"]</h3>
             <div class="form-row">
                 <div class="form-group">
-                    <label asp-for="TourCode">Mã tour <span class="req">*</span></label>
+                    <label asp-for="TourCode">@L["Mã tour"] <span class="req">*</span></label>
                     <input asp-for="TourCode" class="mono upper" placeholder="VD: HN-DN-04N3D" autocomplete="off" data-exclude="@Model.TourID" />
-                    <span class="hint" id="codeStatus">Chữ in hoa, số và dấu gạch ngang</span>
+                    <span class="hint" id="codeStatus">@L["Chữ in hoa, số và dấu gạch ngang"]</span>
                     <span asp-validation-for="TourCode" class="field-error"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="TourName">Tên tour <span class="req">*</span></label>
-                    <input asp-for="TourName" placeholder="VD: Hà Nội – Đà Nẵng – Hội An 4N3Đ" maxlength="255" />
+                    <label asp-for="TourName">@L["Tên tour"] <span class="req">*</span></label>
+                    <input asp-for="TourName" placeholder="@L["VD: Hà Nội – Đà Nẵng – Hội An 4N3Đ"]" maxlength="255" />
                     <span asp-validation-for="TourName" class="field-error"></span>
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group">
-                    <label asp-for="StartLocationId">Điểm khởi hành <span class="req">*</span></label>
+                    <label asp-for="StartLocationId">@L["Điểm khởi hành"] <span class="req">*</span></label>
                     <select asp-for="StartLocationId" class="select select-block">
-                        <option value="">— Chọn điểm khởi hành —</option>
+                        <option value="">@L["— Chọn điểm khởi hành —"]</option>
                         @foreach (var l in Model.LocationOptions)
                         {
                             <option value="@l.LocationId" selected="@(Model.StartLocationId == l.LocationId)">@l.LocationName</option>
@@ -67,9 +67,9 @@
                     <span asp-validation-for="StartLocationId" class="field-error"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="EndLocationId">Điểm đến <span class="req">*</span></label>
+                    <label asp-for="EndLocationId">@L["Điểm đến"] <span class="req">*</span></label>
                     <select asp-for="EndLocationId" class="select select-block">
-                        <option value="">— Chọn điểm đến —</option>
+                        <option value="">@L["— Chọn điểm đến —"]</option>
                         @foreach (var l in Model.LocationOptions)
                         {
                             <option value="@l.LocationId" selected="@(Model.EndLocationId == l.LocationId)">@l.LocationName</option>
@@ -80,53 +80,53 @@
             </div>
             <div class="form-row">
                 <div class="form-group">
-                    <label asp-for="Duration">Thời lượng <span class="req">*</span></label>
-                    <input asp-for="Duration" placeholder="VD: 4 ngày 3 đêm" />
+                    <label asp-for="Duration">@L["Thời lượng"] <span class="req">*</span></label>
+                    <input asp-for="Duration" placeholder="@L["VD: 4 ngày 3 đêm"]" />
                     <span asp-validation-for="Duration" class="field-error"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Transportation">Phương tiện <span class="req">*</span></label>
-                    <input asp-for="Transportation" placeholder="VD: Máy bay, Xe du lịch" />
+                    <label asp-for="Transportation">@L["Phương tiện"] <span class="req">*</span></label>
+                    <input asp-for="Transportation" placeholder="@L["VD: Máy bay, Xe du lịch"]" />
                     <span asp-validation-for="Transportation" class="field-error"></span>
                 </div>
             </div>
             <label class="switch-row">
                 <input type="checkbox" asp-for="Status" />
                 <span class="switch"></span>
-                <span><strong>Đang hoạt động</strong><br /><small class="muted">Tắt để ẩn tour khỏi trang bán hàng</small></span>
+                <span><strong>@L["Đang hoạt động"]</strong><br /><small class="muted">@L["Tắt để ẩn tour khỏi trang bán hàng"]</small></span>
             </label>
         </div>
 
         <div class="card" style="margin-top:20px">
-            <h3 class="card-title"><i data-lucide="sparkles"></i> Thông tin chuyến đi</h3>
+            <h3 class="card-title"><i data-lucide="sparkles"></i> @L["Thông tin chuyến đi"]</h3>
             <div class="form-group">
-                <label asp-for="Attractions">Điểm tham quan <span class="req">*</span></label>
-                <textarea asp-for="Attractions" rows="3" maxlength="1000" placeholder="VD: Bà Nà Hills, Cầu Vàng, Phố cổ Hội An…"></textarea>
+                <label asp-for="Attractions">@L["Điểm tham quan"] <span class="req">*</span></label>
+                <textarea asp-for="Attractions" rows="3" maxlength="1000" placeholder="@L["VD: Bà Nà Hills, Cầu Vàng, Phố cổ Hội An…"]"></textarea>
                 <span asp-validation-for="Attractions" class="field-error"></span>
             </div>
             <div class="form-row">
                 <div class="form-group">
-                    <label asp-for="Hotel">Khách sạn</label>
-                    <input asp-for="Hotel" placeholder="VD: Khách sạn 4 sao" />
+                    <label asp-for="Hotel">@L["Khách sạn"]</label>
+                    <input asp-for="Hotel" placeholder="@L["VD: Khách sạn 4 sao"]" />
                 </div>
                 <div class="form-group">
-                    <label asp-for="Meals">Ẩm thực</label>
-                    <input asp-for="Meals" placeholder="VD: Buffet sáng, đặc sản địa phương" />
+                    <label asp-for="Meals">@L["Ẩm thực"]</label>
+                    <input asp-for="Meals" placeholder="@L["VD: Buffet sáng, đặc sản địa phương"]" />
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group">
-                    <label asp-for="IdealTime">Thời gian lý tưởng</label>
-                    <input asp-for="IdealTime" placeholder="VD: Quanh năm" />
+                    <label asp-for="IdealTime">@L["Thời gian lý tưởng"]</label>
+                    <input asp-for="IdealTime" placeholder="@L["VD: Quanh năm"]" />
                 </div>
                 <div class="form-group">
-                    <label asp-for="SuitableCustomer">Đối tượng phù hợp</label>
-                    <input asp-for="SuitableCustomer" placeholder="VD: Gia đình, cặp đôi" />
+                    <label asp-for="SuitableCustomer">@L["Đối tượng phù hợp"]</label>
+                    <input asp-for="SuitableCustomer" placeholder="@L["VD: Gia đình, cặp đôi"]" />
                 </div>
             </div>
             <div class="form-group">
-                <label asp-for="TripTransportation">Phương tiện trong chuyến đi</label>
-                <input asp-for="TripTransportation" placeholder="VD: Xe 45 chỗ đời mới" />
+                <label asp-for="TripTransportation">@L["Phương tiện trong chuyến đi"]</label>
+                <input asp-for="TripTransportation" placeholder="@L["VD: Xe 45 chỗ đời mới"]" />
             </div>
         </div>
     </section>
@@ -135,8 +135,8 @@
     <section class="tab-panel" data-panel="itinerary" hidden>
         <div class="card">
             <div class="card-title-row">
-                <h3 class="card-title"><i data-lucide="list-ordered"></i> Lịch trình theo ngày</h3>
-                <button type="button" class="btn btn-ghost btn-sm" id="btnAddDay"><i data-lucide="plus"></i> Thêm ngày</button>
+                <h3 class="card-title"><i data-lucide="list-ordered"></i> @L["Lịch trình theo ngày"]</h3>
+                <button type="button" class="btn btn-ghost btn-sm" id="btnAddDay"><i data-lucide="plus"></i> @L["Thêm ngày"]</button>
             </div>
             <div id="dayList" class="repeat-list">
                 @for (var i = 0; i < Model.ItineraryDays.Count; i++)
@@ -144,19 +144,19 @@
                     var d = Model.ItineraryDays[i];
                     <div class="repeat-item js-day">
                         <div class="repeat-head">
-                            <span class="day-badge">Ngày <input type="number" min="1" class="day-num" data-field="DayNumber" value="@d.DayNumber" /></span>
-                            <button type="button" class="icon-btn icon-delete js-remove" title="Xoá ngày"><i data-lucide="trash-2"></i></button>
+                            <span class="day-badge">@L["Ngày"] <input type="number" min="1" class="day-num" data-field="DayNumber" value="@d.DayNumber" /></span>
+                            <button type="button" class="icon-btn icon-delete js-remove" title="@L["Xoá ngày"]"><i data-lucide="trash-2"></i></button>
                         </div>
-                        <div class="form-group"><label>Tiêu đề <span class="req">*</span></label><input data-field="Title" value="@d.Title" placeholder="VD: Hà Nội – Đà Nẵng – Sơn Trà" /></div>
+                        <div class="form-group"><label>@L["Tiêu đề"] <span class="req">*</span></label><input data-field="Title" value="@d.Title" placeholder="@L["VD: Hà Nội – Đà Nẵng – Sơn Trà"]" /></div>
                         <div class="form-row">
-                            <div class="form-group"><label>Bữa ăn</label><input data-field="Meals" value="@d.Meals" placeholder="VD: Sáng, Trưa, Tối" /></div>
-                            <div class="form-group"><label>Lưu trú</label><input data-field="Accommodation" value="@d.Accommodation" placeholder="VD: Khách sạn Đà Nẵng" /></div>
+                            <div class="form-group"><label>@L["Bữa ăn"]</label><input data-field="Meals" value="@d.Meals" placeholder="@L["VD: Sáng, Trưa, Tối"]" /></div>
+                            <div class="form-group"><label>@L["Lưu trú"]</label><input data-field="Accommodation" value="@d.Accommodation" placeholder="@L["VD: Khách sạn Đà Nẵng"]" /></div>
                         </div>
-                        <div class="form-group"><label>Mô tả chi tiết</label><textarea data-field="Description" rows="4">@d.Description</textarea></div>
+                        <div class="form-group"><label>@L["Mô tả chi tiết"]</label><textarea data-field="Description" rows="4">@d.Description</textarea></div>
                     </div>
                 }
             </div>
-            <p class="muted js-empty-days" @(Model.ItineraryDays.Count > 0 ? "hidden" : "")>Chưa có ngày nào — bấm “Thêm ngày”.</p>
+            <p class="muted js-empty-days" @(Model.ItineraryDays.Count > 0 ? "hidden" : "")>@L["Chưa có ngày nào — bấm “Thêm ngày”."]</p>
         </div>
     </section>
 
@@ -164,35 +164,35 @@
     <section class="tab-panel" data-panel="gallery" hidden>
         <div class="card">
             <div class="card-title-row">
-                <h3 class="card-title"><i data-lucide="images"></i> Thư viện ảnh</h3>
+                <h3 class="card-title"><i data-lucide="images"></i> @L["Thư viện ảnh"]</h3>
                 <div class="url-adder">
-                    <input type="url" id="newImageUrl" placeholder="Dán URL ảnh (https://…)" />
-                    <button type="button" class="btn btn-ghost btn-sm" id="btnAddImage"><i data-lucide="plus"></i> Thêm ảnh</button>
+                    <input type="url" id="newImageUrl" placeholder="@L["Dán URL ảnh (https://…)"]" />
+                    <button type="button" class="btn btn-ghost btn-sm" id="btnAddImage"><i data-lucide="plus"></i> @L["Thêm ảnh"]</button>
                 </div>
             </div>
-            <p class="hint" style="margin-top:-6px">Chọn ngôi sao để đặt ảnh chính. Nếu không chọn, ảnh đầu tiên sẽ là ảnh chính.</p>
+            <p class="hint" style="margin-top:-6px">@L["Chọn ngôi sao để đặt ảnh chính. Nếu không chọn, ảnh đầu tiên sẽ là ảnh chính."]</p>
             <div id="imageList" class="gallery-grid gallery-edit">
                 @foreach (var img in Model.Images)
                 {
                     <div class="gallery-item js-image">
-                        <img src="@img.ImageURL" alt="Ảnh tour" loading="lazy" />
+                        <img src="@img.ImageURL" alt="@L["Ảnh tour"]" loading="lazy" />
                         <input type="hidden" data-field="ImageURL" value="@img.ImageURL" />
-                        <label class="main-toggle" title="Đặt làm ảnh chính">
+                        <label class="main-toggle" title="@L["Đặt làm ảnh chính"]">
                             <input type="radio" name="__mainImage" class="js-main" @(img.IsMainImage ? "checked" : "") />
                             <i data-lucide="star"></i>
                         </label>
-                        <button type="button" class="icon-btn icon-delete js-remove" title="Xoá ảnh"><i data-lucide="x"></i></button>
+                        <button type="button" class="icon-btn icon-delete js-remove" title="@L["Xoá ảnh"]"><i data-lucide="x"></i></button>
                     </div>
                 }
             </div>
-            <p class="muted js-empty-images" @(Model.Images.Count > 0 ? "hidden" : "")>Chưa có ảnh nào.</p>
+            <p class="muted js-empty-images" @(Model.Images.Count > 0 ? "hidden" : "")>@L["Chưa có ảnh nào."]</p>
         </div>
     </section>
 
     <div class="form-actions">
-        <a href="/admin/tours" class="btn btn-ghost">Huỷ</a>
+        <a href="/admin/tours" class="btn btn-ghost">@L["Huỷ"]</a>
         <button type="submit" class="btn btn-primary" id="btnSubmitTour">
-            <i data-lucide="check-circle-2"></i> @(Model.IsEdit ? "Cập nhật tour" : "Tạo tour")
+            <i data-lucide="check-circle-2"></i> @(Model.IsEdit ? L["Cập nhật tour"] : L["Tạo tour"])
         </button>
     </div>
 </form>
@@ -200,27 +200,27 @@
 <template id="dayTemplate">
     <div class="repeat-item js-day">
         <div class="repeat-head">
-            <span class="day-badge">Ngày <input type="number" min="1" class="day-num" data-field="DayNumber" /></span>
-            <button type="button" class="icon-btn icon-delete js-remove" title="Xoá ngày"><i data-lucide="trash-2"></i></button>
+            <span class="day-badge">@L["Ngày"] <input type="number" min="1" class="day-num" data-field="DayNumber" /></span>
+            <button type="button" class="icon-btn icon-delete js-remove" title="@L["Xoá ngày"]"><i data-lucide="trash-2"></i></button>
         </div>
-        <div class="form-group"><label>Tiêu đề <span class="req">*</span></label><input data-field="Title" placeholder="VD: Hà Nội – Đà Nẵng – Sơn Trà" /></div>
+        <div class="form-group"><label>@L["Tiêu đề"] <span class="req">*</span></label><input data-field="Title" placeholder="@L["VD: Hà Nội – Đà Nẵng – Sơn Trà"]" /></div>
         <div class="form-row">
-            <div class="form-group"><label>Bữa ăn</label><input data-field="Meals" placeholder="VD: Sáng, Trưa, Tối" /></div>
-            <div class="form-group"><label>Lưu trú</label><input data-field="Accommodation" placeholder="VD: Khách sạn Đà Nẵng" /></div>
+            <div class="form-group"><label>@L["Bữa ăn"]</label><input data-field="Meals" placeholder="@L["VD: Sáng, Trưa, Tối"]" /></div>
+            <div class="form-group"><label>@L["Lưu trú"]</label><input data-field="Accommodation" placeholder="@L["VD: Khách sạn Đà Nẵng"]" /></div>
         </div>
-        <div class="form-group"><label>Mô tả chi tiết</label><textarea data-field="Description" rows="4"></textarea></div>
+        <div class="form-group"><label>@L["Mô tả chi tiết"]</label><textarea data-field="Description" rows="4"></textarea></div>
     </div>
 </template>
 
 <template id="imageTemplate">
     <div class="gallery-item js-image">
-        <img alt="Ảnh tour" />
+        <img alt="@L["Ảnh tour"]" />
         <input type="hidden" data-field="ImageURL" />
-        <label class="main-toggle" title="Đặt làm ảnh chính">
+        <label class="main-toggle" title="@L["Đặt làm ảnh chính"]">
             <input type="radio" name="__mainImage" class="js-main" />
             <i data-lucide="star"></i>
         </label>
-        <button type="button" class="icon-btn icon-delete js-remove" title="Xoá ảnh"><i data-lucide="x"></i></button>
+        <button type="button" class="icon-btn icon-delete js-remove" title="@L["Xoá ảnh"]"><i data-lucide="x"></i></button>
     </div>
 </template>
 
@@ -293,13 +293,13 @@
                 codeInput.value = codeInput.value.toUpperCase().replace(/\s+/g, '');
                 clearTimeout(timer);
                 const code = codeInput.value;
-                if (code.length < 3) { codeStatus.textContent = 'Chữ in hoa, số và dấu gạch ngang'; codeStatus.className = 'hint'; return; }
-                codeStatus.textContent = 'Đang kiểm tra…'; codeStatus.className = 'hint';
+                if (code.length < 3) { codeStatus.textContent = UserI18n.t("Chữ in hoa, số và dấu gạch ngang"); codeStatus.className = 'hint'; return; }
+                codeStatus.textContent = UserI18n.t("Đang kiểm tra…"); codeStatus.className = 'hint';
                 timer = setTimeout(async () => {
                     const ex = codeInput.dataset.exclude;
                     const res = await fetch(`/admin/tours/check-code?tourCode=${encodeURIComponent(code)}${ex ? `&excludeId=${ex}` : ''}`);
                     const { exists } = await res.json();
-                    codeStatus.textContent = exists ? '✗ Mã tour đã tồn tại' : '✓ Mã tour hợp lệ';
+                    codeStatus.textContent = exists ? UserI18n.t("✗ Mã tour đã tồn tại") : UserI18n.t("✓ Mã tour hợp lệ");
                     codeStatus.className = exists ? 'field-error' : 'hint hint-ok';
                 }, 450);
             });

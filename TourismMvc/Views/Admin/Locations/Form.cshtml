@@ -1,8 +1,8 @@
 @model LocationFormViewModel
 @{
-    ViewData["Title"] = Model.IsEdit ? "Chỉnh sửa địa điểm" : "Thêm địa điểm";
-    ViewData["Description"] = "Tạo hoặc cập nhật thông tin địa điểm du lịch.";
-    var regions = new[] { (Region.NORTH, "Miền Bắc", "mountain-snow"), (Region.CENTRAL, "Miền Trung", "sunrise"), (Region.SOUTH, "Miền Nam", "palmtree") };
+    ViewData["Title"] = Model.IsEdit ? L["Chỉnh sửa địa điểm"] : L["Thêm địa điểm"];
+    ViewData["Description"] = L["Tạo hoặc cập nhật thông tin địa điểm du lịch."];
+    var regions = new[] { (Region.NORTH, L["Miền Bắc"], "mountain-snow"), (Region.CENTRAL, L["Miền Trung"], "sunrise"), (Region.SOUTH, L["Miền Nam"], "palmtree") };
     // Bảng sân bay cho JS tự điền khi gõ tên (cùng nguồn với server)
     var airportsJson = System.Text.Json.JsonSerializer.Serialize(
         VietnamAirports.All.ToDictionary(kv => kv.Key, kv => new { code = kv.Value.Code, name = kv.Value.Name }));
@@ -10,10 +10,10 @@
 
 <header class="page-header">
     <div class="title-block">
-        <a href="/admin/locations" class="back-btn" title="Quay lại danh sách" id="btnBack"><i data-lucide="arrow-left"></i></a>
+        <a href="/admin/locations" class="back-btn" title="@L["Quay lại danh sách"]" id="btnBack"><i data-lucide="arrow-left"></i></a>
         <div>
             <h1>@ViewData["Title"]</h1>
-            <p>@(Model.IsEdit ? $"ID: {Model.LocationID} · {Model.Name}" : "Điền thông tin để tạo địa điểm mới")</p>
+            <p>@(Model.IsEdit ? $"ID: {Model.LocationID} · {Model.Name}" : L["Điền thông tin để tạo địa điểm mới"])</p>
         </div>
     </div>
 </header>
@@ -26,42 +26,42 @@
 
     @* ── Cột trái: ảnh ── *@
     <section class="card form-side">
-        <h3 class="card-title"><i data-lucide="image"></i> Hình ảnh</h3>
+        <h3 class="card-title"><i data-lucide="image"></i> @L["Hình ảnh"]</h3>
         <label class="upload-area @(string.IsNullOrEmpty(Model.ImageURL) ? "" : "has-image")" id="uploadArea">
-            <img id="imagePreview" src="@Model.ImageURL" alt="Xem trước ảnh" @(string.IsNullOrEmpty(Model.ImageURL) ? "hidden" : "") />
+            <img id="imagePreview" src="@Model.ImageURL" alt="@L["Xem trước ảnh"]" @(string.IsNullOrEmpty(Model.ImageURL) ? "hidden" : "") />
             <div class="upload-placeholder">
                 <i data-lucide="image-plus"></i>
-                <strong>Click hoặc kéo thả ảnh vào đây</strong>
-                <span>JPG, PNG, WebP — tối đa 5MB</span>
+                <strong>@L["Click hoặc kéo thả ảnh vào đây"]</strong>
+                <span>@L["JPG, PNG, WebP — tối đa 5MB"]</span>
             </div>
-            <span class="upload-change"><i data-lucide="refresh-cw"></i> Thay đổi ảnh</span>
+            <span class="upload-change"><i data-lucide="refresh-cw"></i> @L["Thay đổi ảnh"]</span>
             <input asp-for="ImageFile" type="file" accept="image/*" id="imageInput" />
         </label>
         <span asp-validation-for="ImageFile" class="field-error"></span>
-        <p class="hint">Ảnh hiển thị ở trang chủ (mục điểm đến theo vùng miền) và trang chi tiết.</p>
+        <p class="hint">@L["Ảnh hiển thị ở trang chủ (mục điểm đến theo vùng miền) và trang chi tiết."]</p>
     </section>
 
     @* ── Cột phải: thông tin ── *@
     <div class="form-main">
         <section class="card">
-            <h3 class="card-title"><i data-lucide="info"></i> Thông tin cơ bản</h3>
+            <h3 class="card-title"><i data-lucide="info"></i> @L["Thông tin cơ bản"]</h3>
 
             <div class="form-row">
                 <div class="form-group">
-                    <label asp-for="Name">Tên địa điểm <span class="req">*</span></label>
-                    <input asp-for="Name" id="nameInput" placeholder="VD: Đà Nẵng, Hà Nội…" autocomplete="off" autofocus />
+                    <label asp-for="Name">@L["Tên địa điểm"] <span class="req">*</span></label>
+                    <input asp-for="Name" id="nameInput" placeholder="@L["VD: Đà Nẵng, Hà Nội…"]" autocomplete="off" autofocus />
                     <span asp-validation-for="Name" class="field-error"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="Slug">Slug <span class="req">*</span> <i data-lucide="link-2" class="label-icon"></i></label>
                     <input asp-for="Slug" id="slugInput" class="mono" placeholder="da-nang, ha-noi…" autocomplete="off" />
                     <span asp-validation-for="Slug" class="field-error"></span>
-                    <span class="hint">Tự sinh theo tên. Có thể sửa tay.</span>
+                    <span class="hint">@L["Tự sinh theo tên. Có thể sửa tay."]</span>
                 </div>
             </div>
 
             <div class="form-group">
-                <label>Khu vực <span class="req">*</span></label>
+                <label>@L["Khu vực"] <span class="req">*</span></label>
                 <div class="region-picker">
                     @foreach (var (r, label, icon) in regions)
                     {
@@ -75,11 +75,11 @@
             </div>
 
             <div class="form-group">
-                <label asp-for="Description">Mô tả</label>
+                <label asp-for="Description">@L["Mô tả"]</label>
                 <textarea asp-for="Description" id="descInput" rows="5" maxlength="500"
-                          placeholder="Mô tả ngắn về địa điểm (tối đa 500 ký tự)…"></textarea>
+                          placeholder="@L["Mô tả ngắn về địa điểm (tối đa 500 ký tự)…"]"></textarea>
                 <div class="meta-row">
-                    <span class="hint">Hiển thị trên trang chi tiết khi khách click vào</span>
+                    <span class="hint">@L["Hiển thị trên trang chi tiết khi khách click vào"]</span>
                     <span class="char-count"><span id="descCount">@(Model.Description?.Length ?? 0)</span>/500</span>
                 </div>
                 <span asp-validation-for="Description" class="field-error"></span>
@@ -87,27 +87,27 @@
         </section>
 
         <section class="card">
-            <h3 class="card-title"><i data-lucide="plane"></i> Thông tin sân bay</h3>
-            <p class="hint">Tự động điền khi nhập tên địa điểm có sân bay. Có thể chỉnh tay nếu cần.</p>
+            <h3 class="card-title"><i data-lucide="plane"></i> @L["Thông tin sân bay"]</h3>
+            <p class="hint">@L["Tự động điền khi nhập tên địa điểm có sân bay. Có thể chỉnh tay nếu cần."]</p>
             <div class="form-row">
                 <div class="form-group form-group-sm">
-                    <label asp-for="AirportCode">Mã sân bay</label>
+                    <label asp-for="AirportCode">@L["Mã sân bay"]</label>
                     <input asp-for="AirportCode" id="airportCodeInput" class="mono upper" maxlength="10" placeholder="SGN, HAN…" />
                     <span asp-validation-for="AirportCode" class="field-error"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="AirportName">Tên sân bay</label>
-                    <input asp-for="AirportName" id="airportNameInput" placeholder="VD: Sân bay Quốc tế Tân Sơn Nhất" />
+                    <label asp-for="AirportName">@L["Tên sân bay"]</label>
+                    <input asp-for="AirportName" id="airportNameInput" placeholder="@L["VD: Sân bay Quốc tế Tân Sơn Nhất"]" />
                     <span asp-validation-for="AirportName" class="field-error"></span>
                 </div>
             </div>
-            <div class="autofill-note" id="autofillNote" hidden><i data-lucide="sparkles"></i> Đã tự điền thông tin sân bay</div>
+            <div class="autofill-note" id="autofillNote" hidden><i data-lucide="sparkles"></i> @L["Đã tự điền thông tin sân bay"]</div>
         </section>
 
         <div class="form-actions">
-            <a href="/admin/locations" class="btn btn-ghost" id="btnCancel">Huỷ</a>
+            <a href="/admin/locations" class="btn btn-ghost" id="btnCancel">@L["Huỷ"]</a>
             <button type="submit" class="btn btn-primary" id="btnSubmit">
-                <i data-lucide="check-circle-2"></i> @(Model.IsEdit ? "Cập nhật" : "Tạo mới")
+                <i data-lucide="check-circle-2"></i> @(Model.IsEdit ? L["Cập nhật"] : L["Tạo mới"])
             </button>
         </div>
     </div>

@@ -12,6 +12,8 @@ public sealed class UserTranslationCatalog
     {
         var path = Path.Combine(environment.ContentRootPath, "Localization", "user.en.json");
         English = JsonSerializer.Deserialize<Dictionary<string, string>>(File.ReadAllText(path))!;
+        var admin = JsonSerializer.Deserialize<Dictionary<string, string>>(File.ReadAllText(Path.Combine(environment.ContentRootPath, "Localization", "admin.en.json")))!;
+        English = English.Concat(admin).GroupBy(x => x.Key).ToDictionary(x => x.Key, x => x.First().Value);
         Patterns = English.Where(x => !string.IsNullOrEmpty(x.Value) && Regex.IsMatch(x.Key, @"\{\d+\}"))
             .Select(x => (BuildPattern(x.Key), x.Value)).ToArray();
     }
@@ -27,7 +29,7 @@ public sealed class UserTranslationCatalog
 public sealed class UserText(UserTranslationCatalog catalog, IHttpContextAccessor accessor)
 {
     public bool IsAdmin => accessor.HttpContext?.Request.Path.StartsWithSegments("/admin") == true;
-    public bool IsEnglish => !IsAdmin && CultureInfo.CurrentUICulture.TwoLetterISOLanguageName != "vi";
+    public bool IsEnglish => CultureInfo.CurrentUICulture.TwoLetterISOLanguageName != "vi";
     public string Language => IsEnglish ? "en" : "vi";
     public CultureInfo Culture => CultureInfo.GetCultureInfo(IsEnglish ? "en-GB" : "vi-VN");
     public string DateFormat => IsEnglish ? "dd MMM yyyy" : "dd/MM/yyyy";
@@ -48,6 +50,5 @@ public sealed class UserText(UserTranslationCatalog catalog, IHttpContextAccesso
         return source;
     }
     public string ClientJson => JsonSerializer.Serialize(catalog.English);
-    public static bool IsUserRequest(HttpContext context) => !context.Request.Path.StartsWithSegments("/admin")
-        && !context.Request.Path.StartsWithSegments("/payment/vnpay/ipn");
+    public static bool IsUserRequest(HttpContext context) => !context.Request.Path.StartsWithSegments("/payment/vnpay/ipn");
 }

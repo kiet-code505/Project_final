@@ -1,0 +1,11 @@
+2026-11-09 12:17:23.674: [INFO] CurrentProfilePath: D:\TourismMvc\artifacts\admin-localization-check\edge-profile-isolated\Default
+2026-11-09 12:17:23.674: [INFO] Profiles total count: 1
+2026-11-09 12:17:23.674: [INFO] Profile: name=Profile 1 path=D:\TourismMvc\artifacts\admin-localization-check\edge-profile-isolated\Default lastActive=null
+2026-11-09 12:17:23.674: [INFO] LastUsedProfileDir: D:\TourismMvc\artifacts\admin-localization-check\edge-profile-isolated\Default
+2026-11-09 12:17:23.674: [INFO] VisibilityChanged: 0
+2026-11-09 12:17:23.734: [INFO] OnDoneLoading sync enabled: 0
+2026-11-09 12:17:23.734: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-11-09 12:17:23.734: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-11-09 12:17:23.734: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-11-09 12:17:23.774: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 0
+2026-11-09 12:18:05.471: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1

@@ -1,22 +1,22 @@
 @model TourismMvc.Models.ViewModels.AdminBookingActionViewModel
 @{
     var b = Model.Details.Booking;
-    ViewData["Title"] = Model.ConfirmPayment ? "Xác nhận thu tiền" : "Hủy booking";
+    ViewData["Title"] = Model.ConfirmPayment ? L["Xác nhận thu tiền"] : L["Hủy booking"];
 }
 <link rel="stylesheet" href="~/css/admin-bookings.css" asp-append-version="true" />
-<a class="btn btn-ghost" href="@Model.Details.ReturnUrl"><i data-lucide="arrow-left"></i>Quay lại</a>
+<a class="btn btn-ghost" href="@Model.Details.ReturnUrl"><i data-lucide="arrow-left"></i>@L["Quay lại"]</a>
 <section class="booking-action-panel">
     <div class="booking-action-icon @(Model.ConfirmPayment ? "booking-paid" : "booking-cancelled")"><i data-lucide="@(Model.ConfirmPayment ? "circle-check" : "circle-x")"></i></div>
     <h1>@ViewData["Title"]</h1><p class="booking-action-code">@b.BookingCode</p>
-    <div class="booking-action-summary"><strong>@b.TourDeparture?.Tour?.TourName</strong><p>Khách liên hệ: @b.ContactFullName</p><p>Khởi hành: @b.TourDeparture?.DepartureDate.ToString("dd/MM/yyyy HH:mm")</p><p>Tổng tiền: <strong>@b.TotalPrice.ToString("N0", System.Globalization.CultureInfo.GetCultureInfo("vi-VN")) ₫</strong></p><span class="booking-status @b.BookingStatus.CssClass()">@b.BookingStatus.Label()</span></div>
+    <div class="booking-action-summary"><strong>@b.TourDeparture?.Tour?.TourName</strong><p>@L["Khách liên hệ:"] @b.ContactFullName</p><p>@L["Khởi hành:"] @b.TourDeparture?.DepartureDate.ToString(L.DateTimeFormat, L.Culture)</p><p>@L["Tổng tiền:"] <strong>@b.TotalPrice.ToString("N0", L.Culture) ₫</strong></p><span class="booking-status @b.BookingStatus.CssClass()">@L[b.BookingStatus.Label()]</span></div>
     @if (!Model.Allowed)
-    { <p class="booking-notice" role="alert">@Model.BlockedReason</p><a class="btn btn-primary" href="@Model.Details.ReturnUrl">Quay lại booking</a> }
+    { <p class="booking-notice" role="alert">@L[Model.BlockedReason ?? ""]</p><a class="btn btn-primary" href="@Model.Details.ReturnUrl">@L["Quay lại booking"]</a> }
     else
     {
-        <p class="booking-action-description">@(Model.ConfirmPayment ? "Chỉ xác nhận khi bạn đã nhận đủ tiền từ khách. Sau khi xác nhận, booking sẽ được đánh dấu Đã thanh toán." : "Booking sẽ chuyển sang Đã hủy và chỗ đã giữ được trả lại cho lịch khởi hành. Bạn không thể khôi phục đơn tại trang này.")</p>
+        <p class="booking-action-description">@(Model.ConfirmPayment ? L["Chỉ xác nhận khi bạn đã nhận đủ tiền từ khách. Sau khi xác nhận, booking sẽ được đánh dấu Đã thanh toán."] : L["Booking sẽ chuyển sang Đã hủy và chỗ đã giữ được trả lại cho lịch khởi hành. Bạn không thể khôi phục đơn tại trang này."])</p>
         <form method="post" action="/admin/bookings/@b.BookingID/@(Model.ConfirmPayment ? "confirm" : "cancel")">
             @Html.AntiForgeryToken()<input type="hidden" name="ExpectedStatus" value="@b.BookingStatus" /><input type="hidden" name="ReturnUrl" value="@Model.Details.ReturnUrl" />
-            <div class="booking-action-buttons"><a class="btn btn-ghost" href="@Model.Details.ReturnUrl">Quay lại</a><button class="btn @(Model.ConfirmPayment ? "btn-primary" : "btn-danger")" type="submit">@(Model.ConfirmPayment ? "Xác nhận đã thu tiền" : "Xác nhận hủy booking")</button></div>
+            <div class="booking-action-buttons"><a class="btn btn-ghost" href="@Model.Details.ReturnUrl">@L["Quay lại"]</a><button class="btn @(Model.ConfirmPayment ? "btn-primary" : "btn-danger")" type="submit">@(Model.ConfirmPayment ? L["Xác nhận đã thu tiền"] : L["Xác nhận hủy booking"])</button></div>
         </form>
     }
 </section>

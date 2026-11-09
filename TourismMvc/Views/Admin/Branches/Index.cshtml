@@ -1,7 +1,7 @@
 @model BranchIndexViewModel
 @{
-    ViewData["Title"] = "Quản lý Chi nhánh";
-    ViewData["Description"] = "Quản lý văn phòng và chi nhánh phụ trách các tour du lịch.";
+    ViewData["Title"] = L["Quản lý Chi nhánh"];
+    ViewData["Description"] = L["Quản lý văn phòng và chi nhánh phụ trách các tour du lịch."];
 
     string Link(int? page = null, string? search = "__keep", int? pageSize = null)
     {
@@ -23,13 +23,13 @@
     <div class="title-block">
         <div class="title-icon"><i data-lucide="building-2"></i></div>
         <div>
-            <h1>Quản lý Chi nhánh & Chính sách</h1>
-            <p>Văn phòng phụ trách và các mẫu điều khoản áp dụng cho tour</p>
+            <h1>@L["Quản lý Chi nhánh & Chính sách"]</h1>
+            <p>@L["Văn phòng phụ trách và các mẫu điều khoản áp dụng cho tour"]</p>
         </div>
     </div>
     <div class="header-actions">
         <a href="/admin/branches/create" class="btn btn-primary" id="btnCreateBranch">
-            <i data-lucide="plus"></i> Thêm chi nhánh
+            <i data-lucide="plus"></i> @L["Thêm chi nhánh"]
         </a>
     </div>
 </header>
@@ -37,11 +37,11 @@
 @* ── NAVIGATION TABS (Chi nhánh / Chính sách) ── *@
 <div class="sub-tabs">
     <a href="/admin/branches" class="sub-tab sub-tab-active">
-        <i data-lucide="building-2"></i> Chi nhánh
+        <i data-lucide="building-2"></i> @L["Chi nhánh"]
         <span class="sub-tab-badge">@Model.TotalItems</span>
     </a>
     <a href="/admin/policies" class="sub-tab">
-        <i data-lucide="file-text"></i> Mẫu chính sách (Policy)
+        <i data-lucide="file-text"></i> @L["Mẫu chính sách (Policy)"]
     </a>
 </div>
 
@@ -50,17 +50,17 @@
     <div class="stat-card">
         <div class="stat-icon stat-blue"><i data-lucide="building-2"></i></div>
         <div>
-            <div class="stat-label">Tổng chi nhánh</div>
+            <div class="stat-label">@L["Tổng chi nhánh"]</div>
             <div class="stat-value" data-count="@Model.StatTotal">@Model.StatTotal</div>
-            <div class="stat-hint">Văn phòng đại diện & phụ trách</div>
+            <div class="stat-hint">@L["Văn phòng đại diện & phụ trách"]</div>
         </div>
     </div>
     <div class="stat-card">
         <div class="stat-icon stat-amber"><i data-lucide="file-text"></i></div>
         <div>
-            <div class="stat-label">Tổng mẫu chính sách</div>
+            <div class="stat-label">@L["Tổng mẫu chính sách"]</div>
             <div class="stat-value" data-count="@Model.StatTotalPolicies">@Model.StatTotalPolicies</div>
-            <div class="stat-hint">Đang gắn vào các chi nhánh</div>
+            <div class="stat-hint">@L["Đang gắn vào các chi nhánh"]</div>
         </div>
     </div>
 </section>
@@ -70,10 +70,10 @@
     <label class="search-box">
         <i data-lucide="search"></i>
         <input type="search" name="search" id="searchInput" value="@Model.Search"
-               placeholder="Tìm theo tên chi nhánh, SĐT, email, địa chỉ…" autocomplete="off" />
+               placeholder="@L["Tìm theo tên chi nhánh, SĐT, email, địa chỉ…"]" autocomplete="off" />
         @if (!string.IsNullOrEmpty(Model.Search))
         {
-            <a class="clear-btn" href="@Link(page: 1, search: null)" title="Xoá tìm kiếm"><i data-lucide="x"></i></a>
+            <a class="clear-btn" href="@Link(page: 1, search: null)" title="@L["Xoá tìm kiếm"]"><i data-lucide="x"></i></a>
         }
     </label>
 
@@ -81,7 +81,7 @@
         <select name="pageSize" class="select" id="pageSizeSelect" onchange="this.form.submit()">
             @foreach (var s in new[] { 6, 12, 24 })
             {
-                <option value="@s" selected="@(Model.PageSize == s)">@s / trang</option>
+                <option value="@s" selected="@(Model.PageSize == s)">@s @L["/ trang"]</option>
             }
         </select>
     </div>
@@ -93,15 +93,15 @@
         <div class="empty-icon"><i data-lucide="building-2"></i></div>
         @if (!string.IsNullOrEmpty(Model.Search))
         {
-            <h3>Không tìm thấy chi nhánh phù hợp</h3>
-            <p>Thử đổi từ khoá tìm kiếm khác</p>
-            <a href="/admin/branches" class="btn btn-ghost"><i data-lucide="rotate-ccw"></i> Xoá bộ lọc</a>
+            <h3>@L["Không tìm thấy chi nhánh phù hợp"]</h3>
+            <p>@L["Thử đổi từ khoá tìm kiếm khác"]</p>
+            <a href="/admin/branches" class="btn btn-ghost"><i data-lucide="rotate-ccw"></i> @L["Xoá bộ lọc"]</a>
         }
         else
         {
-            <h3>Chưa có chi nhánh nào</h3>
-            <p>Thêm chi nhánh đầu tiên để bắt đầu liên kết với các mẫu chính sách</p>
-            <a href="/admin/branches/create" class="btn btn-primary"><i data-lucide="plus"></i> Thêm chi nhánh đầu tiên</a>
+            <h3>@L["Chưa có chi nhánh nào"]</h3>
+            <p>@L["Thêm chi nhánh đầu tiên để bắt đầu liên kết với các mẫu chính sách"]</p>
+            <a href="/admin/branches/create" class="btn btn-primary"><i data-lucide="plus"></i> @L["Thêm chi nhánh đầu tiên"]</a>
         }
     </div>
 }
@@ -145,15 +145,15 @@ else
                 </div>
 
                 <div class="branch-card-footer">
-                    <span class="badge badge-central" title="Số mẫu chính sách gắn vào chi nhánh này">
-                        <i data-lucide="file-text"></i> @item.PolicyCount chính sách
+                    <span class="badge badge-central" title="@L["Số mẫu chính sách gắn vào chi nhánh này"]">
+                        <i data-lucide="file-text"></i> @item.PolicyCount @L["chính sách"]
                     </span>
 
                     <div class="row-actions">
-                        <a class="icon-btn icon-edit" href="/admin/branches/@b.ContactID/edit" title="Chỉnh sửa"><i data-lucide="pencil"></i></a>
+                        <a class="icon-btn icon-edit" href="/admin/branches/@b.ContactID/edit" title="@L["Chỉnh sửa"]"><i data-lucide="pencil"></i></a>
                         <button type="button" class="icon-btn icon-delete js-delete-branch" 
                                 data-id="@b.ContactID" data-name="@b.BranchName" data-policies="@item.PolicyCount"
-                                title="Xoá"><i data-lucide="trash-2"></i></button>
+                                title="@L["Xoá"]"><i data-lucide="trash-2"></i></button>
                     </div>
                 </div>
             </div>
@@ -163,9 +163,9 @@ else
     @if (Model.TotalPages > 1)
     {
         <footer class="table-foot" style="margin-top: 20px; background: var(--surface); border-radius: var(--radius);">
-            <span class="muted">Hiển thị <strong>@fromItem–@toItem</strong> trên <strong>@Model.TotalItems</strong> chi nhánh</span>
-            <nav class="pagination" aria-label="Phân trang">
-                <a class="page-btn @(Model.Page <= 1 ? "disabled" : "")" href="@Link(page: Model.Page - 1)"><i data-lucide="chevron-left"></i> Trước</a>
+            <span class="muted">@L["Hiển thị"] <strong>@fromItem–@toItem</strong> @L["trên"] <strong>@Model.TotalItems</strong> @L["chi nhánh"]</span>
+            <nav class="pagination" aria-label="@L["Phân trang"]">
+                <a class="page-btn @(Model.Page <= 1 ? "disabled" : "")" href="@Link(page: Model.Page - 1)"><i data-lucide="chevron-left"></i> @L["Trước"]</a>
                 @for (var p = 1; p <= Model.TotalPages; p++)
                 {
                     <a class="page-num @(p == Model.Page ? "active" : "")" href="@Link(page: p)">@p</a>
@@ -182,11 +182,11 @@ else
         @Html.AntiForgeryToken()
         <input type="hidden" name="returnUrl" value="@currentUrl" />
         <div class="confirm-icon"><i data-lucide="alert-triangle"></i></div>
-        <h3 id="confirmTitle">Xoá chi nhánh này?</h3>
-        <p id="confirmMessage">Hành động này không thể hoàn tác.</p>
+        <h3 id="confirmTitle">@L["Xoá chi nhánh này?"]</h3>
+        <p id="confirmMessage">@L["Hành động này không thể hoàn tác."]</p>
         <div class="confirm-actions">
-            <button type="button" class="btn btn-ghost" data-close>Huỷ</button>
-            <button type="submit" class="btn btn-danger" id="confirmDeleteBtn"><i data-lucide="trash-2"></i> Xác nhận xoá</button>
+            <button type="button" class="btn btn-ghost" data-close>@L["Huỷ"]</button>
+            <button type="submit" class="btn btn-danger" id="confirmDeleteBtn"><i data-lucide="trash-2"></i> @L["Xác nhận xoá"]</button>
         </div>
     </form>
 </div>
@@ -206,11 +206,11 @@ else
                     const policies = +btn.dataset.policies;
 
                     form.action = `/admin/branches/${id}/delete`;
-                    title.textContent = `Xoá "${name}"?`;
+                    title.textContent = UserI18n.t("Xoá \"{0}\"?" ,name);
                     if (policies > 0) {
-                        msg.textContent = `Chi nhánh này đang có ${policies} mẫu chính sách liên kết. Hệ thống sẽ chặn xoá để bảo đảm an toàn dữ liệu.`;
+                        msg.textContent = UserI18n.t("Chi nhánh này đang có {0} mẫu chính sách liên kết. Hệ thống sẽ chặn xoá để bảo đảm an toàn dữ liệu." ,policies);
                     } else {
-                        msg.textContent = 'Hành động này không thể hoàn tác.';
+                        msg.textContent = UserI18n.t("Hành động này không thể hoàn tác.");
                     }
                     modal.removeAttribute('hidden');
                 });
