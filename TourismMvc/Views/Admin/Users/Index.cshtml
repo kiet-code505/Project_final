@@ -1,0 +1,88 @@
+@using TourismMvc.Models.Entities
+@using TourismMvc.Models.ViewModels
+@model AdminUserIndexViewModel
+@{
+    ViewData["Title"] = "Quản lý người dùng";
+    var currentUrl = Context.Request.Path + Context.Request.QueryString;
+    var selfId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+    string Link(int page) => "/admin/users" + Microsoft.AspNetCore.Http.QueryString.Create(new Dictionary<string, string?>
+    {
+        ["fullName"] = Model.Filter.FullName, ["email"] = Model.Filter.Email, ["phone"] = Model.Filter.Phone,
+        ["status"] = Model.Filter.Status, ["role"] = Model.Filter.Role?.ToString(),
+        ["page"] = page.ToString(), ["pageSize"] = Model.Filter.PageSize.ToString()
+    }.Where(x => !string.IsNullOrEmpty(x.Value)));
+}
+<link rel="stylesheet" href="~/css/admin-users.css" asp-append-version="true" />
+<header class="page-header">
+    <div class="title-block">
+        <div class="title-icon"><i data-lucide="users"></i></div>
+        <div><h1>Quản lý người dùng</h1><p>Tra cứu tài khoản, quản lý trạng thái và xem lịch sử đặt tour</p></div>
+    </div>
+</header>
+<section class="stats-grid" aria-label="Thống kê tài khoản">
+    <div class="stat-card"><div class="stat-icon stat-blue"><i data-lucide="users"></i></div><div><div class="stat-label">Tổng người dùng</div><div class="stat-value">@Model.TotalUsers</div></div></div>
+    <div class="stat-card"><div class="stat-icon stat-green"><i data-lucide="user-check"></i></div><div><div class="stat-label">Đang hoạt động</div><div class="stat-value">@Model.ActiveUsers</div></div></div>
+    <div class="stat-card"><div class="stat-icon stat-red"><i data-lucide="user-x"></i></div><div><div class="stat-label">Đã khóa</div><div class="stat-value">@Model.LockedUsers</div></div></div>
+    <div class="stat-card"><div class="stat-icon stat-amber"><i data-lucide="shield-check"></i></div><div><div class="stat-label">Quản trị viên</div><div class="stat-value">@Model.AdminUsers</div></div></div>
+</section>
+<form method="get" action="/admin/users" class="user-filters">
+    <div class="user-filter-fields">
+        <div class="form-group"><label for="fullName">Họ tên</label><input id="fullName" name="fullName" value="@Model.Filter.FullName" maxlength="100" placeholder="Tìm theo tên…" /></div>
+        <div class="form-group"><label for="phone">Số điện thoại</label><input id="phone" name="phone" value="@Model.Filter.Phone" maxlength="30" inputmode="tel" placeholder="Tìm theo số điện thoại…" /></div>
+        <div class="form-group"><label for="email">Email</label><input id="email" name="email" value="@Model.Filter.Email" maxlength="254" placeholder="Tìm theo email…" /></div>
+    </div>
+    <div class="user-filter-actions">
+        <label for="status" class="sr-only">Trạng thái</label>
+        <select class="select" id="status" name="status"><option value="">Tất cả trạng thái</option><option value="active" selected="@(Model.Filter.Status == "active")">Đang hoạt động</option><option value="locked" selected="@(Model.Filter.Status == "locked")">Đã khóa</option></select>
+        <label for="role" class="sr-only">Vai trò</label>
+        <select class="select" id="role" name="role"><option value="">Tất cả vai trò</option><option value="CUSTOMER" selected="@(Model.Filter.Role == Role.CUSTOMER)">Khách hàng</option><option value="ADMIN" selected="@(Model.Filter.Role == Role.ADMIN)">Quản trị viên</option><option value="TOUR_OWNER" selected="@(Model.Filter.Role == Role.TOUR_OWNER)">Nhà cung cấp</option></select>
+        <label for="pageSize" class="sr-only">Số tài khoản mỗi trang</label>
+        <select class="select" name="pageSize" id="pageSize">@foreach (var size in new[] { 6, 12, 24 }) { <option value="@size" selected="@(Model.Filter.PageSize == size)">@size / trang</option> }</select>
+        <button class="btn btn-primary" type="submit"><i data-lucide="search"></i>Tìm kiếm</button>
+        <a class="btn btn-ghost" href="/admin/users"><i data-lucide="rotate-ccw"></i>Đặt lại</a>
+    </div>
+</form>
+<p class="user-result-count" role="status">Tìm thấy <strong>@Model.TotalItems</strong> tài khoản</p>
+@if (Model.Items.Count == 0)
+{
+    <div class="empty"><div class="empty-icon"><i data-lucide="users"></i></div><h3>Không tìm thấy người dùng phù hợp</h3><p>Thử thay đổi tên, email, số điện thoại hoặc bộ lọc.</p><a href="/admin/users" class="btn btn-ghost">Xóa bộ lọc</a></div>
+}
+else
+{
+    <div class="user-grid">
+        @foreach (var account in Model.Items)
+        {
+            var isSelf = account.Id.ToString() == selfId;
+            <article class="user-card" data-user-id="@account.Id">
+                <div class="user-card-heading"><div class="user-avatar"><i data-lucide="user-round"></i></div><div><h2>@account.FullName</h2><p>#@account.Id · @account.RoleLabel @(isSelf ? "· Bạn" : "")</p></div></div>
+                <div class="user-badges"><span class="badge @(account.Status ? "user-active" : "user-locked")">@(account.Status ? "Đang hoạt động" : "Đã khóa")</span><span class="user-verification">@(account.IsEmailVerified ? "Email đã xác thực" : "Email chưa xác thực")</span></div>
+                <dl class="user-info"><div><dt><i data-lucide="mail"></i><span class="sr-only">Email</span></dt><dd>@account.Email</dd></div><div><dt><i data-lucide="phone"></i><span class="sr-only">Số điện thoại</span></dt><dd>@(string.IsNullOrEmpty(account.Phone) ? "Chưa cập nhật số điện thoại" : account.Phone)</dd></div></dl>
+                <div class="user-card-footer">
+                    <a class="btn btn-ghost" href="@Url.Action("Details", "Users", new { id = account.Id, returnUrl = currentUrl })"><i data-lucide="list-ordered"></i>@account.BookingCount đơn đặt tour</a>
+                    @if (isSelf)
+                    {
+                        <span class="user-self" title="Bạn không thể tự khóa tài khoản đang đăng nhập."><i data-lucide="shield-check"></i>Tài khoản của bạn</span>
+                    }
+                    else
+                    {
+                        <a class="btn @(account.Status ? "user-lock-btn" : "user-unlock-btn")" href="@Url.Action("Status", "Users", new { id = account.Id, returnUrl = currentUrl })"><i data-lucide="@(account.Status ? "lock-keyhole" : "unlock-keyhole")"></i>@(account.Status ? "Khóa" : "Mở khóa")</a>
+                    }
+                </div>
+            </article>
+        }
+    </div>
+    <footer class="table-foot user-pagination">
+        <span class="muted">Hiển thị @((Model.Filter.Page - 1) * Model.Filter.PageSize + 1)–@Math.Min(Model.Filter.Page * Model.Filter.PageSize, Model.TotalItems) / @Model.TotalItems tài khoản</span>
+        @if (Model.TotalPages > 1)
+        {
+            <nav class="pagination" aria-label="Phân trang người dùng">
+                @if (Model.Filter.Page > 1) { <a class="page-btn" href="@Link(Model.Filter.Page - 1)" rel="prev">Trước</a> }
+                @for (var p = Math.Max(1, Model.Filter.Page - 2); p <= Math.Min(Model.TotalPages, Model.Filter.Page + 2); p++)
+                {
+                    <a class="page-num @(p == Model.Filter.Page ? "active" : "")" href="@Link(p)" aria-current="@(p == Model.Filter.Page ? "page" : null)">@p</a>
+                }
+                @if (Model.Filter.Page < Model.TotalPages) { <a class="page-btn" href="@Link(Model.Filter.Page + 1)" rel="next">Sau</a> }
+            </nav>
+        }
+    </footer>
+}

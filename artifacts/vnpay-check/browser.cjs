@@ -1,0 +1,24 @@
+const fs=require('node:fs'),assert=require('node:assert/strict'),WebSocket=require('D:/Đồ án cuối kì/frontend/node_modules/ws');
+(async()=>{
+ const f=JSON.parse(fs.readFileSync(__dirname+'/fixture.json','utf8'));
+ const base=process.env.TOURISM_BASE_URL||'http://localhost:5037';
+ const tabs=await(await fetch('http://localhost:9248/json')).json();const ws=new WebSocket(tabs.find(t=>t.type==='page').webSocketDebuggerUrl);await new Promise((ok,no)=>{ws.once('open',ok);ws.once('error',no)});
+ let seq=0;const requests=new Map();ws.on('message',data=>{const m=JSON.parse(data);if(m.id){const p=requests.get(m.id);requests.delete(m.id);m.error?p.no(m.error):p.ok(m.result)}});
+ const send=(method,params={})=>new Promise((ok,no)=>{const id=++seq;requests.set(id,{ok,no});ws.send(JSON.stringify({id,method,params}))});
+ const ev=async expression=>{const r=await send('Runtime.evaluate',{expression,returnByValue:true,awaitPromise:true});if(r.exceptionDetails)throw Error(JSON.stringify(r.exceptionDetails));return r.result.value};
+ const pause=ms=>new Promise(r=>setTimeout(r,ms));const wait=async expression=>{for(let i=0;i<160;i++){if(await ev(expression)){await pause(350);return}await pause(200)}throw Error('Timeout: '+expression)};
+ const go=async path=>{await send('Page.navigate',{url:base+path});await pause(500);await wait('document.readyState==="complete"')};
+ const shot=async name=>{await pause(600);fs.writeFileSync(__dirname+'/'+name+'.png',Buffer.from((await send('Page.captureScreenshot',{format:'png'})).data,'base64'))};
+ await send('Page.enable');await send('Emulation.setDeviceMetricsOverride',{width:1440,height:1100,deviceScaleFactor:1,mobile:false});
+ await go('/order-booking?tourCode='+f.code+'&departureId='+f.departures[9]);
+ await ev('document.getElementById("contact-name").value="VNPAY Browser Fixture";document.getElementById("contact-email").value="vnpay-browser@example.invalid";document.getElementById("contact-phone").value="0901234567";document.getElementById("contact-address").value="Địa chỉ kiểm thử";document.querySelector("[data-field=FullName]").value="Adult Test";document.querySelector("[data-field=DateOfBirth]").value="1990-01-01";document.querySelector("[name=\\"Input.AgreeToPolicy\\"]").checked=true;document.getElementById("submit-booking").click()');
+ await wait('!!document.getElementById("pay-vnpay") && document.readyState==="complete"');
+ const receipt=await ev('location.pathname');fs.writeFileSync(__dirname+'/browser-result.json',JSON.stringify({receipt}));
+ assert.equal(await ev('document.documentElement.scrollWidth<=innerWidth'),true);await ev('document.querySelector(".payment-checkout").scrollIntoView({block:"center"})');await shot('checkout-desktop');
+ await send('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});await ev('document.querySelector(".payment-checkout").scrollIntoView({block:"center"})');await shot('checkout-mobile');assert.equal(await ev('document.documentElement.scrollWidth<=innerWidth'),true);
+ await send('Emulation.setDeviceMetricsOverride',{width:1440,height:1100,deviceScaleFactor:1,mobile:false});await ev('document.getElementById("pay-vnpay").click()');
+ await wait('location.hostname==="sandbox.vnpayment.vn" && document.readyState==="complete"');await pause(1200);await shot('vnpay-gateway');
+ console.log('PASS browser native booking, countdown, private payment checkout and desktop/mobile layout');
+ console.log(JSON.stringify(await ev('({path:location.pathname,text:document.body.innerText.slice(0,1600),inputs:[...document.querySelectorAll("input")].map(x=>({id:x.id,name:x.name,type:x.type,placeholder:x.placeholder})),buttons:[...document.querySelectorAll("button")].map(x=>({id:x.id,text:x.textContent.trim()}))})')));
+ ws.close();
+})().catch(e=>{console.error(e);process.exit(1)});

@@ -1,0 +1,124 @@
+@model DepartureIndexViewModel
+@{
+    ViewData["Title"] = "Quản lý lịch khởi hành";
+    var vi = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+    var currentUrl = Context.Request.Path + Context.Request.QueryString;
+    string Link(int page) => "/admin/departures" + Microsoft.AspNetCore.Http.QueryString.Create(
+        new Dictionary<string, string?> {
+            ["search"] = Model.Search, ["tourId"] = Model.TourId?.ToString(),
+            ["startDate"] = Model.StartDate?.ToString("yyyy-MM-dd"),
+            ["endDate"] = Model.EndDate?.ToString("yyyy-MM-dd"),
+            ["status"] = Model.Status?.ToString().ToLowerInvariant(),
+            ["newestFirst"] = Model.NewestFirst.ToString(),
+            ["pageSize"] = Model.PageSize.ToString(), ["page"] = page.ToString()
+        }.Where(x => !string.IsNullOrEmpty(x.Value)));
+}
+<link rel="stylesheet" href="~/css/admin-departures.css" asp-append-version="true" />
+<header class="page-header">
+    <div class="title-block">
+        <div class="title-icon"><i data-lucide="calendar-days"></i></div>
+        <div><h1>Quản lý lịch khởi hành</h1><p>Lịch theo tour, tình trạng chỗ, giá và vận chuyển</p></div>
+    </div>
+</header>
+<div class="departure-tools">
+    <a class="btn btn-primary" href="@Url.Action("Create", "Departures", new { tourId = Model.TourId, returnUrl = currentUrl })"><i data-lucide="plus"></i> Thêm lịch khởi hành</a>
+    <a class="btn btn-ghost" href="@("/admin/departures/export" + Link(Model.Page).Substring("/admin/departures".Length))"><i data-lucide="download"></i> Xuất CSV trang này</a>
+    <button class="btn btn-ghost" type="button" data-expand-departures="true">Mở rộng tất cả</button>
+    <button class="btn btn-ghost" type="button" data-expand-departures="false">Thu gọn tất cả</button>
+</div>
+<section class="stats-grid">
+    <div class="stat-card"><div class="stat-icon stat-blue"><i data-lucide="calendar-days"></i></div><div><div class="stat-label">Tổng lịch theo bộ lọc</div><div class="stat-value">@Model.TotalItems</div></div></div>
+    <div class="stat-card"><div class="stat-icon stat-green"><i data-lucide="check-circle-2"></i></div><div><div class="stat-label">Đang hoạt động</div><div class="stat-value">@Model.ActiveCount</div></div></div>
+    <div class="stat-card"><div class="stat-icon stat-amber"><i data-lucide="armchair"></i></div><div><div class="stat-label">Chỗ còn trống</div><div class="stat-value">@Model.AvailableSlots</div></div></div>
+    <div class="stat-card"><div class="stat-icon stat-rose"><i data-lucide="users"></i></div><div><div class="stat-label">Hành khách đã đặt</div><div class="stat-value">@Model.BookedSlots</div></div></div>
+</section>
+<form class="toolbar departure-filters" method="get" action="/admin/departures">
+    @if (Model.TourId.HasValue) { <input type="hidden" name="tourId" value="@Model.TourId" /> }
+    <label class="search-box"><i data-lucide="search"></i><input type="search" name="search" value="@Model.Search" placeholder="Tìm mã tour hoặc tên tour…" aria-label="Tìm tour" /></label>
+    <label>Từ ngày<input class="select" type="date" name="startDate" value="@Model.StartDate?.ToString("yyyy-MM-dd")" /></label>
+    <label>Đến ngày<input class="select" type="date" name="endDate" value="@Model.EndDate?.ToString("yyyy-MM-dd")" /></label>
+    <label>Chọn nhanh<select class="select" data-date-range><option value="">Chọn khoảng ngày</option><option value="today">Hôm nay</option><option value="week">Tuần này</option><option value="month">Tháng này</option><option value="next-month">Tháng sau</option><option value="all">Tất cả ngày</option></select></label>
+    <select class="select" name="status" aria-label="Trạng thái">
+        <option value="">Mọi trạng thái</option>
+        <option value="true" selected="@(Model.Status == true)">Hoạt động</option>
+        <option value="false" selected="@(Model.Status == false)">Tạm dừng</option>
+    </select>
+    <select class="select" name="newestFirst" aria-label="Sắp xếp">
+        <option value="false" selected="@(!Model.NewestFirst)">Ngày khởi hành tăng dần</option>
+        <option value="true" selected="@Model.NewestFirst">Mới tạo trước</option>
+    </select>
+    <select class="select" name="pageSize" aria-label="Số lịch mỗi trang">
+        @foreach (var size in new[] { 10, 20, 50 }) { <option value="@size" selected="@(Model.PageSize == size)">@size / trang</option> }
+    </select>
+    <button class="btn btn-primary" type="submit"><i data-lucide="filter"></i> Lọc</button>
+    <a class="btn btn-ghost" href="/admin/departures">Xoá bộ lọc</a>
+</form>
+<div asp-validation-summary="All" class="departure-validation"></div>
+@if (Model.Items.Count == 0)
+{
+    <div class="empty"><div class="empty-icon"><i data-lucide="calendar-days"></i></div><h3>Không có lịch khởi hành</h3><p>Chưa có dữ liệu hoặc không có lịch phù hợp với bộ lọc.</p></div>
+}
+else
+{
+    <form id="departure-bulk-delete" method="post" action="/admin/departures/delete-selected" class="departure-bulk" data-departure-delete>
+        @Html.AntiForgeryToken()<input type="hidden" name="returnUrl" value="@currentUrl" />
+        <label class="departure-check"><input type="checkbox" data-select-departures /> Chọn tất cả trên trang</label>
+        <span data-selected-count>Đã chọn 0 lịch</span>
+        <button class="btn btn-danger" type="submit" data-delete-selected disabled><i data-lucide="trash-2"></i> Xóa lịch đã chọn</button>
+    </form>
+    @foreach (var group in Model.Items.GroupBy(d => new { d.TourId, d.TourCode, d.TourName, d.Duration }))
+    {
+        <details class="table-card departure-group" open>
+            <summary class="departure-group-heading">
+                <i data-lucide="package"></i>
+                <div><strong>@group.Key.TourName</strong><div class="muted">@group.Key.TourCode · @group.Key.Duration</div></div>
+                <span class="departure-group-count">@group.Count() lịch trên trang</span>
+                <i data-lucide="chevron-down" class="accordion-arrow"></i>
+            </summary>
+            <div class="table-wrap"><table class="table">
+                <thead><tr><th>Chọn</th><th>Ngày khởi hành</th><th>Tình trạng chỗ</th><th>Giá người lớn từ</th><th>Vận chuyển</th><th>Trạng thái</th><th>Thao tác</th></tr></thead>
+                <tbody>
+                @foreach (var d in group)
+                {
+                    var detailUrl = Url.Action("Details", "Departures", new { id = d.DepartureId, returnUrl = currentUrl });
+                    <tr>
+                        <td><input type="checkbox" name="ids" value="@d.DepartureId" form="departure-bulk-delete" data-departure-id aria-label="Chọn lịch #@d.DepartureId" /></td>
+                        <td><a href="@detailUrl"><strong>@d.DepartureDate.ToString("dd/MM/yyyy")</strong></a><div class="muted">@d.DepartureDate.ToString("HH:mm") · #@d.DepartureId</div></td>
+                        <td><strong>@d.AvailableSlots còn</strong><div class="muted">@d.BookedSlots đã đặt</div>@if (d.AvailableSlots == 0) { <span class="status-pill status-off">Hết chỗ</span> }</td>
+                        <td>@(d.LowestPrice.HasValue ? d.LowestPrice.Value.ToString("N0", vi) + " ₫" : "Chưa có giá")</td>
+                        <td><div class="tour-stats">
+                            @if (d.HasOutbound) { <span class="tour-stat"><i data-lucide="plane-takeoff"></i>Chiều đi</span> }
+                            @if (d.HasInbound) { <span class="tour-stat"><i data-lucide="plane-landing"></i>Chiều về</span> }
+                            @if (!d.HasOutbound && !d.HasInbound) { <span class="muted">Chưa có</span> }
+                        </div></td>
+                        <td><span class="status-pill @(d.Active ? "status-on" : "status-off")">@(d.Active ? "Hoạt động" : "Tạm dừng")</span></td>
+                        <td><div class="departure-row-actions">
+                            <a class="icon-btn" href="@detailUrl" title="Xem chi tiết"><i data-lucide="eye"></i></a>
+                            <a class="icon-btn" href="@Url.Action("Edit", "Departures", new { id = d.DepartureId, returnUrl = currentUrl })" title="Chỉnh sửa"><i data-lucide="pencil"></i></a>
+                            <a class="icon-btn" href="@Url.Action("Clone", "Departures", new { id = d.DepartureId, returnUrl = currentUrl })" title="Sao chép sang ngày khác"><i data-lucide="copy"></i></a>
+                            <form method="post" action="/admin/departures/@d.DepartureId/delete" data-departure-delete>
+                                @Html.AntiForgeryToken()<input type="hidden" name="returnUrl" value="@currentUrl" />
+                                <button class="icon-btn departure-delete" type="submit" title="Xóa lịch #@d.DepartureId"><i data-lucide="trash-2"></i></button>
+                            </form>
+                        </div></td>
+                    </tr>
+                }
+                </tbody>
+            </table></div>
+        </details>
+    }
+    <footer class="table-foot">
+        <span class="muted">Hiển thị @((Model.Page - 1) * Model.PageSize + 1)–@Math.Min(Model.Page * Model.PageSize, Model.TotalItems) trên @Model.TotalItems lịch</span>
+        @if (Model.TotalPages > 1)
+        {
+            <nav class="pagination" aria-label="Phân trang">
+                @if (Model.Page > 1) { <a class="page-btn" href="@Link(Model.Page - 1)">Trước</a> }
+                @for (var p = Math.Max(1, Model.Page - 2); p <= Math.Min(Model.TotalPages, Model.Page + 2); p++)
+                { <a class="page-num @(p == Model.Page ? "active" : "")" href="@Link(p)" aria-current="@(p == Model.Page ? "page" : null)">@p</a> }
+                @if (Model.Page < Model.TotalPages) { <a class="page-btn" href="@Link(Model.Page + 1)">Sau</a> }
+            </nav>
+        }
+    </footer>
+}
+<partial name="~/Views/Admin/Departures/_DeleteConfirmation.cshtml" />
+@section Scripts { <script src="~/js/admin-departures.js" asp-append-version="true"></script> }

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản lý lịch khởi hành · Tourism Admin</title>
+    <meta name="description" content="Trang quản trị hệ thống du lịch" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/admin.css?v=2B4eyPwHNWQUQtGfKsWY1vjGnY89SfF2fEFSSXFGyOw" />
+</head>
+<body class="admin">
+    <aside class="sidebar" id="sidebar">
+        <a class="brand" href="/admin/locations">
+            <span class="brand-logo"><i data-lucide="compass"></i></span>
+            <span class="brand-text">Tourism<small>Admin Console</small></span>
+        </a>
+
+        <nav class="nav">
+            <div class="nav-label">Danh mục</div>
+            <a class="nav-item " href="/admin/locations">
+                <i data-lucide="map-pin"></i><span>Địa điểm</span>
+            </a>
+            <a class="nav-item " href="/admin/branches">
+                <i data-lucide="building-2"></i><span>Chi nhánh</span>
+            </a>
+            <a class="nav-item " href="/admin/policies">
+                <i data-lucide="file-text"></i><span>Chính sách</span>
+            </a>
+            <a class="nav-item " href="/admin/tours">
+                <i data-lucide="map"></i><span>Tour</span>
+            </a>
+            <a class="nav-item active" href="/admin/departures"><i data-lucide="calendar-days"></i><span>Lịch khởi hành</span></a>
+
+            <div class="nav-label">Kinh doanh</div>
+            <a class="nav-item disabled" title="Sắp ra mắt"><i data-lucide="ticket"></i><span>Booking</span><em>Soon</em></a>
+            <a class="nav-item disabled" title="Sắp ra mắt"><i data-lucide="users"></i><span>Người dùng</span><em>Soon</em></a>
+        </nav>
+
+        <div class="sidebar-foot">
+            <a href="/" class="nav-item"><i data-lucide="arrow-left"></i><span>Về trang chủ</span></a>
+        </div>
+    </aside>
+
+    <div class="main">
+        <header class="topbar">
+            <button class="icon-btn mobile-only" id="sidebarToggle" type="button" aria-label="Mở menu">
+                <i data-lucide="menu"></i>
+            </button>
+            <nav class="crumbs" aria-label="breadcrumb">
+                <span>Admin</span><i data-lucide="chevron-right"></i>
+                <strong>Quản lý lịch khởi hành</strong>
+            </nav>
+            <div class="topbar-right">
+                <div class="avatar" title="Admin">AD</div>
+            </div>
+        </header>
+
+        <main class="content">
+            <link rel="stylesheet" href="/css/admin-departures.css?v=BTiFw635d3CRE6Zp5giFPn_kR7llcOtGCY5VS0IclPs" />
+<header class="page-header">
+    <div class="title-block">
+        <div class="title-icon"><i data-lucide="calendar-days"></i></div>
+        <div><h1>Quản lý lịch khởi hành</h1><p>Lịch theo tour, tình trạng chỗ, giá và vận chuyển</p></div>
+    </div>
+</header>
+<section class="stats-grid">
+    <div class="stat-card"><div class="stat-icon stat-blue"><i data-lucide="calendar-days"></i></div><div><div class="stat-label">Tổng lịch theo bộ lọc</div><div class="stat-value">20</div></div></div>
+    <div class="stat-card"><div class="stat-icon stat-green"><i data-lucide="check-circle-2"></i></div><div><div class="stat-label">Đang hoạt động</div><div class="stat-value">20</div></div></div>
+    <div class="stat-card"><div class="stat-icon stat-amber"><i data-lucide="armchair"></i></div><div><div class="stat-label">Chỗ còn trống</div><div class="stat-value">2697</div></div></div>
+    <div class="stat-card"><div class="stat-icon stat-rose"><i data-lucide="users"></i></div><div><div class="stat-label">Hành khách đã đặt</div><div class="stat-value">3</div></div></div>
+</section>
+<form class="toolbar departure-filters" method="get" action="/admin/departures">
+    <label class="search-box"><i data-lucide="search"></i><input type="search" name="search" placeholder="Tìm mã tour hoặc tên tour…" aria-label="Tìm tour" /></label>
+    <label>Từ ngày<input class="select" type="date" name="startDate" /></label>
+    <label>Đến ngày<input class="select" type="date" name="endDate" /></label>
+    <select class="select" name="status" aria-label="Trạng thái">
+        <option value="">Mọi trạng thái</option>
+        <option value="true">Hoạt động</option>
+        <option value="false">Tạm dừng</option>
+    </select>
+    <select class="select" name="newestFirst" aria-label="Sắp xếp">
+        <option value="false" selected="selected">Ngày khởi hành tăng dần</option>
+        <option value="true">Mới tạo trước</option>
+    </select>
+    <select class="select" name="pageSize" aria-label="Số lịch mỗi trang">
+ <option value="10" selected="selected">10 / trang</option>  <option value="20">20 / trang</option>  <option value="50">50 / trang</option>     </select>
+    <button class="btn btn-primary" type="submit"><i data-lucide="filter"></i> Lọc</button>
+    <a class="btn btn-ghost" href="/admin/departures">Xoá bộ lọc</a>
+</form>
+<div class="departure-validation validation-summary-valid" data-valmsg-summary="true"><ul><li style="display:none"></li>
+</ul></div>
+        <details class="table-card departure-group" open>
+            <summary class="departure-group-heading">
+                <i data-lucide="package"></i>
+                <div><strong>Tour Quảng Nam - Bà Rịa-Vũng Tàu</strong><div class="muted">QN-VT · 3 ngày 2 đêm</div></div>
+                <span class="departure-group-count">4 lịch trên trang</span>
+                <i data-lucide="chevron-down" class="accordion-arrow"></i>
+            </summary>
+            <div class="table-wrap"><table class="table">
+                <thead><tr><th>Ngày khởi hành</th><th>Tình trạng chỗ</th><th>Giá người lớn từ</th><th>Vận chuyển</th><th>Trạng thái</th><th>Chi tiết</th></tr></thead>
+                <tbody>
+                    <tr>
+                        <td><a href="/admin/departures/24?returnUrl=%2Fadmin%2Fdepartures"><strong>03/10/2026</strong></a><div class="muted">11:00 · #24</div></td>
+                        <td><strong>120 còn</strong><div class="muted">0 đã đặt</div></td>
+                        <td>6.500.000 ₫</td>
+                        <td><div class="tour-stats">
+ <span class="tour-stat"><i data-lucide="plane-takeoff"></i>Chiều đi</span>  <span class="tour-stat"><i data-lucide="plane-landing"></i>Chiều về</span>                         </div></td>
+                        <td><span class="status-pill status-on">Hoạt động</span></td>
+                        <td><a class="icon-btn" href="/admin/departures/24?returnUrl=%2Fadmin%2Fdepartures" title="Xem chi tiết"><i data-lucide="eye"></i></a></td>
+                    </tr>
+                    <tr>
+                        <td><a href="/admin/departures/27?returnUrl=%2Fadmin%2Fdepartures"><strong>09/10/2026</strong></a><div class="muted">20:17 · #27</div></td>
+                        <td><strong>120 còn</strong><div class="muted">0 đã đặt</div></td>
+                        <td>6.500.000 ₫</td>
+                        <td><div class="tour-stats">
+ <span class="tour-stat"><i data-lucide="plane-takeoff"></i>Chiều đi</span>  <span class="tour-stat"><i data-lucide="plane-landing"></i>Chiều về</span>                         </div></td>
+                        <td><span class="status-pill status-on">Hoạt động</span></td>
+                        <td><a class="icon-btn" href="/admin/departures/27?returnUrl=%2Fadmin%2Fdepartures" title="Xem chi tiết"><i data-lucide="eye"></i></a></td>
+                    </tr>
+                    <tr>
+                        <td><a href="/admin/departures/25?returnUrl=%2Fadmin%2Fdepartures"><strong>10/10/2026</strong></a><div class="muted">20:14 · #25</div></td>
+                        <td><strong>120 còn</strong><div class="muted">0 đã đặt</div></td>
+                        <td>6.500.000 ₫</td>
+                        <td><div class="tour-stats">
+ <span class="tour-stat"><i data-lucide="plane-takeoff"></i>Chiều đi</span>  <span class="tour-stat"><i data-lucide="plane-landing"></i>Chiều về</span>                         </div></td>
+                        <td><span class="status-pill status-on">Hoạt động</span></td>
+                        <td><a class="icon-btn" href="/admin/departures/25?returnUrl=%2Fadmin%2Fdepartures" title="Xem chi tiết"><i data-lucide="eye"></i></a></td>
+                    </tr>
+                    <tr>
+                        <td><a href="/admin/departures/28?returnUrl=%2Fadmin%2Fdepartures"><strong>10/10/2026</strong></a><div class="muted">20:39 · #28</div></td>
+                        <td><strong>120 còn</strong><div class="muted">0 đã đặt</div></td>
+                        <td>6.500.000 ₫</td>
+                        <td><div class="tour-stats">
+ <span class="tour-stat"><i data-lucide="plane-takeoff"></i>Chiều đi</span>  <span class="tour-stat"><i data-lucide="plane-landing"></i>Chiều về</span>                         </div></td>
+                        <td><span class="status-pill status-on">Hoạt động</span></td>
+                        <td><a class="icon-btn" href="/admin/departures/28?returnUrl=%2Fadmin%2Fdepartures" title="Xem chi tiết"><i data-lucide="eye"></i></a></td>
+                    </tr>
+                </tbody>
+            </table></div>
+        </details>
+        <details class="table-card departure-group" open>
+            <summary class="departure-group-heading">
+                <i data-lucide="package"></i>
+                <div><strong>Tour Khánh Hòa - Cần Thơ</strong><div class="muted">KH-CT · 3 ngày 2 đêm</div></div>
+                <span class="departure-group-count">1 lịch trên trang</span>
+                <i data-lucide="chevron-down" class="accordion-arrow"></i>
+            </summary>
+            <div class="table-wrap"><table class="table">
+                <thead><tr><th>Ngày khởi hành</th><th>Tình trạng chỗ</th><th>Giá người lớn từ</th><th>Vận chuyển</th><th>Trạng thái</th><th>Chi tiết</th></tr></thead>
+                <tbody>
+                    <tr>
+                        <td><a href="/admin/departures/26?returnUrl=%2Fadmin%2Fdepartures"><strong>08/10/2026</strong></a><div class="muted">20:15 · #26</div></td>
+                        <td><strong>130 còn</strong><div class="muted">0 đã đặt</div></td>
+                        <td>3.500.000 ₫</td>
+                        <td><div class="tour-stats">
+ <span class="tour-stat"><i data-lucide="plane-takeoff"></i>Chiều đi</span>  <span class="tour-stat"><i data-lucide="plane-landing"></i>Chiều về</span>                         </div></td>
+                        <td><span class="status-pill status-on">Hoạt động</span></td>
+                        <td><a class="icon-btn" href="/admin/departures/26?returnUrl=%2Fadmin%2Fdepartures" title="Xem chi tiết"><i data-lucide="eye"></i></a></td>
+                    </tr>
+                </tbody>
+            </table></div>
+        </details>
+        <details class="table-card departure-group" open>
+            <summary class="departure-group-heading">
+                <i data-lucide="package"></i>
+                <div><strong>Tour Lào Cai - Khánh Hòa</strong><div class="muted">LC-KH · 3 ngày 2 đêm</div></div>
+                <span class="departure-group-count">1 lịch trên trang</span>
+                <i data-lucide="chevron-down" class="accordion-arrow"></i>
+            </summary>
+            <div class="table-wrap"><table class="table">
+                <thead><tr><th>Ngày khởi hành</th><th>Tình trạng chỗ</th><th>Giá người lớn từ</th><th>Vận chuyển</th><th>Trạng thái</th><th>Chi tiết</th></tr></thead>
+                <tbody>
+                    <tr>
+                        <td><a href="/admin/departures/20?returnUrl=%2Fadmin%2Fdepartures"><strong>01/11/2026</strong></a><div class="muted">09:30 · #20</div></td>
+                        <td><strong>150 còn</strong><div class="muted">0 đã đặt</div></td>
+                        <td>5.100.000 ₫</td>
+                        <td><div class="tour-stats">
+ <span class="tour-stat"><i data-lucide="plane-takeoff"></i>Chiều đi</span>  <span class="tour-stat"><i data-lucide="plane-landing"></i>Chiều về</span>                         </div></td>
+                        <td><span class="status-pill status-on">Hoạt động</span></td>
+                        <td><a class="icon-btn" href="/admin/departures/20?returnUrl=%2Fadmin%2Fdepartures" title="Xem chi tiết"><i data-lucide="eye"></i></a></td>
+                    </tr>
+                </tbody>
+            </table></div>
+        </details>
+        <details class="table-card departure-group" open>
+            <summary class="departure-group-heading">
+                <i data-lucide="package"></i>
+                <div><strong>Tour Đà Nẵng- Hà Nội</strong><div class="muted">DN-HN-002 · 3 ngày 2 đêm</div></div>
+                <span class="departure-group-count">1 lịch trên trang</span>
+                <i data-lucide="chevron-down" class="accordion-arrow"></i>
+            </summary>
+            <div class="table-wrap"><table class="table">
+                <thead><tr><th>Ngày khởi hành</th><th>Tình trạng chỗ</th><th>Giá người lớn từ</th><th>Vận chuyển</th><th>Trạng thái</th><th>Chi tiết</th></tr></thead>
+                <tbody>
+                    <tr>
+                        <td><a href="/admin/departures/22?returnUrl=%2Fadmin%2Fdepartures"><strong>07/11/2026</strong></a><div class="muted">09:38 · #22</div></td>
+                        <td><strong>160 còn</strong><div class="muted">0 đã đặt</div></td>
+                        <td>10.200.000 ₫</td>
+                        <td><div class="tour-stats">
+ <span class="tour-stat"><i data-lucide="plane-takeoff"></i>Chiều đi</span>  <span class="tour-stat"><i data-lucide="plane-landing"></i>Chiều về</span>                         </div></td>
+                        <td><span class="status-pill status-on">Hoạt động</span></td>
+                        <td><a class="icon-btn" href="/admin/departures/22?returnUrl=%2Fadmin%2Fdepartures" title="Xem chi tiết"><i data-lucide="eye"></i></a></td>
+                    </tr>
+                </tbody>
+            </table></div>
+        </details>
+        <details class="table-card departure-group" open>
+            <summary class="departure-group-heading">
+                <i data-lucide="package"></i>
+                <div><strong>Tour Ninh Bình - Quảng Bình</strong><div class="muted">NB-QB · 3 ngày 2 đêm</div></div>
+                <span class="departure-group-count">1 lịch trên trang</span>
+                <i data-lucide="chevron-down" class="accordion-arrow"></i>
+            </summary>
+            <div class="table-wrap"><table class="table">
+                <thead><tr><th>Ngày khởi hành</th><th>Tình trạng chỗ</th><th>Giá người lớn từ</th><th>Vận chuyển</th><th>Trạng thái</th><th>Chi tiết</th></tr></thead>
+                <tbody>
+                    <tr>
+                        <td><a href="/admin/departures/21?returnUrl=%2Fadmin%2Fdepartures"><strong>15/11/2026</strong></a><div class="muted">10:34 · #21</div></td>
+                        <td><strong>160 còn</strong><div class="muted">0 đã đặt</div></td>
+                        <td>4.200.000 ₫</td>
+                        <td><div class="tour-stats">
+ <span class="tour-stat"><i data-lucide="plane-takeoff"></i>Chiều đi</span>  <span class="tour-stat"><i data-lucide="plane-landing"></i>Chiều về</span>                         </div></td>
+                        <td><span class="status-pill status-on">Hoạt động</span></td>
+                        <td><a class="icon-btn" href="/admin/departures/21?returnUrl=%2Fadmin%2Fdepartures" title="Xem chi tiết"><i data-lucide="eye"></i></a></td>
+                    </tr>
+                </tbody>
+            </table></div>
+        </details>
+        <details class="table-card departure-group" open>
+            <summary class="departure-group-heading">
+                <i data-lucide="package"></i>
+                <div><strong>Tour Yên Bái - Hạ Long</strong><div class="muted">YB-HL · 4 ngày 3 đêm</div></div>
+                <span class="departure-group-count">1 lịch trên trang</span>
+                <i data-lucide="chevron-down" class="accordion-arrow"></i>
+            </summary>
+            <div class="table-wrap"><table class="table">
+                <thead><tr><th>Ngày khởi hành</th><th>Tình trạng chỗ</th><th>Giá người lớn từ</th><th>Vận chuyển</th><th>Trạng thái</th><th>Chi tiết</th></tr></thead>
+                <tbody>
+                    <tr>
+                        <td><a href="/admin/departures/1?returnUrl=%2Fadmin%2Fdepartures"><strong>17/11/2026</strong></a><div class="muted">03:14 · #1</div></td>
+                        <td><strong>37 còn</strong><div class="muted">3 đã đặt</div></td>
+                        <td>6.500.000 ₫</td>
+                        <td><div class="tour-stats">
+ <span class="tour-stat"><i data-lucide="plane-takeoff"></i>Chiều đi</span>  <span class="tour-stat"><i data-lucide="plane-landing"></i>Chiều về</span>                         </div></td>
+                        <td><span class="status-pill status-on">Hoạt động</span></td>
+                        <td><a class="icon-btn" href="/admin/departures/1?returnUrl=%2Fadmin%2Fdepartures" title="Xem chi tiết"><i data-lucide="eye"></i></a></td>
+                    </tr>
+                </tbody>
+            </table></div>
+        </details>
+        <details class="table-card departure-group" open>
+            <summary class="departure-group-heading">
+                <i data-lucide="package"></i>
+                <div><strong>Tour Hà Nội - Đà Nẵng</strong><div class="muted">HN-DN-001 · 3 ngày 2 đêm</div></div>
+                <span class="departure-group-count">1 lịch trên trang</span>
+                <i data-lucide="chevron-down" class="accordion-arrow"></i>
+            </summary>
+            <div class="table-wrap"><table class="table">
+                <thead><tr><th>Ngày khởi hành</th><th>Tình trạng chỗ</th><th>Giá người lớn từ</th><th>Vận chuyển</th><th>Trạng thái</th><th>Chi tiết</th></tr></thead>
+                <tbody>
+                    <tr>
+                        <td><a href="/admin/departures/23?returnUrl=%2Fadmin%2Fdepartures"><strong>18/11/2026</strong></a><div class="muted">09:58 · #23</div></td>
+                        <td><strong>160 còn</strong><div class="muted">0 đã đặt</div></td>
+                        <td>1.600.000 ₫</td>
+                        <td><div class="tour-stats">
+ <span class="tour-stat"><i data-lucide="plane-takeoff"></i>Chiều đi</span>  <span class="tour-stat"><i data-lucide="plane-landing"></i>Chiều về</span>                         </div></td>
+                        <td><span class="status-pill status-on">Hoạt động</span></td>
+                        <td><a class="icon-btn" href="/admin/departures/23?returnUrl=%2Fadmin%2Fdepartures" title="Xem chi tiết"><i data-lucide="eye"></i></a></td>
+                    </tr>
+                </tbody>
+            </table></div>
+        </details>
+    <footer class="table-foot">
+        <span class="muted">Hiển thị 1–10 trên 20 lịch</span>
+            <nav class="pagination" aria-label="Phân trang">
+ <a class="page-num active" href="/admin/departures?newestFirst=False&amp;pageSize=10&amp;page=1" aria-current="page">1</a>  <a class="page-num " href="/admin/departures?newestFirst=False&amp;pageSize=10&amp;page=2">2</a>  <a class="page-btn" href="/admin/departures?newestFirst=False&amp;pageSize=10&amp;page=2">Sau</a>             </nav>
+    </footer>
+
+        </main>
+    </div>
+
+    <div class="toast-stack" id="toastStack">
+    </div>
+
+    <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+    <script src="/js/admin.js?v=So16DIZ82dk6IvcPex9iBX0wjMDgRxTQr9bynIN4ZXM"></script>
+    
+</body>
+</html>

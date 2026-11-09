@@ -1,0 +1,81 @@
+0:00:00 TouchMode.EnteredNonTouchMode
+0:00:00 Tab1 FinishNav3
+0:00:00 Tab1 PageLoad
+0:00:04 Widget Closed: ToastView
+0:12:49 Tab1 StartNav4 #typed
+0:12:49 Tab1 FinishNav4
+0:12:51 Tab1 PageLoad
+0:12:54 Tab1 StartNav5 #renderer-script #form_submit
+0:12:54 Tab1 FinishNav5
+0:12:54 Tab1 PageLoad
+0:12:56 Tab1 StartNav6 #typed
+0:12:56 Tab1 FinishNav6
+0:12:56 Widget Closed: TranslateBubbleView
+0:12:57 Tab1 PageLoad
+0:12:57 Tab1 StartNav7 #renderer-script #form_submit
+0:12:57 Tab1 FinishNav7
+0:12:57 Tab1 PageLoad
+0:14:56 Tab1 StartNav8 #typed
+0:14:56 Tab1 FinishNav8
+0:14:56 Tab1 PageLoad
+0:14:59 Tab1 StartNav9 #renderer-script #form_submit
+0:14:59 Tab1 FinishNav9
+0:14:59 Tab1 PageLoad
+0:15:01 Tab1 StartNav10 #typed
+0:15:01 Tab1 FinishNav10
+0:15:01 Widget Closed: TranslateBubbleView
+0:15:01 Tab1 PageLoad
+0:15:02 Tab1 StartNav11 #renderer-script #form_submit
+0:15:02 Tab1 FinishNav11
+0:15:02 Tab1 PageLoad
+0:15:03 Tab1 StartNav12 #typed
+0:15:04 Tab1 FinishNav12
+0:15:04 Tab1 PageLoad
+0:15:04 Tab1 StartNav13 #renderer-script #link
+0:15:04 Tab1 FinishNav13
+0:15:04 Tab1 StartNav14 #renderer-script #form_submit
+0:15:05 Tab1 FinishNav14
+0:15:05 Tab1 PageLoad
+0:15:05 Tab1 StartNav15 #renderer-script #form_submit
+0:15:05 Tab1 FinishNav15
+0:15:05 Widget Closed: TranslateBubbleView
+0:15:05 Tab1 PageLoad
+0:15:06 Tab1 StartNav16 #renderer-script #link
+0:15:06 Tab1 FinishNav16
+0:15:06 Tab1 PageLoad
+0:15:08 Tab1 StartNav17 #renderer-script #form_submit
+0:15:08 Tab1 FinishNav17
+0:15:08 Tab1 PageLoad
+0:15:09 Tab1 StartNav18 #renderer-script #form_submit
+0:15:09 Tab1 FinishNav18
+0:15:09 Tab1 PageLoad
+0:15:10 Tab1 StartNav19 #renderer-script #form_submit
+0:15:10 Tab1 FinishNav19
+0:15:10 Widget Closed: TranslateBubbleView
+0:15:10 Tab1 PageLoad
+0:15:11 Tab1 StartNav20 #typed
+0:15:11 Tab1 FinishNav20
+0:15:11 Tab1 PageLoad
+0:15:13 Tab1 StartNav21 #typed
+0:15:13 Tab1 FinishNav21
+0:15:13 Tab1 PageLoad
+0:15:15 Tab1 StartNav22 #typed
+0:15:15 Tab1 FinishNav22
+0:15:15 Tab1 PageLoad
+0:15:17 Tab1 StartNav23 #renderer-script #form_submit
+0:15:17 Tab1 FinishNav23
+0:15:17 Tab1 PageLoad
+0:15:18 Tab1 StartNav24 #typed
+0:15:18 Tab1 FinishNav24
+0:15:18 Widget Closed: TranslateBubbleView
+0:15:18 Tab1 PageLoad
+0:15:19 Tab1 StartNav25 #renderer-script #form_submit
+0:15:19 Tab1 FinishNav25
+0:15:19 Tab1 PageLoad
+0:15:20 Tab1 StartNav26 #typed
+0:15:20 Tab1 FinishNav26
+0:15:20 Tab1 PageLoad
+0:15:22 Tab1 StartNav27 #typed
+0:15:22 Tab1 FinishNav27
+0:15:22 Tab1 PageLoad
+0:15:23 Tab1 RenderProcessGone

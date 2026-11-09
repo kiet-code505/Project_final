@@ -1,0 +1,504 @@
+.tour-search {
+
+
+// ─────────────────────────────────────────────
+// Variables
+// ─────────────────────────────────────────────
+$primary: #1a6ef8;
+$primary-dark: #1455cc;
+$accent: #ff6b35;
+$text: #1a1a2e;
+$text-muted: #6b7280;
+$border: #e5e7eb;
+$bg: #f8fafc;
+$card-bg: #ffffff;
+$shadow-sm: 0 1px 3px rgba(0,0,0,.06);
+$shadow-md: 0 4px 16px rgba(0,0,0,.1);
+$shadow-lg: 0 8px 32px rgba(0,0,0,.14);
+$radius: 14px;
+$radius-sm: 8px;
+
+// ─────────────────────────────────────────────
+// Page Wrapper
+// ─────────────────────────────────────────────
+.pageWrapper {
+    font-family: 'Inter', sans-serif;
+    background: $bg;
+    min-height: 100vh;
+}
+
+// ─────────────────────────────────────────────
+// Hero Section
+// ─────────────────────────────────────────────
+.heroSection {
+    position: relative;
+    height: 380px;
+    background: url('https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=1400&q=85') center/cover no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding-top: 70px;
+}
+
+.heroOverlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(10,30,80,.75) 0%, rgba(26,110,248,.55) 100%);
+    backdrop-filter: blur(1px);
+}
+
+.heroContent {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    width: 100%;
+    max-width: 800px;
+    padding: 0 24px;
+}
+
+.heroTitle {
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0 0 8px;
+    letter-spacing: -0.5px;
+    text-shadow: 0 2px 16px rgba(0,0,0,.3);
+}
+
+.heroSub {
+    color: rgba(255,255,255,.85);
+    font-size: 1rem;
+    margin: 0 0 28px;
+}
+
+// ─────────────────────────────────────────────
+// Search Bar
+// ─────────────────────────────────────────────
+.searchBar {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    background: #fff;
+    border-radius: 50px;
+    padding: 6px 6px 6px 20px;
+    box-shadow: 0 8px 32px rgba(0,0,0,.2);
+    max-width: 640px;
+    margin: 0 auto;
+}
+
+.searchInputGroup {
+    flex: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.searchIcon {
+    color: $primary;
+    flex-shrink: 0;
+}
+
+.searchInput {
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: .95rem;
+    color: $text;
+    width: 100%;
+    padding: 8px 0;
+
+    &::placeholder { color: $text-muted; }
+}
+
+.locationDropdown {
+    position: absolute;
+    top: calc(100% + 14px);
+    left: -20px;
+    width: 300px;
+    background: #fff;
+    border-radius: $radius-sm;
+    box-shadow: $shadow-lg;
+    z-index: 100;
+    overflow: hidden;
+}
+
+.locationItem {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 16px;
+    font-size: .9rem;
+    color: $text;
+    cursor: pointer;
+    transition: background .15s;
+
+    &:hover { background: #f0f4ff; color: $primary; }
+    svg { color: $primary; }
+}
+
+.searchBtn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: $primary;
+    color: #fff;
+    border: none;
+    border-radius: 44px;
+    padding: 12px 26px;
+    font-size: .95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .2s, transform .15s;
+    white-space: nowrap;
+
+    &:hover { background: $primary-dark; transform: scale(1.03); }
+    &:disabled { opacity: .7; cursor: not-allowed; }
+}
+
+.spinning {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+// ─────────────────────────────────────────────
+// Main Content
+// ─────────────────────────────────────────────
+.mainContent {
+    padding: 32px 0 60px;
+}
+
+.container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+// ─────────────────────────────────────────────
+// Filter Bar
+// ─────────────────────────────────────────────
+.filterBar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.filterLeft {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.filterToggle {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    background: #fff;
+    border: 1.5px solid $border;
+    border-radius: 50px;
+    padding: 8px 18px;
+    font-size: .88rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: border-color .2s, background .2s;
+    color: $text;
+
+    &:hover, &.filterToggleActive {
+        border-color: $primary;
+        background: #eef3ff;
+        color: $primary;
+    }
+}
+
+.filterBadge {
+    background: $primary;
+    color: #fff;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    font-size: .72rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.filterChip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #eef3ff;
+    color: $primary;
+    border-radius: 50px;
+    padding: 6px 12px;
+    font-size: .84rem;
+    font-weight: 500;
+
+    button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: $primary;
+        display: flex;
+        align-items: center;
+        padding: 0;
+        line-height: 1;
+
+        &:hover { color: #e03;  }
+    }
+}
+
+.resultCount {
+    color: $text-muted;
+    font-size: .9rem;
+}
+
+// ─────────────────────────────────────────────
+// Filter Panel
+// ─────────────────────────────────────────────
+.filterPanel {
+    background: #fff;
+    border: 1.5px solid $border;
+    border-radius: $radius;
+    padding: 24px;
+    margin-bottom: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    align-items: flex-end;
+    animation: fadeInDown .2s ease;
+}
+
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.filterGroup {
+    flex: 1;
+    min-width: 220px;
+}
+
+.filterGroupLabel {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: .84rem;
+    font-weight: 600;
+    color: $text;
+    margin: 0 0 10px;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+}
+
+.filterOptions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.filterOption {
+    background: $bg;
+    border: 1.5px solid $border;
+    border-radius: 50px;
+    padding: 7px 15px;
+    font-size: .85rem;
+    cursor: pointer;
+    transition: all .2s;
+    color: $text;
+
+    &:hover { border-color: $primary; color: $primary; background: #eef3ff; }
+    &.filterOptionActive { background: $primary; color: #fff; border-color: $primary; }
+}
+
+.applyFilter {
+    background: $primary;
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    padding: 11px 28px;
+    font-size: .9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .2s;
+    height: fit-content;
+    align-self: flex-end;
+
+    &:hover { background: $primary-dark; }
+}
+
+// ─────────────────────────────────────────────
+// Tour Grid
+// ─────────────────────────────────────────────
+.tourGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    gap: 24px;
+}
+
+// ─────────────────────────────────────────────
+// Tour Card
+// ─────────────────────────────────────────────
+.tourCard {
+    background: $card-bg;
+    border-radius: $radius;
+    overflow: hidden;
+    box-shadow: $shadow-sm;
+    cursor: pointer;
+    transition: box-shadow .25s, transform .25s;
+    border: 1px solid transparent;
+
+    &:hover {
+        box-shadow: $shadow-lg;
+        transform: translateY(-4px);
+        border-color: rgba($primary, .12);
+    }
+}
+
+.tourCardImage {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform .4s ease;
+    }
+
+    .tourCard:hover & img {
+        transform: scale(1.06);
+    }
+}
+
+.tourCardBadge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: rgba(0,0,0,.55);
+    backdrop-filter: blur(6px);
+    color: #fff;
+    font-size: .76rem;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 50px;
+    border: 1px solid rgba(255,255,255,.25);
+}
+
+.tourCardBody {
+    padding: 16px 18px 18px;
+}
+
+.tourCardTitle {
+    font-size: 1rem;
+    font-weight: 600;
+    color: $text;
+    margin: 0 0 10px;
+    line-height: 1.45;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.tourCardMeta {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 14px;
+}
+
+.metaItem {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: .8rem;
+    color: $text-muted;
+    svg { color: $primary; }
+}
+
+.tourCardFooter {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid $border;
+    padding-top: 12px;
+}
+
+.priceLabel {
+    display: block;
+    font-size: .75rem;
+    color: $text-muted;
+}
+
+.priceValue {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: $accent;
+}
+
+.detailBtn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: $primary;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: .82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .2s;
+
+    &:hover { background: $primary-dark; }
+}
+
+// ─────────────────────────────────────────────
+// States
+// ─────────────────────────────────────────────
+.loadingState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 24px;
+    gap: 16px;
+    color: $text-muted;
+    font-size: 1rem;
+}
+
+.emptyState {
+    text-align: center;
+    padding: 80px 24px;
+
+    .emptyIcon {
+        font-size: 4rem;
+        margin-bottom: 16px;
+    }
+
+    h3 { font-size: 1.4rem; color: $text; margin: 0 0 8px; }
+    p  { color: $text-muted; margin: 0 0 24px; }
+}
+
+.resetBtn {
+    background: $primary;
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    padding: 12px 28px;
+    font-size: .95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .2s;
+
+    &:hover { background: $primary-dark; }
+}
+
+}

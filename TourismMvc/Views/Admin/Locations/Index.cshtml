@@ -1,0 +1,276 @@
+@model LocationIndexViewModel
+@{
+    ViewData["Title"] = "Quản lý địa điểm";
+    ViewData["Description"] = "Quản lý tỉnh/thành phố, khu vực và thông tin sân bay cho các tour du lịch.";
+
+    var regionInfo = new Dictionary<Region, (string Label, string Css)>
+    {
+        [Region.NORTH] = ("Miền Bắc", "badge-north"),
+        [Region.CENTRAL] = ("Miền Trung", "badge-central"),
+        [Region.SOUTH] = ("Miền Nam", "badge-south"),
+    };
+
+    // Tạo URL giữ nguyên các bộ lọc hiện tại, chỉ đổi vài tham số
+    string Link(int? page = null, string? sortBy = null, string? sortDir = null, string? region = "__keep", int? pageSize = null, string? search = "__keep")
+    {
+        var qs = new Dictionary<string, string?>
+        {
+            ["search"] = search == "__keep" ? Model.Search : search,
+            ["region"] = region == "__keep" ? Model.Region?.ToString() : region,
+            ["sortBy"] = sortBy ?? Model.SortBy,
+            ["sortDir"] = sortDir ?? Model.SortDir,
+            ["page"] = (page ?? Model.Page).ToString(),
+            ["pageSize"] = (pageSize ?? Model.PageSize).ToString(),
+        };
+        return "/admin/locations" + Microsoft.AspNetCore.Http.QueryString.Create(qs.Where(kv => !string.IsNullOrEmpty(kv.Value)));
+    }
+
+    string SortLink(string col) =>
+        Link(page: 1, sortBy: col, sortDir: Model.SortBy == col && Model.SortDir == "ASC" ? "DESC" : "ASC");
+
+    string SortIcon(string col) =>
+        Model.SortBy != col ? "arrow-up-down" : Model.SortDir == "ASC" ? "arrow-up" : "arrow-down";
+
+    var currentUrl = Context.Request.Path + Context.Request.QueryString;
+    var fromItem = Model.TotalItems == 0 ? 0 : (Model.Page - 1) * Model.PageSize + 1;
+    var toItem = Math.Min(Model.Page * Model.PageSize, Model.TotalItems);
+}
+
+<header class="page-header">
+    <div class="title-block">
+        <div class="title-icon"><i data-lucide="globe-2"></i></div>
+        <div>
+            <h1>Quản lý địa điểm</h1>
+            <p>Tỉnh / thành phố, khu vực và thông tin sân bay</p>
+        </div>
+    </div>
+    <div class="header-actions">
+        <button type="button" class="btn btn-ghost" id="exportCsv"><i data-lucide="download"></i> Xuất CSV</button>
+        <a href="/admin/locations/create" class="btn btn-primary" id="btnCreateLocation"><i data-lucide="plus"></i> Thêm địa điểm</a>
+    </div>
+</header>
+
+@* ── STAT CARDS ── *@
+<section class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon stat-blue"><i data-lucide="map-pin"></i></div>
+        <div>
+            <div class="stat-label">Tổng địa điểm</div>
+            <div class="stat-value" data-count="@Model.StatTotal">@Model.StatTotal</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon stat-rose"><i data-lucide="mountain-snow"></i></div>
+        <div>
+            <div class="stat-label">Miền Bắc</div>
+            <div class="stat-value" data-count="@Model.StatNorth">@Model.StatNorth</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon stat-amber"><i data-lucide="sunrise"></i></div>
+        <div>
+            <div class="stat-label">Miền Trung / Nam</div>
+            <div class="stat-value" data-count="@(Model.StatCentral + Model.StatSouth)">@(Model.StatCentral + Model.StatSouth)</div>
+            <div class="stat-hint">@Model.StatCentral Trung · @Model.StatSouth Nam</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon stat-green"><i data-lucide="plane"></i></div>
+        <div>
+            <div class="stat-label">Có sân bay</div>
+            <div class="stat-value" data-count="@Model.StatWithAirport">@Model.StatWithAirport</div>
+        </div>
+    </div>
+</section>
+
+@* ── TOOLBAR (GET form) ── *@
+<form class="toolbar" method="get" action="/admin/locations" id="filterForm">
+    <input type="hidden" name="region" value="@Model.Region" />
+    <input type="hidden" name="sortBy" value="@Model.SortBy" />
+    <input type="hidden" name="sortDir" value="@Model.SortDir" />
+
+    <label class="search-box">
+        <i data-lucide="search"></i>
+        <input type="search" name="search" id="searchInput" value="@Model.Search"
+               placeholder="Tìm theo tên, slug, mô tả…" autocomplete="off" />
+        @if (!string.IsNullOrEmpty(Model.Search))
+        {
+            <a class="clear-btn" href="@Link(page: 1, search: null)" title="Xoá tìm kiếm"><i data-lucide="x"></i></a>
+        }
+    </label>
+
+    <div class="filter-group">
+        <i data-lucide="filter"></i>
+        <div class="segmented" role="tablist">
+            <a class="@(Model.Region == null ? "seg-active" : "")" href="@Link(page: 1, region: null)">Tất cả</a>
+            @foreach (var (r, info) in regionInfo)
+            {
+                <a class="@(Model.Region == r ? "seg-active" : "")" href="@Link(page: 1, region: r.ToString())">@info.Label</a>
+            }
+        </div>
+        <select name="pageSize" class="select" id="pageSizeSelect">
+            @foreach (var s in new[] { 10, 20, 50 })
+            {
+                <option value="@s" selected="@(Model.PageSize == s)">@s / trang</option>
+            }
+        </select>
+    </div>
+</form>
+
+@* ── BULK BAR ── *@
+<section class="bulk-bar" id="bulkBar" hidden>
+    <span><strong id="bulkCount">0</strong> địa điểm đã chọn</span>
+    <div>
+        <button type="button" class="btn btn-ghost btn-sm" id="bulkClear"><i data-lucide="x"></i> Bỏ chọn</button>
+        <button type="button" class="btn btn-danger btn-sm" id="bulkDelete"><i data-lucide="trash-2"></i> Xoá đã chọn</button>
+    </div>
+</section>
+
+@if (Model.Items.Count == 0)
+{
+    <div class="empty">
+        <div class="empty-icon"><i data-lucide="map"></i></div>
+        @if (!string.IsNullOrEmpty(Model.Search) || Model.Region != null)
+        {
+            <h3>Không tìm thấy địa điểm phù hợp</h3>
+            <p>Thử đổi từ khoá hoặc bỏ bộ lọc khu vực</p>
+            <a href="/admin/locations" class="btn btn-ghost"><i data-lucide="rotate-ccw"></i> Xoá bộ lọc</a>
+        }
+        else
+        {
+            <h3>Chưa có địa điểm nào</h3>
+            <p>Thêm địa điểm đầu tiên để bắt đầu xây dựng catalog</p>
+            <a href="/admin/locations/create" class="btn btn-primary"><i data-lucide="plus"></i> Thêm địa điểm đầu tiên</a>
+        }
+    </div>
+}
+else
+{
+    <div class="table-card">
+        <div class="table-wrap">
+            <table class="table" id="locationsTable">
+                <thead>
+                    <tr>
+                        <th class="cb-col"><input type="checkbox" id="checkAll" aria-label="Chọn tất cả" /></th>
+                        <th>Ảnh</th>
+                        <th><a class="sortable @(Model.SortBy == "name" ? "sorted" : "")" href="@SortLink("name")">Tên địa điểm <i data-lucide="@SortIcon("name")"></i></a></th>
+                        <th>Khu vực</th>
+                        <th>Sân bay</th>
+                        <th>Mô tả</th>
+                        <th>Tours</th>
+                        <th><a class="sortable @(Model.SortBy == "updatedAt" ? "sorted" : "")" href="@SortLink("updatedAt")">Cập nhật <i data-lucide="@SortIcon("updatedAt")"></i></a></th>
+                        <th class="actions-col">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{ var idx = 0; }
+                    @foreach (var item in Model.Items)
+                    {
+                        var l = item.Location;
+                        var region = regionInfo.GetValueOrDefault(l.Region, (l.Region.ToString(), ""));
+                        var desc = l.Description ?? "";
+                        <tr style="animation-delay:@(Math.Min(idx++ * 0.03, 0.3).ToString(System.Globalization.CultureInfo.InvariantCulture))s"
+                            data-id="@l.LocationID" data-name="@l.LocationName" data-slug="@l.Slug"
+                            data-region="@region.Item1" data-airport-code="@l.AirportCode" data-airport-name="@l.AirportName"
+                            data-start="@item.ToursAsStartPoint" data-end="@item.ToursAsEndPoint" data-desc="@desc">
+                            <td class="cb-col"><input type="checkbox" class="row-check" value="@l.LocationID" aria-label="Chọn @l.LocationName" /></td>
+                            <td>
+                                <div class="thumb">
+                                    @if (!string.IsNullOrEmpty(l.ImageURL))
+                                    {
+                                        <img src="@l.ImageURL" alt="@l.LocationName" loading="lazy" onerror="this.remove()" />
+                                    }
+                                    <i data-lucide="image"></i>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="loc-name">
+                                    <strong>@l.LocationName</strong>
+                                    <span class="slug-chip"><i data-lucide="hash"></i>@l.Slug</span>
+                                </div>
+                            </td>
+                            <td><span class="badge @region.Item2">@region.Item1</span></td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(l.AirportCode))
+                                {
+                                    <div class="airport-cell" title="@l.AirportName">
+                                        <span class="airport-code">@l.AirportCode</span>
+                                        <span class="airport-name">@l.AirportName</span>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <span class="muted">—</span>
+                                }
+                            </td>
+                            <td>
+                                <div class="desc-cell" title="@desc">
+                                    @if (desc.Length == 0)
+                                    {
+                                        <span class="muted">Chưa có mô tả</span>
+                                    }
+                                    else
+                                    {
+                                        @(desc.Length > 70 ? desc[..70] + "…" : desc)
+                                    }
+                                </div>
+                            </td>
+                            <td>
+                                <div class="tour-stats">
+                                    <span class="tour-stat" title="Tour khởi hành từ đây"><i data-lucide="plane-takeoff"></i>@item.ToursAsStartPoint</span>
+                                    <span class="tour-stat" title="Tour có điểm đến ở đây"><i data-lucide="map-pin"></i>@item.ToursAsEndPoint</span>
+                                </div>
+                            </td>
+                            <td class="meta-cell">@(l.UpdatedAt?.ToString("dd/MM/yyyy") ?? "—")</td>
+                            <td class="actions-col">
+                                <div class="row-actions">
+                                    <a class="icon-btn icon-edit" href="/admin/locations/@l.LocationID/edit" title="Chỉnh sửa" id="edit-@l.LocationID"><i data-lucide="pencil"></i></a>
+                                    <button type="button" class="icon-btn icon-delete js-delete-one" data-id="@l.LocationID"
+                                            data-name="@l.LocationName" data-inuse="@(item.ToursAsStartPoint + item.ToursAsEndPoint)"
+                                            title="Xoá" id="delete-@l.LocationID"><i data-lucide="trash-2"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <footer class="table-foot">
+            <span class="muted">Hiển thị <strong>@fromItem–@toItem</strong> trên <strong>@Model.TotalItems</strong> địa điểm</span>
+            @if (Model.TotalPages > 1)
+            {
+                var start = Math.Max(1, Math.Min(Model.Page - 3, Model.TotalPages - 6));
+                var end = Math.Min(Model.TotalPages, start + 6);
+                <nav class="pagination" aria-label="Phân trang">
+                    <a class="page-btn @(Model.Page <= 1 ? "disabled" : "")" href="@Link(page: Model.Page - 1)"><i data-lucide="chevron-left"></i> Trước</a>
+                    @for (var p = start; p <= end; p++)
+                    {
+                        <a class="page-num @(p == Model.Page ? "active" : "")" href="@Link(page: p)">@p</a>
+                    }
+                    <a class="page-btn @(Model.Page >= Model.TotalPages ? "disabled" : "")" href="@Link(page: Model.Page + 1)">Sau <i data-lucide="chevron-right"></i></a>
+                </nav>
+            }
+        </footer>
+    </div>
+}
+
+@* ── CONFIRM DELETE MODAL ── *@
+<div class="modal-backdrop" id="confirmModal" hidden>
+    <form class="confirm-modal" method="post" action="/admin/locations/delete" id="deleteForm">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="returnUrl" value="@currentUrl" />
+        <div id="deleteIds"></div>
+        <div class="confirm-icon"><i data-lucide="alert-triangle"></i></div>
+        <h3 id="confirmTitle">Xoá địa điểm này?</h3>
+        <p id="confirmMessage">Hành động này không thể hoàn tác.</p>
+        <div class="confirm-actions">
+            <button type="button" class="btn btn-ghost" data-close>Huỷ</button>
+            <button type="submit" class="btn btn-danger" id="confirmDeleteBtn"><i data-lucide="trash-2"></i> Xác nhận xoá</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script src="~/js/admin-locations.js" asp-append-version="true"></script>
+}

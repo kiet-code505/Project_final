@@ -1,0 +1,7 @@
+﻿{
+    "publicUrl":  "https://busy-biotechnology-acquisition-milton.trycloudflare.com",
+    "purpose":  "VNPAY Sandbox IPN only",
+    "backendUrl":  "http://localhost:5019",
+    "bridgeUrl":  "http://127.0.0.1:5187",
+    "ipnUrl":  "https://busy-biotechnology-acquisition-milton.trycloudflare.com/payment/vnpay/ipn"
+}

@@ -1,0 +1,56 @@
+@model BranchFormViewModel
+@{
+    ViewData["Title"] = Model.IsEdit ? "Chỉnh sửa Chi nhánh" : "Thêm Chi nhánh mới";
+    ViewData["Description"] = "Quản lý thông tin liên hệ và địa chỉ của văn phòng chi nhánh.";
+}
+
+<header class="page-header">
+    <div class="title-block">
+        <a href="/admin/branches" class="back-btn" title="Quay lại danh sách" id="btnBack"><i data-lucide="arrow-left"></i></a>
+        <div>
+            <h1>@ViewData["Title"]</h1>
+            <p>@(Model.IsEdit ? $"ID: {Model.ContactID} · {Model.BranchName}" : "Điền thông tin văn phòng / chi nhánh")</p>
+        </div>
+    </div>
+</header>
+
+<form method="post" class="card" style="max-width: 680px; margin: 0 auto;"
+      action="@(Model.IsEdit ? $"/admin/branches/{Model.ContactID}/edit" : "/admin/branches/create")">
+    @Html.AntiForgeryToken()
+
+    <div asp-validation-summary="ModelOnly" class="alert alert-error"></div>
+
+    <h3 class="card-title"><i data-lucide="building-2"></i> Thông tin chi nhánh</h3>
+
+    <div class="form-group">
+        <label asp-for="BranchName">Tên chi nhánh <span class="req">*</span></label>
+        <input asp-for="BranchName" placeholder="VD: Chi nhánh TP. Hồ Chí Minh, Chi nhánh Hà Nội…" autocomplete="off" autofocus />
+        <span asp-validation-for="BranchName" class="field-error"></span>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group">
+            <label asp-for="Phone">Số điện thoại <span class="req">*</span></label>
+            <input asp-for="Phone" type="tel" placeholder="VD: 02839123456 hoặc 0908123456" />
+            <span asp-validation-for="Phone" class="field-error"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Email">Email liên hệ <span class="req">*</span></label>
+            <input asp-for="Email" type="email" placeholder="VD: contact@tourism-hcm.com" />
+            <span asp-validation-for="Email" class="field-error"></span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Address">Địa chỉ văn phòng <span class="req">*</span></label>
+        <textarea asp-for="Address" rows="3" placeholder="Nhập địa chỉ đầy đủ (số nhà, tên đường, phường/xã, quận/huyện, tỉnh/thành)..."></textarea>
+        <span asp-validation-for="Address" class="field-error"></span>
+    </div>
+
+    <div class="form-actions" style="margin-top: 24px; border-top: 1px solid var(--border); padding-top: 16px;">
+        <a href="/admin/branches" class="btn btn-ghost">Huỷ</a>
+        <button type="submit" class="btn btn-primary">
+            <i data-lucide="check-circle-2"></i> @(Model.IsEdit ? "Cập nhật chi nhánh" : "Tạo chi nhánh")
+        </button>
+    </div>
+</form>

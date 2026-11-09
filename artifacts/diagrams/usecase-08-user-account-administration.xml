@@ -1,0 +1,80 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<mxfile host="app.diagrams.net" type="device">
+  <diagram id="user-account-administration" name="User Account Administration">
+    <mxGraphModel dx="1600" dy="1320" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1320" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="boundary" value="User Account Administration" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=2;verticalAlign=top;align=center;spacingTop=18;fontFamily=Arial;fontSize=18;fontSize=25;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="240" y="60" width="1200" height="1150" />
+        </mxCell>
+        <mxCell id="admin" value="Administrator" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#ffffff;strokeColor=#000000;fontFamily=Arial;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="65" y="590" width="55" height="100" />
+        </mxCell>
+        <mxCell id="precondition" value="Precondition: Signed in with the ADMIN role." style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontFamily=Arial;fontSize=18;fontSize=16;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="330" y="125" width="760" height="45" />
+        </mxCell>
+        <mxCell id="view-accounts" value="View User Accounts" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;fontFamily=Arial;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="400" y="220" width="260" height="90" />
+        </mxCell>
+        <mxCell id="search-accounts" value="Search / Filter&#10;User Accounts" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;fontFamily=Arial;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="970" y="220" width="280" height="90" />
+        </mxCell>
+        <mxCell id="account-details" value="View User Account&#10;Details" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;fontFamily=Arial;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="400" y="460" width="260" height="90" />
+        </mxCell>
+        <mxCell id="account-bookings" value="View Associated&#10;Bookings" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;fontFamily=Arial;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="970" y="460" width="280" height="90" />
+        </mxCell>
+        <mxCell id="lock" value="Lock User Account" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;fontFamily=Arial;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="400" y="730" width="260" height="90" />
+        </mxCell>
+        <mxCell id="unlock" value="Unlock User Account" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;fontFamily=Arial;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="400" y="1000" width="260" height="90" />
+        </mxCell>
+        <mxCell id="validate-status-change" value="Validate Account&#10;Status Change" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;fontFamily=Arial;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="970" y="865" width="280" height="90" />
+        </mxCell>
+        <mxCell id="admin-view-accounts" value="" style="edgeStyle=none;html=1;strokeColor=#000000;strokeWidth=1.5;startArrow=none;fontFamily=Arial;fontSize=18;fontSize=14;labelBackgroundColor=#ffffff;endArrow=none;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="admin" target="view-accounts">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="admin-account-details" value="" style="edgeStyle=none;html=1;strokeColor=#000000;strokeWidth=1.5;startArrow=none;fontFamily=Arial;fontSize=18;fontSize=14;labelBackgroundColor=#ffffff;endArrow=none;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="admin" target="account-details">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="admin-lock" value="" style="edgeStyle=none;html=1;strokeColor=#000000;strokeWidth=1.5;startArrow=none;fontFamily=Arial;fontSize=18;fontSize=14;labelBackgroundColor=#ffffff;endArrow=none;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="admin" target="lock">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="admin-unlock" value="" style="edgeStyle=none;html=1;strokeColor=#000000;strokeWidth=1.5;startArrow=none;fontFamily=Arial;fontSize=18;fontSize=14;labelBackgroundColor=#ffffff;endArrow=none;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="admin" target="unlock">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="search-extends-list" value="«extend»&#10;[Search or filters applied]" style="edgeStyle=none;html=1;strokeColor=#000000;strokeWidth=1.5;startArrow=none;fontFamily=Arial;fontSize=18;fontSize=14;labelBackgroundColor=#ffffff;dashed=1;endArrow=open;endFill=0;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" edge="1" parent="1" source="search-accounts" target="view-accounts">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="details-include-bookings" value="«include»" style="edgeStyle=none;html=1;strokeColor=#000000;strokeWidth=1.5;startArrow=none;fontFamily=Arial;fontSize=18;fontSize=14;labelBackgroundColor=#ffffff;dashed=1;endArrow=open;endFill=0;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="account-details" target="account-bookings">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="lock-include-validation" value="«include»" style="edgeStyle=none;html=1;strokeColor=#000000;strokeWidth=1.5;startArrow=none;fontFamily=Arial;fontSize=18;fontSize=14;labelBackgroundColor=#ffffff;dashed=1;endArrow=open;endFill=0;exitX=1;exitY=0.5;entryX=0;entryY=0.25;" edge="1" parent="1" source="lock" target="validate-status-change">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="unlock-include-validation" value="«include»" style="edgeStyle=none;html=1;strokeColor=#000000;strokeWidth=1.5;startArrow=none;fontFamily=Arial;fontSize=18;fontSize=14;labelBackgroundColor=#ffffff;dashed=1;endArrow=open;endFill=0;exitX=1;exitY=0.5;entryX=0;entryY=0.75;" edge="1" parent="1" source="unlock" target="validate-status-change">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="search-note" value="Search by full name, email or phone. Filter by account status and role. Pagination is supported." style="shape=note;whiteSpace=wrap;html=1;size=18;fillColor=#fff2cc;strokeColor=#b7a361;align=left;verticalAlign=top;spacing=12;fontFamily=Arial;fontSize=18;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="900" y="350" width="450" height="90" />
+        </mxCell>
+        <mxCell id="details-note" value="Account details show contact information, role, status, email-verification state and the linked booking list. The list may be empty. Password hashes are not displayed." style="shape=note;whiteSpace=wrap;html=1;size=18;fillColor=#fff2cc;strokeColor=#b7a361;align=left;verticalAlign=top;spacing=12;fontFamily=Arial;fontSize=18;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="350" y="580" width="990" height="110" />
+        </mxCell>
+        <mxCell id="validation-note" value="Before changing status:&#10;- Validate the requested status.&#10;- Recheck that the acting administrator is active and email-verified.&#10;- Verify the target account exists.&#10;- Block locking the administrator's own signed-in account." style="shape=note;whiteSpace=wrap;html=1;size=18;fillColor=#fff2cc;strokeColor=#b7a361;align=left;verticalAlign=top;spacing=12;fontFamily=Arial;fontSize=18;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="880" y="700" width="470" height="155" />
+        </mxCell>
+        <mxCell id="effects-note" value="Lock: disables login; existing sessions are rejected at the next authentication check.&#10;Unlock: allows login again, subject to other authentication checks.&#10;Changing status does not change the account role." style="shape=note;whiteSpace=wrap;html=1;size=18;fillColor=#fff2cc;strokeColor=#b7a361;align=left;verticalAlign=top;spacing=12;fontFamily=Arial;fontSize=18;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="850" y="1040" width="500" height="145" />
+        </mxCell>
+        <mxCell id="caption" value="Figure X: Use Case Diagram for User Account Administration" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;fontFamily=Arial;fontSize=18;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="240" y="1240" width="1200" height="40" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

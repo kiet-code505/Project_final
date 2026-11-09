@@ -1,0 +1,10 @@
+@{
+    var returnUrl = Context.Request.Path + Context.Request.QueryString;
+}
+<form method="post" action="/language" class="user-language-selector" aria-label="@L["Ngôn ngữ"]">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="returnUrl" value="@returnUrl" />
+    <button type="submit" name="culture" value="en" lang="en" class="@(L.IsEnglish ? "selected" : "")" aria-pressed="@(L.IsEnglish ? "true" : "false")" title="English">EN</button>
+    <span aria-hidden="true">/</span>
+    <button type="submit" name="culture" value="vi" lang="vi" class="@(!L.IsEnglish ? "selected" : "")" aria-pressed="@(!L.IsEnglish ? "true" : "false")" title="Tiếng Việt">VI</button>
+</form>

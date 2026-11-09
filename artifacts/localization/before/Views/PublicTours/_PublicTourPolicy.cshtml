@@ -1,0 +1,14 @@
+@model TourismMvc.Models.Entities.PolicyTemplate
+<section class="td-policy"><div class="policyContainer"><h2 class="sectionTitle">NHỮNG THÔNG TIN CẦN LƯU Ý</h2>
+@if (Model == null) { <p class="detail-empty">Chính sách của lịch khởi hành đang được cập nhật. Vui lòng liên hệ để được tư vấn.</p> }
+else
+{
+    <p class="detail-muted">@Model.TemplateName</p>
+    <div class="detail-policy-grid">
+        @foreach (var item in new[] { ("Giá tour bao gồm", Model.TourPriceIncludes), ("Giá tour không bao gồm", Model.TourPriceExcludes), ("Điều kiện thanh toán", Model.PaymentConditions), ("Điều kiện hủy tour", Model.CancellationRules) })
+        { <details><summary>@item.Item1 <i data-lucide="chevron-down"></i></summary><div data-rich-text>@(string.IsNullOrWhiteSpace(item.Item2) ? "Đang cập nhật" : item.Item2)</div></details> }
+        @if (Model.Contact != null && Model.Contact.IsDeleted != true)
+        { <details><summary>Liên hệ &amp; hỗ trợ <i data-lucide="chevron-down"></i></summary><div class="branch-contact"><strong>@Model.Contact.BranchName</strong><p>@Model.Contact.Address</p><p>Hotline: <a href="tel:@Model.Contact.Phone">@Model.Contact.Phone</a></p><p>Email: <a href="mailto:@Model.Contact.Email">@Model.Contact.Email</a></p></div></details> }
+    </div>
+}
+</div></section>

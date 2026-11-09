@@ -1,0 +1,14 @@
+.user-header-right > a.user-login, .user-header-right > a.user-register { border: 1px solid #ffffff80; border-radius: 6px; padding: 8px 12px; white-space: nowrap; }
+.user-header-right > a.user-register { background: white; color: #073763; }
+.user-header.scrolled .user-header-right > a.user-login { border-color: #cbd5e1; }
+.user-header.scrolled .user-header-right > a.user-register { background: #073763; color: white; }
+.account-menu { position: relative; max-width: 240px; }
+.account-menu summary { display: flex; align-items: center; gap: 7px; cursor: pointer; list-style: none; }
+.account-menu summary::-webkit-details-marker { display: none; }
+.account-menu summary svg { width: 18px; height: 18px; }
+.account-name { max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.account-dropdown { position: absolute; top: calc(100% + 20px); right: 0; width: min(290px, 90vw); padding: 18px; border: 1px solid #e2e8f0; border-radius: 10px; background: white; color: #334155; box-shadow: 0 12px 35px #0f172a26; display: flex; flex-direction: column; gap: 10px; overflow-wrap: anywhere; }
+.account-dropdown > span { font-size: 12px; color: #64748b; }
+.account-dropdown > a, .user-header-right .account-dropdown button { display: flex; gap: 8px; align-items: center; color: #334155; border: 0; padding: 8px 0; font-size: 13px; background: transparent; }
+.account-dropdown > a:hover, .user-header-right .account-dropdown button:hover { color: #1a6ef8; }
+@media(max-width:600px) { .user-header-right > a.user-login { display: inline-block; font-size: 12px; padding: 8px; } .user-header-right > a.user-register { display: none; } .account-name { max-width: 105px; } }

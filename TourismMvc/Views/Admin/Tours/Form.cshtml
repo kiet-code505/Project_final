@@ -1,0 +1,321 @@
+@model TourFormViewModel
+@{
+    ViewData["Title"] = Model.IsEdit ? "Chỉnh sửa tour" : "Thêm tour mới";
+    ViewData["Description"] = "Tạo / cập nhật tour: thông tin chung, lịch trình theo ngày và thư viện ảnh.";
+    var action = Model.IsEdit ? $"/admin/tours/{Model.TourID}/edit" : "/admin/tours/create";
+    var generalErrorKeys = new[] { "TourCode", "TourName", "Duration", "Transportation", "StartLocationId", "EndLocationId", "Attractions" };
+    var generalHasError = generalErrorKeys.Any(k => ViewData.ModelState[k]?.Errors.Count > 0);
+    var itineraryHasError = ViewData.ModelState.Keys.Any(k => k.StartsWith("ItineraryDays") && ViewData.ModelState[k]!.Errors.Count > 0);
+    var imagesHasError = ViewData.ModelState.Keys.Any(k => k.StartsWith("Images") && ViewData.ModelState[k]!.Errors.Count > 0);
+}
+
+<header class="page-header">
+    <div class="title-block">
+        <a href="/admin/tours" class="back-btn" title="Quay lại danh sách" id="btnBack"><i data-lucide="arrow-left"></i></a>
+        <div>
+            <h1>@ViewData["Title"]</h1>
+            <p>@(Model.IsEdit ? $"ID: {Model.TourID} · {Model.TourCode}" : "Điền thông tin chung, lịch trình và hình ảnh")</p>
+        </div>
+    </div>
+</header>
+
+<form method="post" action="@action" id="tourForm" novalidate>
+    @Html.AntiForgeryToken()
+    <div asp-validation-summary="All" class="alert alert-error" style="margin-bottom:16px"></div>
+
+    <nav class="sub-tabs" role="tablist">
+        <button type="button" class="sub-tab sub-tab-active" data-tab="general" id="tabGeneral">
+            <i data-lucide="info"></i> Thông tin chung @if (generalHasError) { <span class="tab-dot"></span> }
+        </button>
+        <button type="button" class="sub-tab" data-tab="itinerary" id="tabItinerary">
+            <i data-lucide="list-ordered"></i> Lịch trình <span class="sub-tab-badge js-count-days">@Model.ItineraryDays.Count</span>
+            @if (itineraryHasError) { <span class="tab-dot"></span> }
+        </button>
+        <button type="button" class="sub-tab" data-tab="gallery" id="tabGallery">
+            <i data-lucide="images"></i> Thư viện ảnh <span class="sub-tab-badge js-count-images">@Model.Images.Count</span>
+            @if (imagesHasError) { <span class="tab-dot"></span> }
+        </button>
+    </nav>
+
+    @* ── TAB 1: THÔNG TIN CHUNG ── *@
+    <section class="tab-panel" data-panel="general">
+        <div class="card">
+            <h3 class="card-title"><i data-lucide="tag"></i> Định danh</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label asp-for="TourCode">Mã tour <span class="req">*</span></label>
+                    <input asp-for="TourCode" class="mono upper" placeholder="VD: HN-DN-04N3D" autocomplete="off" data-exclude="@Model.TourID" />
+                    <span class="hint" id="codeStatus">Chữ in hoa, số và dấu gạch ngang</span>
+                    <span asp-validation-for="TourCode" class="field-error"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="TourName">Tên tour <span class="req">*</span></label>
+                    <input asp-for="TourName" placeholder="VD: Hà Nội – Đà Nẵng – Hội An 4N3Đ" maxlength="255" />
+                    <span asp-validation-for="TourName" class="field-error"></span>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label asp-for="StartLocationId">Điểm khởi hành <span class="req">*</span></label>
+                    <select asp-for="StartLocationId" class="select select-block">
+                        <option value="">— Chọn điểm khởi hành —</option>
+                        @foreach (var l in Model.LocationOptions)
+                        {
+                            <option value="@l.LocationId" selected="@(Model.StartLocationId == l.LocationId)">@l.LocationName</option>
+                        }
+                    </select>
+                    <span asp-validation-for="StartLocationId" class="field-error"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="EndLocationId">Điểm đến <span class="req">*</span></label>
+                    <select asp-for="EndLocationId" class="select select-block">
+                        <option value="">— Chọn điểm đến —</option>
+                        @foreach (var l in Model.LocationOptions)
+                        {
+                            <option value="@l.LocationId" selected="@(Model.EndLocationId == l.LocationId)">@l.LocationName</option>
+                        }
+                    </select>
+                    <span asp-validation-for="EndLocationId" class="field-error"></span>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label asp-for="Duration">Thời lượng <span class="req">*</span></label>
+                    <input asp-for="Duration" placeholder="VD: 4 ngày 3 đêm" />
+                    <span asp-validation-for="Duration" class="field-error"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Transportation">Phương tiện <span class="req">*</span></label>
+                    <input asp-for="Transportation" placeholder="VD: Máy bay, Xe du lịch" />
+                    <span asp-validation-for="Transportation" class="field-error"></span>
+                </div>
+            </div>
+            <label class="switch-row">
+                <input type="checkbox" asp-for="Status" />
+                <span class="switch"></span>
+                <span><strong>Đang hoạt động</strong><br /><small class="muted">Tắt để ẩn tour khỏi trang bán hàng</small></span>
+            </label>
+        </div>
+
+        <div class="card" style="margin-top:20px">
+            <h3 class="card-title"><i data-lucide="sparkles"></i> Thông tin chuyến đi</h3>
+            <div class="form-group">
+                <label asp-for="Attractions">Điểm tham quan <span class="req">*</span></label>
+                <textarea asp-for="Attractions" rows="3" maxlength="1000" placeholder="VD: Bà Nà Hills, Cầu Vàng, Phố cổ Hội An…"></textarea>
+                <span asp-validation-for="Attractions" class="field-error"></span>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label asp-for="Hotel">Khách sạn</label>
+                    <input asp-for="Hotel" placeholder="VD: Khách sạn 4 sao" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Meals">Ẩm thực</label>
+                    <input asp-for="Meals" placeholder="VD: Buffet sáng, đặc sản địa phương" />
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label asp-for="IdealTime">Thời gian lý tưởng</label>
+                    <input asp-for="IdealTime" placeholder="VD: Quanh năm" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="SuitableCustomer">Đối tượng phù hợp</label>
+                    <input asp-for="SuitableCustomer" placeholder="VD: Gia đình, cặp đôi" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="TripTransportation">Phương tiện trong chuyến đi</label>
+                <input asp-for="TripTransportation" placeholder="VD: Xe 45 chỗ đời mới" />
+            </div>
+        </div>
+    </section>
+
+    @* ── TAB 2: LỊCH TRÌNH ── *@
+    <section class="tab-panel" data-panel="itinerary" hidden>
+        <div class="card">
+            <div class="card-title-row">
+                <h3 class="card-title"><i data-lucide="list-ordered"></i> Lịch trình theo ngày</h3>
+                <button type="button" class="btn btn-ghost btn-sm" id="btnAddDay"><i data-lucide="plus"></i> Thêm ngày</button>
+            </div>
+            <div id="dayList" class="repeat-list">
+                @for (var i = 0; i < Model.ItineraryDays.Count; i++)
+                {
+                    var d = Model.ItineraryDays[i];
+                    <div class="repeat-item js-day">
+                        <div class="repeat-head">
+                            <span class="day-badge">Ngày <input type="number" min="1" class="day-num" data-field="DayNumber" value="@d.DayNumber" /></span>
+                            <button type="button" class="icon-btn icon-delete js-remove" title="Xoá ngày"><i data-lucide="trash-2"></i></button>
+                        </div>
+                        <div class="form-group"><label>Tiêu đề <span class="req">*</span></label><input data-field="Title" value="@d.Title" placeholder="VD: Hà Nội – Đà Nẵng – Sơn Trà" /></div>
+                        <div class="form-row">
+                            <div class="form-group"><label>Bữa ăn</label><input data-field="Meals" value="@d.Meals" placeholder="VD: Sáng, Trưa, Tối" /></div>
+                            <div class="form-group"><label>Lưu trú</label><input data-field="Accommodation" value="@d.Accommodation" placeholder="VD: Khách sạn Đà Nẵng" /></div>
+                        </div>
+                        <div class="form-group"><label>Mô tả chi tiết</label><textarea data-field="Description" rows="4">@d.Description</textarea></div>
+                    </div>
+                }
+            </div>
+            <p class="muted js-empty-days" @(Model.ItineraryDays.Count > 0 ? "hidden" : "")>Chưa có ngày nào — bấm “Thêm ngày”.</p>
+        </div>
+    </section>
+
+    @* ── TAB 3: THƯ VIỆN ẢNH ── *@
+    <section class="tab-panel" data-panel="gallery" hidden>
+        <div class="card">
+            <div class="card-title-row">
+                <h3 class="card-title"><i data-lucide="images"></i> Thư viện ảnh</h3>
+                <div class="url-adder">
+                    <input type="url" id="newImageUrl" placeholder="Dán URL ảnh (https://…)" />
+                    <button type="button" class="btn btn-ghost btn-sm" id="btnAddImage"><i data-lucide="plus"></i> Thêm ảnh</button>
+                </div>
+            </div>
+            <p class="hint" style="margin-top:-6px">Chọn ngôi sao để đặt ảnh chính. Nếu không chọn, ảnh đầu tiên sẽ là ảnh chính.</p>
+            <div id="imageList" class="gallery-grid gallery-edit">
+                @foreach (var img in Model.Images)
+                {
+                    <div class="gallery-item js-image">
+                        <img src="@img.ImageURL" alt="Ảnh tour" loading="lazy" />
+                        <input type="hidden" data-field="ImageURL" value="@img.ImageURL" />
+                        <label class="main-toggle" title="Đặt làm ảnh chính">
+                            <input type="radio" name="__mainImage" class="js-main" @(img.IsMainImage ? "checked" : "") />
+                            <i data-lucide="star"></i>
+                        </label>
+                        <button type="button" class="icon-btn icon-delete js-remove" title="Xoá ảnh"><i data-lucide="x"></i></button>
+                    </div>
+                }
+            </div>
+            <p class="muted js-empty-images" @(Model.Images.Count > 0 ? "hidden" : "")>Chưa có ảnh nào.</p>
+        </div>
+    </section>
+
+    <div class="form-actions">
+        <a href="/admin/tours" class="btn btn-ghost">Huỷ</a>
+        <button type="submit" class="btn btn-primary" id="btnSubmitTour">
+            <i data-lucide="check-circle-2"></i> @(Model.IsEdit ? "Cập nhật tour" : "Tạo tour")
+        </button>
+    </div>
+</form>
+
+<template id="dayTemplate">
+    <div class="repeat-item js-day">
+        <div class="repeat-head">
+            <span class="day-badge">Ngày <input type="number" min="1" class="day-num" data-field="DayNumber" /></span>
+            <button type="button" class="icon-btn icon-delete js-remove" title="Xoá ngày"><i data-lucide="trash-2"></i></button>
+        </div>
+        <div class="form-group"><label>Tiêu đề <span class="req">*</span></label><input data-field="Title" placeholder="VD: Hà Nội – Đà Nẵng – Sơn Trà" /></div>
+        <div class="form-row">
+            <div class="form-group"><label>Bữa ăn</label><input data-field="Meals" placeholder="VD: Sáng, Trưa, Tối" /></div>
+            <div class="form-group"><label>Lưu trú</label><input data-field="Accommodation" placeholder="VD: Khách sạn Đà Nẵng" /></div>
+        </div>
+        <div class="form-group"><label>Mô tả chi tiết</label><textarea data-field="Description" rows="4"></textarea></div>
+    </div>
+</template>
+
+<template id="imageTemplate">
+    <div class="gallery-item js-image">
+        <img alt="Ảnh tour" />
+        <input type="hidden" data-field="ImageURL" />
+        <label class="main-toggle" title="Đặt làm ảnh chính">
+            <input type="radio" name="__mainImage" class="js-main" />
+            <i data-lucide="star"></i>
+        </label>
+        <button type="button" class="icon-btn icon-delete js-remove" title="Xoá ảnh"><i data-lucide="x"></i></button>
+    </div>
+</template>
+
+@section Scripts {
+    <script>
+        (() => {
+            const $ = (s, r = document) => r.querySelector(s);
+            const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+            const refreshIcons = () => window.lucide && lucide.createIcons();
+
+            // ── Tabs ──
+            const showTab = name => {
+                $$('.sub-tab').forEach(b => b.classList.toggle('sub-tab-active', b.dataset.tab === name));
+                $$('.tab-panel').forEach(p => p.hidden = p.dataset.panel !== name);
+            };
+            $$('.sub-tab').forEach(b => b.addEventListener('click', () => showTab(b.dataset.tab)));
+            const firstErr = $('.sub-tab .tab-dot');
+            if (firstErr) showTab(firstErr.closest('.sub-tab').dataset.tab);
+
+            // ── Counters / empty states ──
+            const dayList = $('#dayList'), imageList = $('#imageList');
+            const refreshCounts = () => {
+                const nd = $$('.js-day', dayList).length, ni = $$('.js-image', imageList).length;
+                $('.js-count-days').textContent = nd;
+                $('.js-count-images').textContent = ni;
+                $('.js-empty-days').hidden = nd > 0;
+                $('.js-empty-images').hidden = ni > 0;
+            };
+
+            // ── Itinerary ──
+            $('#btnAddDay').addEventListener('click', () => {
+                const node = $('#dayTemplate').content.firstElementChild.cloneNode(true);
+                const nums = $$('.day-num', dayList).map(i => Number(i.value) || 0);
+                $('.day-num', node).value = (nums.length ? Math.max(...nums) : 0) + 1;
+                dayList.appendChild(node);
+                refreshIcons(); refreshCounts();
+                $('[data-field=Title]', node).focus();
+            });
+
+            // ── Gallery ──
+            const addImage = url => {
+                const node = $('#imageTemplate').content.firstElementChild.cloneNode(true);
+                $('img', node).src = url;
+                $('[data-field=ImageURL]', node).value = url;
+                imageList.appendChild(node);
+                refreshIcons(); refreshCounts();
+            };
+            $('#btnAddImage').addEventListener('click', () => {
+                const input = $('#newImageUrl'), url = input.value.trim();
+                if (!/^https?:\/\//i.test(url)) { input.focus(); input.classList.add('input-validation-error'); return; }
+                input.classList.remove('input-validation-error');
+                addImage(url); input.value = '';
+            });
+            $('#newImageUrl').addEventListener('keydown', e => {
+                if (e.key === 'Enter') { e.preventDefault(); $('#btnAddImage').click(); }
+            });
+
+            // ── Remove (delegated) ──
+            document.addEventListener('click', e => {
+                const btn = e.target.closest('.js-remove');
+                if (!btn) return;
+                btn.closest('.js-day, .js-image').remove();
+                refreshCounts();
+            });
+
+            // ── Mã tour: in hoa + kiểm tra trùng (debounce) ──
+            const codeInput = $('#TourCode'), codeStatus = $('#codeStatus');
+            let timer;
+            codeInput.addEventListener('input', () => {
+                codeInput.value = codeInput.value.toUpperCase().replace(/\s+/g, '');
+                clearTimeout(timer);
+                const code = codeInput.value;
+                if (code.length < 3) { codeStatus.textContent = 'Chữ in hoa, số và dấu gạch ngang'; codeStatus.className = 'hint'; return; }
+                codeStatus.textContent = 'Đang kiểm tra…'; codeStatus.className = 'hint';
+                timer = setTimeout(async () => {
+                    const ex = codeInput.dataset.exclude;
+                    const res = await fetch(`/admin/tours/check-code?tourCode=${encodeURIComponent(code)}${ex ? `&excludeId=${ex}` : ''}`);
+                    const { exists } = await res.json();
+                    codeStatus.textContent = exists ? '✗ Mã tour đã tồn tại' : '✓ Mã tour hợp lệ';
+                    codeStatus.className = exists ? 'field-error' : 'hint hint-ok';
+                }, 450);
+            });
+
+            // ── Trước khi submit: đặt name theo index để model binding nhận List<> ──
+            $('#tourForm').addEventListener('submit', () => {
+                $$('.js-day', dayList).forEach((row, i) =>
+                    $$('[data-field]', row).forEach(f => f.name = `ItineraryDays[${i}].${f.dataset.field}`));
+                $$('.js-image', imageList).forEach((row, i) => {
+                    $('[data-field=ImageURL]', row).name = `Images[${i}].ImageURL`;
+                    let main = $('input[data-main]', row);
+                    if (!main) { main = document.createElement('input'); main.type = 'hidden'; main.dataset.main = '1'; row.appendChild(main); }
+                    main.name = `Images[${i}].IsMainImage`;
+                    main.value = $('.js-main', row).checked ? 'true' : 'false';
+                });
+            });
+        })();
+    </script>
+}

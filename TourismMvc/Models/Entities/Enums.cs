@@ -1,8 +1,8 @@
 namespace TourismMvc.Models.Entities;
 
 // Lưu trong DB dạng chuỗi (EnumType.STRING) – cấu hình ở AppDbContext.
-// Luồng booking: PENDING_CONFIRMATION -> PAID | CANCELLED
-public enum BookingStatus { PENDING_CONFIRMATION, PAID, CANCELLED }
+// New online reservations: PENDING_PAYMENT -> PAID | EXPIRED. Legacy bookings keep PENDING_CONFIRMATION.
+public enum BookingStatus { PENDING_CONFIRMATION, PAID, CANCELLED, PENDING_PAYMENT, EXPIRED }
 public enum PassengerType { ADULT, CHILD, INFANT, SINGLE_SUPPLEMENT }
 public enum Region { NORTH, CENTRAL, SOUTH }
 public enum Role { ADMIN, CUSTOMER, TOUR_OWNER }

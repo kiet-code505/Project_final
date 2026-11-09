@@ -1,0 +1,264 @@
+@model PolicyIndexViewModel
+@{
+    ViewData["Title"] = "Quản lý Chính sách";
+    ViewData["Description"] = "Quản lý các mẫu điều khoản và chính sách áp dụng cho tour du lịch.";
+
+    string Link(int? page = null, string? search = "__keep", int? contactId = -999, int? pageSize = null)
+    {
+        var qs = new Dictionary<string, string?>
+        {
+            ["search"] = search == "__keep" ? Model.Search : search,
+            ["contactId"] = contactId == -999 ? Model.ContactId?.ToString() : contactId?.ToString(),
+            ["page"] = (page ?? Model.Page).ToString(),
+            ["pageSize"] = (pageSize ?? Model.PageSize).ToString(),
+        };
+        return "/admin/policies" + Microsoft.AspNetCore.Http.QueryString.Create(qs.Where(kv => !string.IsNullOrEmpty(kv.Value)));
+    }
+
+    var currentUrl = Context.Request.Path + Context.Request.QueryString;
+    var fromItem = Model.TotalItems == 0 ? 0 : (Model.Page - 1) * Model.PageSize + 1;
+    var toItem = Math.Min(Model.Page * Model.PageSize, Model.TotalItems);
+}
+
+<header class="page-header">
+    <div class="title-block">
+        <div class="title-icon"><i data-lucide="file-text"></i></div>
+        <div>
+            <h1>Quản lý Chi nhánh & Chính sách</h1>
+            <p>Văn phòng phụ trách và các mẫu điều khoản áp dụng cho tour</p>
+        </div>
+    </div>
+    <div class="header-actions">
+        <a href="/admin/policies/create" class="btn btn-primary" id="btnCreatePolicy">
+            <i data-lucide="plus"></i> Thêm mẫu chính sách
+        </a>
+    </div>
+</header>
+
+@* ── NAVIGATION TABS (Chi nhánh / Chính sách) ── *@
+<div class="sub-tabs">
+    <a href="/admin/branches" class="sub-tab">
+        <i data-lucide="building-2"></i> Chi nhánh
+    </a>
+    <a href="/admin/policies" class="sub-tab sub-tab-active">
+        <i data-lucide="file-text"></i> Mẫu chính sách (Policy)
+        <span class="sub-tab-badge">@Model.TotalItems</span>
+    </a>
+</div>
+
+@* ── STAT CARDS ── *@
+<section class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon stat-blue"><i data-lucide="file-text"></i></div>
+        <div>
+            <div class="stat-label">Tổng policy</div>
+            <div class="stat-value" data-count="@Model.StatTotal">@Model.StatTotal</div>
+            <div class="stat-hint">Mẫu chính sách đã tạo</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon stat-green"><i data-lucide="building-2"></i></div>
+        <div>
+            <div class="stat-label">Đã gắn chi nhánh</div>
+            <div class="stat-value" data-count="@Model.StatLinkedBranch">@Model.StatLinkedBranch</div>
+            <div class="stat-hint">@(Model.StatTotal - Model.StatLinkedBranch) chưa gắn</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon stat-amber"><i data-lucide="trending-up"></i></div>
+        <div>
+            <div class="stat-label">Chuyến khởi hành áp dụng</div>
+            <div class="stat-value" data-count="@Model.StatTotalUsage">@Model.StatTotalUsage</div>
+            <div class="stat-hint">Tổng số tour departure sử dụng</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon stat-rose"><i data-lucide="shield-alert"></i></div>
+        <div>
+            <div class="stat-label">Chưa dùng</div>
+            <div class="stat-value" data-count="@Model.StatUnused">@Model.StatUnused</div>
+            <div class="stat-hint">Chính sách nháp / chưa gán tour</div>
+        </div>
+    </div>
+</section>
+
+@* ── TOOLBAR ── *@
+<form class="toolbar" method="get" action="/admin/policies" id="filterForm">
+    <label class="search-box">
+        <i data-lucide="search"></i>
+        <input type="search" name="search" id="searchInput" value="@Model.Search"
+               placeholder="Tìm theo tên chính sách hoặc chi nhánh…" autocomplete="off" />
+        @if (!string.IsNullOrEmpty(Model.Search))
+        {
+            <a class="clear-btn" href="@Link(page: 1, search: null)" title="Xoá tìm kiếm"><i data-lucide="x"></i></a>
+        }
+    </label>
+
+    <div class="filter-group">
+        <select name="contactId" class="select" onchange="this.form.submit()">
+            <option value="">-- Tất cả chi nhánh --</option>
+            @foreach (var b in Model.Branches)
+            {
+                <option value="@b.ContactID" selected="@(Model.ContactId == b.ContactID)">@b.BranchName</option>
+            }
+        </select>
+
+        <select name="pageSize" class="select" onchange="this.form.submit()">
+            @foreach (var s in new[] { 5, 10, 20 })
+            {
+                <option value="@s" selected="@(Model.PageSize == s)">@s / trang</option>
+            }
+        </select>
+    </div>
+</form>
+
+@if (Model.Items.Count == 0)
+{
+    <div class="empty">
+        <div class="empty-icon"><i data-lucide="file-text"></i></div>
+        @if (!string.IsNullOrEmpty(Model.Search) || Model.ContactId.HasValue)
+        {
+            <h3>Không tìm thấy mẫu chính sách phù hợp</h3>
+            <p>Thử đổi từ khoá hoặc bỏ chọn chi nhánh lọc</p>
+            <a href="/admin/policies" class="btn btn-ghost"><i data-lucide="rotate-ccw"></i> Xoá bộ lọc</a>
+        }
+        else
+        {
+            <h3>Chưa có mẫu chính sách nào</h3>
+            <p>Tạo mẫu chính sách đầu tiên để liên kết áp dụng cho các chuyến tour</p>
+            <a href="/admin/policies/create" class="btn btn-primary"><i data-lucide="plus"></i> Tạo chính sách đầu tiên</a>
+        }
+    </div>
+}
+else
+{
+    <div class="policy-list">
+        @foreach (var item in Model.Items)
+        {
+            var p = item.Policy;
+            var fields = new[]
+            {
+                ("Giá tour bao gồm", p.TourPriceIncludes, "check-circle-2"),
+                ("Giá tour không bao gồm", p.TourPriceExcludes, "x-circle"),
+                ("Điều kiện thanh toán", p.PaymentConditions, "credit-card"),
+                ("Quy định huỷ tour", p.CancellationRules, "alert-octagon")
+            };
+            var filledCount = fields.Count(f => !string.IsNullOrWhiteSpace(f.Item2));
+
+            <div class="policy-card">
+                <div class="policy-header">
+                    <div class="policy-title-area">
+                        <div class="policy-title-icon"><i data-lucide="file-text"></i></div>
+                        <div>
+                            <h3>@p.TemplateName</h3>
+                            <div class="policy-meta">
+                                <span class="branch-tag">
+                                    <i data-lucide="building-2"></i>
+                                    @(item.BranchName ?? "Chưa gắn chi nhánh")
+                                </span>
+                                <span class="id-chip"><i data-lucide="hash"></i>ID: @p.PolicyTemplateID</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="policy-header-right">
+                        <span class="usage-badge" title="@item.UsageCount chuyến khởi hành đang áp dụng template này">
+                            <strong>@item.UsageCount</strong>
+                            <small>tour</small>
+                        </span>
+                        <span class="complete-chip" title="@filledCount/4 mục điều khoản đã điền">
+                            @filledCount/4 điều khoản
+                        </span>
+                        <div class="row-actions">
+                            <a class="icon-btn icon-edit" href="/admin/policies/@p.PolicyTemplateID/edit" title="Chỉnh sửa"><i data-lucide="pencil"></i></a>
+                            <button type="button" class="icon-btn icon-delete js-delete-policy"
+                                    data-id="@p.PolicyTemplateID" data-name="@p.TemplateName" data-usage="@item.UsageCount"
+                                    title="Xoá"><i data-lucide="trash-2"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                @* Accordion danh sách điều khoản *@
+                <div class="policy-accordion-list">
+                    @foreach (var (title, content, icon) in fields)
+                    {
+                        if (!string.IsNullOrWhiteSpace(content))
+                        {
+                            <details class="policy-accordion-item">
+                                <summary class="policy-accordion-summary">
+                                    <span><i data-lucide="@icon"></i> @title</span>
+                                    <i data-lucide="chevron-down" class="accordion-arrow"></i>
+                                </summary>
+                                <div class="policy-accordion-content">
+                                    @Html.Raw(content)
+                                </div>
+                            </details>
+                        }
+                    }
+                </div>
+            </div>
+        }
+    </div>
+
+    @if (Model.TotalPages > 1)
+    {
+        <footer class="table-foot" style="margin-top: 20px; background: var(--surface); border-radius: var(--radius);">
+            <span class="muted">Hiển thị <strong>@fromItem–@toItem</strong> trên <strong>@Model.TotalItems</strong> chính sách</span>
+            <nav class="pagination" aria-label="Phân trang">
+                <a class="page-btn @(Model.Page <= 1 ? "disabled" : "")" href="@Link(page: Model.Page - 1)"><i data-lucide="chevron-left"></i> Trước</a>
+                @for (var pg = 1; pg <= Model.TotalPages; pg++)
+                {
+                    <a class="page-num @(pg == Model.Page ? "active" : "")" href="@Link(page: pg)">@pg</a>
+                }
+                <a class="page-btn @(Model.Page >= Model.TotalPages ? "disabled" : "")" href="@Link(page: Model.Page + 1)">Sau <i data-lucide="chevron-right"></i></a>
+            </nav>
+        </footer>
+    }
+}
+
+@* ── CONFIRM DELETE MODAL ── *@
+<div class="modal-backdrop" id="confirmModal" hidden>
+    <form class="confirm-modal" method="post" action="/admin/policies/0/delete" id="deleteForm">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="returnUrl" value="@currentUrl" />
+        <div class="confirm-icon"><i data-lucide="alert-triangle"></i></div>
+        <h3 id="confirmTitle">Xoá mẫu chính sách này?</h3>
+        <p id="confirmMessage">Hành động này không thể hoàn tác.</p>
+        <div class="confirm-actions">
+            <button type="button" class="btn btn-ghost" data-close>Huỷ</button>
+            <button type="submit" class="btn btn-danger" id="confirmDeleteBtn"><i data-lucide="trash-2"></i> Xác nhận xoá</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        (function() {
+            const modal = document.getElementById('confirmModal');
+            const form = document.getElementById('deleteForm');
+            const title = document.getElementById('confirmTitle');
+            const msg = document.getElementById('confirmMessage');
+
+            document.querySelectorAll('.js-delete-policy').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const id = btn.dataset.id;
+                    const name = btn.dataset.name;
+                    const usage = +btn.dataset.usage;
+
+                    form.action = `/admin/policies/${id}/delete`;
+                    title.textContent = `Xoá "${name}"?`;
+                    if (usage > 0) {
+                        msg.textContent = `Mẫu chính sách này đang được ${usage} chuyến khởi hành áp dụng. Hệ thống sẽ chặn xoá để tránh làm mất thông tin tour.`;
+                    } else {
+                        msg.textContent = 'Hành động này không thể hoàn tác.';
+                    }
+                    modal.removeAttribute('hidden');
+                });
+            });
+
+            const closeModal = () => modal.setAttribute('hidden', '');
+            modal?.addEventListener('click', e => { if (e.target === modal || e.target.closest('[data-close]')) closeModal(); });
+            document.addEventListener('keydown', e => { if (e.key === 'Escape' && modal && !modal.hidden) closeModal(); });
+        })();
+    </script>
+}

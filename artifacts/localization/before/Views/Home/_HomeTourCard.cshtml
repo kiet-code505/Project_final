@@ -1,0 +1,9 @@
+@model TourismMvc.Models.ViewModels.HomeTourCard
+@{ var vi = System.Globalization.CultureInfo.GetCultureInfo("vi-VN"); }
+<article class="tourCard">
+    <div class="imageWrapper"><img class="home-cover" src="@(string.IsNullOrWhiteSpace(Model.ImageUrl) ? "/images/home/ryan-le-8-hEg1OuFn8-unsplash.jpg" : Model.ImageUrl)" alt="@Model.Name" loading="lazy" />@if (Model.Discount > 0) { <div class="saleRibbon"><span>Tiết kiệm @((Model.OriginalPrice!.Value - Model.Price!.Value).ToString("N0", vi)) đ</span></div> }</div>
+    <div class="cardContent"><h3 class="cardTitle">@Model.Name</h3><p class="tourCode">@Model.Code</p>
+        <div class="detailRow"><i data-lucide="map-pin" class="detailIcon"></i><span>Khởi hành: <strong>@Model.StartLocation</strong></span></div><div class="detailRow"><i data-lucide="calendar-days" class="detailIcon"></i><span>@(Model.DepartureDate?.ToString("dd/MM/yyyy") ?? "Chưa có lịch sắp tới")</span></div><div class="detailRow"><i data-lucide="clock" class="detailIcon"></i><span>@Model.Duration</span>@if (Model.AvailableSlots.HasValue) { <span class="home-slots">Còn @Model.AvailableSlots chỗ</span> }</div>
+        <div class="priceSection">@if (Model.OriginalPrice.HasValue && Model.OriginalPrice > Model.Price) { <span class="originalPrice">@Model.OriginalPrice.Value.ToString("N0", vi) đ</span> }<strong class="promotionalPrice">@(Model.Price.HasValue ? Model.Price.Value.ToString("N0", vi) + " đ" : "Liên hệ")</strong><a class="bookingButton" href="@Model.DetailUrl">Xem chuyến đi</a></div>
+    </div>
+</article>

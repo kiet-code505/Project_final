@@ -1,0 +1,8 @@
+<svg width="190" height="48" viewBox="0 0 190 48" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Futuretravel">
+  <text x="4" y="32" fill="#334155" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="700">Futuretravel</text>
+  <g transform="translate(158 6) scale(0.76)">
+    <path d="M3 15.6C10.4 13.9 17.5 8.1 23.5 1.8C24.2 1.1 25.3 1.8 25 2.8L20.8 16.8C20.6 17.5 20.1 18 19.4 18.2L4 18C2.4 17.9 1.8 16 3 15.6Z" fill="#0EA5E9"/>
+    <path d="M15.6 21.7L28.7 28.2C29.6 28.7 30.5 27.8 30 26.8L24.3 15.2C23.9 14.4 23 14.2 22.3 14.8L15.3 20C14.7 20.5 14.9 21.4 15.6 21.7Z" fill="#38BDF8"/>
+    <path d="M8.5 18.1L18.9 18.1L13.7 23.1C12.7 24.1 11.1 23.6 10.7 22.3L8.5 18.1Z" fill="#0369A1"/>
+  </g>
+</svg>

@@ -1,0 +1,402 @@
+﻿/**
+ * VNPAY Payment Gateway Promotion
+ * sonnt2@vnpay.vn
+ * */
+
+(function ($) {
+    $.fn.promotion = function (options) {
+        var defaultOptions = {
+            cardNumberInput: $('<input />'),
+            cardDateInput: $('<input />'),
+            ordertoken: '',
+            bankLogo: ''
+        };
+
+        var settings = jQuery.extend({}, defaultOptions, options);
+
+        var cardForm = $(this);
+
+        var modalPromo = null;
+        var modalPromoDetails = null;
+        var toastPromoCopySuccess = null;
+
+        var txtExpiryDate = '';
+        var txtBtnApply = '';
+        var txtBtnCancelPromo = '';
+        var txtBtnDetails = '';
+        var txtInputPromotionCode = '';
+        var txtTooltipCopy = '';
+        var iconCopy = '';
+        var queryPromotionUrl = '';
+        var checkPromotionUrl = '';
+
+        var totalAmountOriginal = '';
+        var promotionsMap = {};
+        var promoLocale = '';
+
+        function isVietnamese() {
+            return promoLocale === 'vi-VN';
+        };
+
+        function showServerError(message) {
+            $('#modalPromo .error-message').text(message);
+            $('#modalPromo .error-block').show();
+        };
+
+        function hideServerError() {
+            $('#modalPromo .error-message').text('');
+            $('#modalPromo .error-block').hide();
+        };
+
+        function handleShowPromoModal() {
+            if (cardForm.parsley().validate()) {
+                $('#inputPromoManual').val('');
+                if (!$('#btnPromoManual').hasClass('ubtn-primary-disabled')) {
+                    $('#btnPromoManual').addClass('ubtn-primary-disabled');
+                }
+                $('#promoCodeManual').parsley().reset();
+                $('#modalPromo .list-promo').hide();
+                $('#modalPromo .empty-box').hide();
+                $('#modalPromo .error-block').hide();
+
+                queryPromotion();
+            }
+        };
+
+        function showPromoDetailsModal(promotion) {
+            if (promotion != null) {
+
+                var summary = !isVietnamese() && promotion.summaryEn ? promotion.summaryEn : promotion.summary;
+                var benefits = !isVietnamese() && promotion.benefitsEn ? promotion.benefitsEn : promotion.benefits;
+                var conditions = !isVietnamese() && promotion.conditionsEn ? promotion.conditionsEn : promotion.conditions;
+
+                $('#modalPromoDetails input[name=promoCode]').val(promotion.promoCode);
+                $('#modalPromoDetails .promo-summary').text(summary);
+                $('#modalPromoDetails .promo-code').text(promotion.promoCode);
+
+                $('#modalPromoDetails .promo-benefits').empty();
+                var htmlBenefits = txtInputPromotionCode.replace('${promoCode}', promotion.promoCode);
+                if (benefits) {
+                    benefits.forEach((benefit) => {
+                        htmlBenefits += '<br/>• ' + benefit + '.';
+                    });
+                }
+                $('#modalPromoDetails .promo-benefits').html(htmlBenefits);
+
+                $('#modalPromoDetails .promo-conditions').empty();
+                var htmlConditions = '';
+                if (conditions) {
+                    conditions.forEach((condition, index) => {
+                        htmlConditions += (index > 0 ? '<br/>' : '') + '• ' + condition + '.';
+                    });
+                }
+                $('#modalPromoDetails .promo-conditions').html(htmlConditions);
+
+                $('#modalPromoDetails .promo-end-time-wrapper').hide();
+                $('#modalPromoDetails .promo-apply-status-message').hide();
+
+                $('#modalPromoDetails .btn-cancel-promo').hide();
+                $('#modalPromoDetails .btn-apply-promo').hide();
+                $('#modalPromoDetails .btn-unavailable-promo').hide();
+
+                if (promotion.applyStatus == 1) {
+                    $('#modalPromoDetails .promo-end-time').text(promotion.endTime);
+                    $('#modalPromoDetails .promo-end-time-wrapper').show();
+
+                    if (promotion.promoCode == $('#promoCode').val()) {
+                        $('#modalPromoDetails .btn-cancel-promo').show();
+                    } else {
+                        $('#modalPromoDetails .btn-apply-promo').show();
+                    }
+                } else {
+                    $('#modalPromoDetails .promo-apply-status-message').text(promotion.applyStatusMessage);
+                    $('#modalPromoDetails .promo-apply-status-message').show();
+
+                    $('#modalPromoDetails .btn-unavailable-promo').show();
+                }
+
+                modalPromoDetails.show();
+            }
+        };
+
+        function renderPromotions(promotions) {
+            $('#listPromotions').empty();
+            if (promotions && promotions.length > 0) {
+                var html = '';
+                promotions.forEach(promotion => {
+                    promotionsMap[promotion.promoCode] = promotion;
+
+                    var summary = !isVietnamese() && promotion.summaryEn ? promotion.summaryEn : promotion.summary;
+
+                    html += '<div class="promo-card-wrap">';
+                    html += '   <input type="checkbox" name="rncPromo" id="rncPromo-' + promotion.promoCode + '" class="hidden" value="' + promotion.promoCode + '" />';
+                    html += '   <div class="promo-card rnc-content">';
+                    html += '       <a href="#" class="promo-link-abs btn-promotion-details"></a>';
+                    html += '       <div class="promo-card-inner">';
+                    html += '           <div class="row row-0 align-items-center">';
+                    html += '               <div class="col promo-left">';
+                    html += '                   <div class="promo-left-inner">';
+                    html += '                       <div class="h3">' + summary + '</div>';
+                    html += '                       <div class="mt8 p">';
+                    if (promotion.applyStatus != 1) {
+                        html += '                       <div class="color-warning">' + promotion.applyStatusMessage + '</div>';
+                    }
+                    html += '                           <span class="color-sub-default">' + txtExpiryDate + ': </span>' + promotion.endTime;
+                    html += '                       </div>';
+                    html += '                       <div class="mt16">';
+                    html += '                           <div class="ulabel-status ulabel-size-xl up ubg-porcelain color-sub-default">';
+                    html += '                               <div class="row row-border row-8 align-items-center">';
+                    html += '                                   <div class="col">' + promotion.promoCode + '</div>';
+                    html += '                                   <div class="col-auto">';
+                    html += '                                       <div class="u-label-border-left">';
+                    html += '                                           <a data-bs-tooltip="tooltip" title="' + txtTooltipCopy + '" data-trigger="hover" class="ubg-transparent ubox-size-button-xxs ubox-square ubg-hover ubg-active ubtn btn-copy-promo">';
+                    html += '                                               <div class="ubtn-inner">';
+                    html += '                                                   <span class="ubtn-ic ubtn-ic-left">';
+                    html += '                                                       <img src="' + iconCopy + '" alt="" class="ic-sm">';
+                    html += '                                                   </span>';
+                    html += '                                               </div>';
+                    html += '                                           </a>';
+                    html += '                                       </div>';
+                    html += '                                   </div>';
+                    html += '                               </div>';
+                    html += '                           </div>';
+                    html += '                       </div>';
+                    html += '                   </div>';
+                    html += '               </div>';
+                    html += '               <div class="col-auto scope-vertical">';
+                    html += '                   <div class="scope-divider-inner">';
+                    html += '                       <div class="scope-divider-line"></div>';
+                    html += '                   </div>';
+                    html += '               </div>';
+                    html += '               <div class="col-auto promo-right">';
+                    if (promotion.applyStatus == 1) {
+                        html += '               <div class="hide-checked">';
+                        html += '                   <label class="ubg-transparent ubox-size-button-default ubg-active ubtn no-p btn-apply-promo">';
+                        html += '                       <div class="ubtn-inner">';
+                        html += '                           <span class="ubtn-text color-primary">' + txtBtnApply + '</span>';
+                        html += '                       </div>';
+                        html += '                   </label>';
+                        html += '               </div>';
+                        html += '               <div class="show-checked">';
+                        html += '                   <label class="ubg-transparent ubox-size-button-default ubg-active ubtn no-p btn-cancel-promo">';
+                        html += '                       <div class="ubtn-inner">';
+                        html += '                           <span class="ubtn-text color-primary">' + txtBtnCancelPromo + '</span>';
+                        html += '                       </div>';
+                        html += '                   </label>';
+                        html += '               </div>';
+                    } else {
+                        html += '               <button class="ubg-transparent ubox-size-button-default ubg-active ubtn no-p btn-promotion-details">';
+                        html += '                   <div class="ubtn-inner">';
+                        html += '                       <span class="ubtn-text color-primary">' + txtBtnDetails + '</span>';
+                        html += '                   </div>';
+                        html += '               </button>';
+                    }                    
+                    html += '               </div>';
+                    html += '           </div>';
+                    html += '       </div>';
+                    html += '   </div>';
+                    html += '</div>';
+                });
+
+                $('#listPromotions').html(html);
+                $('#modalPromo .list-promo').show();
+
+                setTimeout(function () {
+                    var promoCodeSelected = $('#promoCode').val();
+                    if (promoCodeSelected && promoCodeSelected.length > 0) {
+                        $('#listPromotions input[name=rncPromo][value=' + promoCodeSelected + ']').prop('checked', true);
+                    }
+
+                    $('#listPromotions .btn-copy-promo').each(function () {
+                        new bootstrap.Tooltip(this);
+                    });
+
+                    $('#listPromotions .btn-copy-promo').on('click', function () {
+                        var promoCode = $(this).closest('.promo-card-wrap').find('input[name=rncPromo]').val();
+                        copyPromoCode(promoCode);
+                    });
+
+                    $('#listPromotions .btn-cancel-promo').on('click', function () {
+                        removePromotion();
+                        modalPromo.hide();
+                    });
+
+                    $('#listPromotions .btn-apply-promo').on('click', function () {
+                        var promoCode = $(this).closest('.promo-card-wrap').find('input[name=rncPromo]').val();
+                        checkPromotion(promoCode);
+                    });
+
+                    $('#listPromotions .btn-promotion-details').on('click', function () {
+                        var promoCode = $(this).closest('.promo-card-wrap').find('input[name=rncPromo]').val();
+                        showPromoDetailsModal(promotionsMap[promoCode]);
+                    });
+                });
+            } else {
+                $('#modalPromo .empty-box').show();
+            }
+            modalPromo.show();
+        };
+
+        function queryPromotion() {
+            var postData = {
+                ordertoken: settings.ordertoken,
+                cardNumber: settings.cardNumberInput.val()
+            };
+
+            promotionsMap = {};
+            hideServerError();
+            $('.loading').show();
+            $.ajax({
+                url: queryPromotionUrl,
+                type: 'POST',
+                dataType: 'JSON',
+                data: postData,
+                success: function (data) {
+                    if (data.code === "00") {
+                        renderPromotions(data.data);
+                    } else {
+                        renderPromotions([]);
+                        showServerError(data.message);
+                    }
+                    $('.loading').hide();
+                },
+                error: function (data) {
+                    renderPromotions([]);
+                    showServerError(data.message);
+                    $('.loading').hide();
+                }
+            });
+        };
+
+        function copyPromoCode(promoCode) {
+            navigator.clipboard.writeText(promoCode);
+            toastPromoCopySuccess.show();
+        }
+
+        function applyPromotion(promoCode, totalAmount, discountAmount) {
+            $('#promoCode').val(promoCode);
+            $('#promoCodeSelected').text(promoCode);
+            $('#promoDiscountAmount').text(discountAmount);
+            //Order Information
+            $('#totalAmountMb').text(totalAmount);
+            $('#totalAmountDt').text(totalAmount);
+            $('#discountAmount').text(discountAmount);
+            $('#discountAmountItem').show();
+
+            $('.promo-unselected').hide();
+            $('.promo-selected').show();
+
+            modalPromoDetails.hide();
+            modalPromo.hide();
+        };
+
+        function removePromotion() {
+            $('#listPromotions input[name=rncPromo]').prop('checked', false);
+            $('#promoCode').val('');
+            $('#promoCodeSelected').text('');
+            $('#promoDiscountAmount').text('');
+            //Order Information
+            $('#totalAmountMb').text(totalAmountOriginal);
+            $('#totalAmountDt').text(totalAmountOriginal);
+            $('#discountAmount').text('');
+            $('#discountAmountItem').hide();
+
+            $('.promo-unselected').show();
+            $('.promo-selected').hide();
+        };
+
+        function checkPromotion(promoCode) {
+            var postData = {
+                ordertoken: settings.ordertoken,
+                cardNumber: settings.cardNumberInput.val(),
+                promoCode: promoCode
+            };
+
+            hideServerError();
+            $('.loading').show();
+            $.ajax({
+                url: checkPromotionUrl,
+                type: 'POST',
+                dataType: 'JSON',
+                data: postData,
+                success: function (data) {
+                    if (data.code === '00') {
+                        applyPromotion(promoCode, data.data.totalAmount, data.data.discountAmount);
+                    } else {
+                        modalPromoDetails.hide();
+                        showServerError(data.message);
+                    }
+                    $('.loading').hide();
+                },
+                error: function (data) {
+                    modalPromoDetails.hide();
+                    showServerError(data.message);
+                    $('.loading').hide();
+                }
+            });
+        };
+
+        function init() {
+            queryPromotionUrl = $('#queryPromotionUrl').text();
+            checkPromotionUrl = $('#checkPromotionUrl').text();
+            promoLocale = $('#promoLocale').text();
+            txtExpiryDate = $('#modalPromo .txt-expiry-date').text();
+            txtBtnApply = $('#modalPromo .txt-btn-apply').text();
+            txtBtnCancelPromo = $('#modalPromo .txt-btn-cancel-promo').text();
+            txtBtnDetails = $('#modalPromo .txt-btn-details').text();
+            txtInputPromotionCode = $('#modalPromo .txt-input-promotion-code').text();
+            txtTooltipCopy = $('#modalPromo .txt-tooltip-copy').text();
+            iconCopy = $('#modalPromo .icon-copy').text();
+
+            totalAmountOriginal = $('#totalAmountDt').text();
+
+            $('#btnShowPromoModal').on('click', handleShowPromoModal);
+            $('#btnPromoCodeSelected').on('click', handleShowPromoModal);
+            $('#removePromo').on('click', function (e) {
+                e.preventDefault();
+                removePromotion();
+            });
+
+            modalPromo = new bootstrap.Modal(document.getElementById('modalPromo'), {});
+            modalPromoDetails = new bootstrap.Modal(document.getElementById('modalPromoDetails'), {});
+            toastPromoCopySuccess = new bootstrap.Toast(document.getElementById('toastPromoCopySuccess'), {});
+
+            $('#inputPromoManual').on('input', function (e) {
+                if ($('#inputPromoManual').val()) {
+                    $('#btnPromoManual').removeClass('ubtn-primary-disabled')
+                } else {
+                    $('#btnPromoManual').addClass('ubtn-primary-disabled')
+                }
+            })
+
+            $('#promoCodeManual').submit(function (e) {
+                e.preventDefault();
+                if (!$('#btnPromoManual').hasClass('ubtn-primary-disabled')) {
+                    if (cardForm.parsley().validate()) {
+                        checkPromotion($(this).find('#inputPromoManual').val());
+                    }
+                }
+            });
+
+            $('#modalPromoDetails .btn-copy-promo').on('click', function () {
+                var promoCode = $(this).closest('#modalPromoDetails').find('input[name=promoCode]').val();
+                copyPromoCode(promoCode);
+            });
+
+            $('#modalPromoDetails .btn-cancel-promo').on('click', function () {
+                removePromotion();
+                modalPromoDetails.hide();
+            });
+
+            $('#modalPromoDetails .btn-apply-promo').on('click', function () {
+                var promoCode = $(this).closest('#modalPromoDetails').find('input[name=promoCode]').val();
+                checkPromotion(promoCode);
+            });
+
+            cardForm.on('change', removePromotion);
+            $('.bank-payement-section-inner a.nav-link[data-bs-toggle="tab"]').on('hide.bs.tab', removePromotion);
+        };
+
+        init();
+    };
+})(jQuery);

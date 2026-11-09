@@ -1,0 +1,33 @@
+@using TourismMvc.Models.ViewModels
+@model AdminUserDetailsViewModel
+@{
+    ViewData["Title"] = "Chi tiết người dùng";
+    var account = Model.Account;
+    var self = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value == account.Id.ToString();
+    var currentUrl = Context.Request.Path + Context.Request.QueryString;
+    string PageLink(int page) => Url.Action("Details", "Users", new { id = account.Id, page, returnUrl = Model.ReturnUrl })!;
+}
+<link rel="stylesheet" href="~/css/admin-users.css" asp-append-version="true" />
+<header class="page-header"><div class="title-block"><div class="title-icon"><i data-lucide="user-round"></i></div><div><h1>Chi tiết người dùng</h1><p>Thông tin tài khoản và các đơn đặt tour đã liên kết</p></div></div><a class="btn btn-ghost" href="@Model.ReturnUrl"><i data-lucide="arrow-left"></i>Danh sách người dùng</a></header>
+<section class="user-profile">
+    <div class="user-card-heading"><div class="user-avatar"><i data-lucide="user-round"></i></div><div><h2>@account.FullName</h2><p>#@account.Id · @account.RoleLabel</p></div><span class="badge @(account.Status ? "user-active" : "user-locked")">@(account.Status ? "Đang hoạt động" : "Đã khóa")</span></div>
+    <dl class="user-profile-info"><div><dt>Email</dt><dd>@account.Email</dd></div><div><dt>Số điện thoại</dt><dd>@(string.IsNullOrEmpty(account.Phone) ? "Chưa cập nhật" : account.Phone)</dd></div><div><dt>Xác thực email</dt><dd>@(account.IsEmailVerified ? "Đã xác thực" : "Chưa xác thực")</dd></div><div><dt>Đơn đặt tour</dt><dd>@account.BookingCount đơn</dd></div></dl>
+    @if (!self) { <a class="btn @(account.Status ? "user-lock-btn" : "user-unlock-btn")" href="@Url.Action("Status", "Users", new { id = account.Id, returnUrl = currentUrl })"><i data-lucide="@(account.Status ? "lock-keyhole" : "unlock-keyhole")"></i>@(account.Status ? "Khóa tài khoản" : "Mở khóa tài khoản")</a> }
+</section>
+<section class="user-bookings">
+    <h2>Lịch sử đặt tour <span class="muted">(@account.BookingCount)</span></h2>
+    @if (Model.Bookings.Count == 0)
+    {
+        <div class="empty"><div class="empty-icon"><i data-lucide="ticket"></i></div><h3>Chưa có đơn đặt tour</h3><p>Tài khoản này chưa có đơn đặt tour liên kết.</p></div>
+    }
+    else
+    {
+        <div class="table-wrap"><table class="table"><thead><tr><th>Mã đơn / Ngày đặt</th><th>Tour / Khởi hành</th><th>Hành khách</th><th>Tổng tiền</th><th>Trạng thái</th></tr></thead><tbody>
+            @foreach (var booking in Model.Bookings)
+            {
+                <tr><td><a href="/admin/bookings/@booking.Id"><strong>@booking.BookingCode</strong></a><small class="user-cell-note">@booking.BookingDate.ToString("dd/MM/yyyy HH:mm")</small></td><td><a class="user-tour-link" href="@Url.Action("Details", "PublicTourDetail", new { tourCode = booking.TourCode })">@booking.TourName</a><small class="user-cell-note">@booking.DepartureDate.ToString("dd/MM/yyyy")</small></td><td>@booking.TotalPassengers người</td><td class="user-money">@booking.TotalPrice.ToString("N0", System.Globalization.CultureInfo.GetCultureInfo("vi-VN")) ₫</td><td><span class="user-booking-status">@booking.StatusLabel</span></td></tr>
+            }
+        </tbody></table></div>
+        <footer class="table-foot user-pagination"><span class="muted">Trang @Model.Page / @Model.TotalPages</span><nav class="pagination" aria-label="Phân trang lịch sử đặt tour">@if (Model.Page > 1) { <a class="page-btn" href="@PageLink(Model.Page - 1)">Trước</a> } @if (Model.Page < Model.TotalPages) { <a class="page-btn" href="@PageLink(Model.Page + 1)">Sau</a> }</nav></footer>
+    }
+</section>

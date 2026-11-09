@@ -1,0 +1,67 @@
+@model TourismMvc.Models.ViewModels.HomeIndexViewModel
+@using TourismMvc.Models.Entities
+@{
+    Layout = "_UserLayout";
+    ViewData["Title"] = "Trang chủ";
+    const string description = "Hãy tận hưởng trải nghiệm du lịch chuyên nghiệp, mang lại cho bạn những khoảnh khắc tuyệt vời và nâng tầm cuộc sống. Chúng tôi cam kết mang đến những chuyến đi đáng nhớ, giúp bạn khám phá thế giới theo cách hoàn hảo nhất.";
+    var regions = new[] { (Region.NORTH, "Miền Bắc"), (Region.CENTRAL, "Miền Trung"), (Region.SOUTH, "Miền Nam") };
+    var firstRegion = regions.FirstOrDefault(r => Model.Destinations.Any(d => d.Region == r.Item1)).Item1;
+}
+<section class="home-banner" aria-label="Tìm chuyến đi"><div class="bannerContainer">
+    <div class="bgClip"><div class="bgLayer"></div></div><div class="overlay"></div>
+    <div class="content">
+        <div class="heroCopy"><h1 class="headline">Hơn 1000+ Chuyến Đi, Khám Phá Ngay</h1><p class="subHeadline">Giá tốt - hỗ trợ 24/7 - khắp nơi</p></div>
+        <form class="searchBox" action="/tours#results" method="get">
+            <div class="inputGroup"><i data-lucide="map-pin" class="icon"></i><div class="inputLabels"><label for="destination">Bạn muốn đi đâu?</label><input class="inputField" id="destination" name="searchNameTour" value="@Model.Search" list="destination-options" placeholder="Ví dụ: Đà Nẵng, Phú Quốc,..." autocomplete="off" /><datalist id="destination-options">@foreach (var location in Model.Destinations) { <option value="@location.Name"></option> }</datalist></div></div>
+            <div class="inputGroup"><i data-lucide="banknote" class="icon"></i><div class="inputLabels"><label for="budget">Ngân sách</label><select id="budget" name="budget" class="home-budget"><option value="">Chọn mức giá</option><option value="under5" selected="@(Model.Budget == "under5")">Dưới 5 triệu</option><option value="5to10" selected="@(Model.Budget == "5to10")">Từ 5 - 10 triệu</option><option value="10to20" selected="@(Model.Budget == "10to20")">Từ 10 - 20 triệu</option><option value="over20" selected="@(Model.Budget == "over20")">Trên 20 triệu</option></select></div></div>
+            <button class="searchButton" type="submit" aria-label="Tìm chuyến đi"><i data-lucide="search" class="searchIcon"></i></button>
+        </form>
+        <aside class="galleryBox" aria-label="Cảnh đẹp Việt Nam"><div class="coverflow" id="travel-gallery">
+            @foreach (var photo in new[] { "photo-1710141968143-7ea1f6d89025", "photo-1583417319070-4a69db38a482", "photo-1570366583862-f91883984fde" }) { <button class="coverCard" type="button" aria-label="Xem ảnh Việt Nam"><img src="https://images.unsplash.com/@photo?w=800&amp;auto=format&amp;fit=crop&amp;q=85" alt="Cảnh đẹp Việt Nam" /></button> }
+        </div></aside>
+    </div>
+    <div class="bottomInfoStrip">
+        @foreach (var item in new[] { ("globe-2", "1.000+ chuyến đi", "Chất lượng trong và ngoài nước"), ("star", "10K+ đánh giá 5 sao", "Từ những khách hàng đã đặt chuyến đi"), ("badge-percent", "100+ ưu đãi mỗi ngày", "Cho khách đặt sớm, theo nhóm, phút chót") }) { <div class="infoItem"><div class="infoIcon infoIconPrimary"><i data-lucide="@item.Item1"></i></div><p><strong>@item.Item2</strong></p><p>@item.Item3</p></div> }
+    </div>
+</div></section>
+<div class="home-main">
+@if (Model.HasSearch)
+{
+    <section class="home-special home-results" id="search-results"><div class="header"><h2 class="title">KẾT QUẢ TÌM CHUYẾN ĐI</h2><p class="description">Tìm thấy @Model.ResultCount chuyến đi. @if (Model.ResultCount > Model.SearchResults.Count) { <span>Hiển thị @Model.SearchResults.Count chuyến đi mới nhất.</span> } <a href="/">Xoá bộ lọc</a></p></div>
+    @if (Model.SearchResults.Count == 0) { <p class="home-empty">Chưa có chuyến đi phù hợp. Bạn thử đổi điểm đến hoặc ngân sách nhé.</p> }
+    <div class="home-results-grid">@foreach (var tour in Model.SearchResults) { <partial name="_HomeTourCard" model="tour" /> }</div></section>
+}
+<section class="home-explore" id="products"><div class="exploreProductsContainer">
+    <div class="header"><h2 class="title">KHÁM PHÁ SẢN PHẨM FUTURE TRAVEL</h2><p class="description">@description</p><div class="navigation"><button class="home-arrow" data-carousel="featured-tours" data-direction="-1" aria-label="Tour trước">←</button><button class="home-arrow" data-carousel="featured-tours" data-direction="1" aria-label="Tour tiếp theo">→</button></div></div>
+    @if (Model.FeaturedTours.Count == 0) { <p class="home-empty">Chưa có chuyến đi nổi bật.</p> }
+    <div class="productsWrapper home-carousel" id="featured-tours"><div class="productsGrid">@foreach (var tour in Model.FeaturedTours)
+    {
+        <a class="productCard" href="@tour.DetailUrl"><span class="imageWrapper"><img class="home-cover" src="@(string.IsNullOrWhiteSpace(tour.ImageUrl) ? "/images/home/ryan-le-8-hEg1OuFn8-unsplash.jpg" : tour.ImageUrl)" alt="@tour.Name" loading="lazy" /><span class="cardOverlay"><span class="cardTitle">@tour.Name</span></span></span></a>
+    }</div></div>
+</div></section>
+<section class="home-special" id="special-tours"><div class="specialToursContainer">
+    <div class="header"><h2 class="title">CHUYẾN ĐI ƯU ĐÃI ĐẶC BIỆT</h2><p class="description">@description</p><div class="navigation"><button class="home-arrow" data-carousel="special-tours-list" data-direction="-1" aria-label="Ưu đãi trước">←</button><button class="home-arrow" data-carousel="special-tours-list" data-direction="1" aria-label="Ưu đãi tiếp theo">→</button></div></div>
+    @if (Model.SpecialTours.Count == 0) { <p class="home-empty">Hiện chưa có chuyến đi ưu đãi. Bạn có thể khám phá các chuyến đi nổi bật ở trên.</p> }
+    <div class="toursWrapper home-carousel" id="special-tours-list"><div class="toursGrid">@foreach (var tour in Model.SpecialTours) { <partial name="_HomeTourCard" model="tour" /> }</div></div>
+</div></section>
+<section class="home-destinations" id="destinations"><div class="favoriteDestinationsContainer">
+    <div class="header"><h2 class="title">ĐIỂM ĐẾN YÊU THÍCH</h2><p class="description">@description</p><div class="regionTabs" role="tablist" aria-label="Điểm đến theo miền">@foreach (var (region, label) in regions)
+    { <button class="regionTab @(region == firstRegion ? "activeTab" : "")" id="tab-@region" role="tab" aria-selected="@(region == firstRegion ? "true" : "false")" aria-controls="region-@region" data-region="@region">@label<span class="activeIndicator" hidden="@(region != firstRegion)"></span></button> }</div></div>
+    @foreach (var (region, label) in regions)
+    {
+        var destinations = Model.Destinations.Where(d => d.Region == region).Take(9).ToList();
+        <div id="region-@region" role="tabpanel" aria-labelledby="tab-@region" hidden="@(region != firstRegion)">
+            @if (destinations.Count == 0) { <p class="home-empty">Chưa có điểm đến tại @label.</p> }
+            <div class="destinationsGrid">@for (var index = 0; index < destinations.Count; index++)
+            {
+                var location = destinations[index];
+                <a class="destinationItem item@index" href="/tours?endLocationID=@location.Id#results"><div class="backgroundImage"><img class="home-cover" src="@(string.IsNullOrWhiteSpace(location.ImageUrl) ? "/images/home/ryan-le-8-hEg1OuFn8-unsplash.jpg" : location.ImageUrl)" alt="@location.Name" loading="lazy" /><div class="dimOverlay"></div><div class="contentOverlay"><h3 class="name">@location.Name</h3><span class="exploreButton">Khám phá</span></div></div></a>
+            }</div>
+        </div>
+    }
+</div></section>
+<section class="home-trust" id="about"><div class="trustAndStatsContainer"><div class="content">
+    <div class="textColumn"><h2 class="title">Du Lịch Với Sự Tự Tin<br />Lý Do Hàng Đầu Để Chọn<br />Công Ty Chúng Tôi</h2><p class="description">Chúng tôi sẽ nỗ lực hết mình để biến giấc mơ du lịch của bạn thành hiện thực, những chuyến đi ngoạn mục và những điểm tham quan không thể bỏ qua.</p><div class="experiencePill">Chúng tôi có <span>5+ Năm</span> kinh nghiệm</div><div class="statsRow"><div class="statItem"><div class="statNumber">1k+</div><div class="statLabel">Điểm đến phổ biến</div></div><div class="statItem"><div class="statNumber">8m+</div><div class="statLabel">Khách hàng hài lòng</div></div></div><a class="exploreButton" href="#destinations">Khám Phá Điểm Đến <span class="arrow">→</span></a></div>
+    <div class="imageColumn"><div class="mainImage"><img class="home-cover" src="/images/home/premium_photo.avif" alt="Tận hưởng hành trình cùng Future Travel" loading="lazy" /></div><div class="decorativeElements">@{ var icons = new[] { "travel.png", "globe.png", "compass.png", "camera.png", "ticket.png" }; }@for (var i = 0; i < icons.Length; i++) { <img class="decorativeIcon icon@(i + 1)" src="/images/home/@icons[i]" alt="" /> }</div></div>
+</div></div></section>
+</div>

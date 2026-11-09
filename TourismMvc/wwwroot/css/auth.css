@@ -1,0 +1,23 @@
+.auth-login .errorBox ul, .auth-register .errorBox ul, .auth-admin .errorBox ul { margin: 0; padding-left: 18px; }
+.auth-login .formCard, .auth-register .formCard, .auth-admin .formCard { min-width: 0; }
+.auth-login .input, .auth-register .input, .auth-admin .input { padding-right: 46px; min-width: 0; }
+.auth-login .inputIcon, .auth-register .inputIcon, .auth-admin .inputIcon { width: 16px; height: 16px; }
+.auth-login .toggleBtn svg, .auth-register .toggleBtn svg, .auth-admin .toggleBtn svg { width: 16px; height: 16px; }
+.auth-login .submitBtn svg, .auth-register .submitBtn svg, .auth-admin .submitBtn svg { width: 17px; height: 17px; }
+.auth-remember { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: #475569; cursor: pointer; }
+.auth-remember input { accent-color: #1767c6; }
+.auth-admin-link { font-size: 12px; text-align: center; color: #64748b; margin-top: 18px; }
+.auth-password-hint, .auth-optional { font-size: 11px; color: #64748b; font-weight: normal; }
+.auth-register .errorBox { color: #b91c1c; border: 1px solid #fecaca; background: #fef2f2; border-radius: 9px; padding: 12px; margin-bottom: 18px; font-size: 12px; }
+.auth-login .successBox { color: #166534; background: #f0fdf4; border: 1px solid #bbf7d0; padding: 12px; border-radius: 9px; margin-bottom: 16px; font-size: 13px; }
+.auth-admin .formFooter { text-align: center; font-size: 13px; color: #64748b; margin-top: 20px; }
+.auth-login .brandLogo, .auth-register .brandLogo, .auth-admin .brandLogo { text-decoration: none; }
+@media (max-width: 600px) {
+    .auth-login .page, .auth-register .page { padding: 76px 12px 30px; }
+    .auth-login .container, .auth-register .container { margin-top: 12px; }
+    .auth-login .brandSide, .auth-register .brandSide { padding: 26px 24px; min-height: 0; }
+    .auth-login .formSide, .auth-register .formSide, .auth-admin .formSide { padding: 28px 22px; }
+}
+@media(prefers-reduced-motion:reduce) {
+    .auth-login *, .auth-login *::after, .auth-register *, .auth-register *::after, .auth-admin * { animation: none !important; transition: none !important; }
+}

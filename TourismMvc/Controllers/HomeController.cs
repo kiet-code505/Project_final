@@ -1,14 +1,15 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using TourismMvc.Models;
+using TourismMvc.Services;
 
 namespace TourismMvc.Controllers;
 
-public class HomeController : Controller
+public class HomeController(IHomeService homeService) : Controller
 {
-    public IActionResult Index()
+    public async Task<IActionResult> Index(string? search, int? destinationId, string? budget)
     {
-        return View();
+        return View(await homeService.GetHomeAsync(search, destinationId, budget));
     }
 
     public IActionResult Privacy()

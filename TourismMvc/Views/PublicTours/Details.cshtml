@@ -1,0 +1,140 @@
+@model TourismMvc.Models.ViewModels.PublicTourDetailViewModel
+@using TourismMvc.Models.Entities
+@{
+    Layout = "_UserLayout";
+    ViewData["Title"] = Model.Tour.TourName;
+    ViewData["SolidHeader"] = true;
+    var t = Model.Tour;
+    var vi = L.Culture;
+    string Money(decimal? value) => value.HasValue ? value.Value.ToString("N0", vi) + " ₫" : L["Liên hệ"];
+    string PassengerName(PassengerType type) => type switch {
+        PassengerType.ADULT => L["Người lớn"], PassengerType.CHILD => L["Trẻ em"],
+        PassengerType.INFANT => L["Em bé"], PassengerType.SINGLE_SUPPLEMENT => L["Phụ thu phòng đơn"], _ => type.ToString()
+    };
+    var months = Model.Departures.GroupBy(d => new { d.DepartureDate.Year, d.DepartureDate.Month }).ToList();
+    var selected = Model.Departures.FirstOrDefault(d => d.DepartureID == Model.SelectedDepartureId);
+    var selectedPrice = selected?.Pricings.FirstOrDefault(p => p.PassengerType == PassengerType.ADULT)?.EffectivePrice;
+    var canBookSelected = selected != null && selected.AvailableSlots > 0 && selectedPrice.HasValue && selectedPrice >= 0;
+    var bookingUrl = canBookSelected ? "/order-booking?tourCode=" + Uri.EscapeDataString(t.TourCode) + "&departureId=" + selected!.DepartureID : "#departures";
+    var initialMonth = selected?.DepartureDate.ToString("yyyy-MM") ?? Model.Departures.FirstOrDefault()?.DepartureDate.ToString("yyyy-MM");
+    var info = new (string Icon, string Label, string? Content)[] {
+        ("map", L["Điểm tham quan"], t.Attractions), ("utensils", L["Ẩm thực"], t.Meals),
+        ("users", L["Đối tượng thích hợp"], t.SuitableCustomer), ("sun", L["Thời gian lý tưởng"], t.IdealTime),
+        ("bus", L["Phương tiện"], t.TripTransportation ?? t.Transportation), ("hotel", L["Lưu trú"], t.Hotel)
+    };
+}
+<link rel="stylesheet" href="~/css/tour-detail-components.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/tour-detail.css" asp-append-version="true" />
+<div class="td-layout"><main class="mainContent">
+    <nav class="breadcrumb" aria-label="@L["Đường dẫn"]"><a href="/">@L["Du lịch"]</a> / <a href="/tours?startLocationID=@t.StartLocationId">@t.StartLocation?.LocationName</a> / <a href="/tours?endLocationID=@t.EndLocationId">@t.EndLocation?.LocationName</a> / <span>@t.TourCode</span></nav>
+    <h1 class="tourTitle">@t.TourName</h1>
+    @if (Model.InvalidDeparture) { <p class="detail-notice" role="status">@L["Lịch khởi hành đã chọn không còn khả dụng. Vui lòng chọn lịch khác bên dưới."]</p> }
+    <div class="detailLayout">
+        <div class="leftColumn">
+            @if (Model.Images.Count > 0)
+            {
+                <section class="gallerySection" aria-label="@L["Hình ảnh tour"]">
+                    <div class="thumbnails">@for (var i = 0; i < Model.Images.Count; i++)
+                    {
+                        <button type="button" class="thumbItem @(i == 0 ? "active" : "")" data-gallery-index="@i" aria-label="@L["Xem ảnh {0}", i + 1]" aria-pressed="@(i == 0 ? "true" : "false")"><img src="@Model.Images[i]" alt="@L["{0} - ảnh {1}", t.TourName, i + 1]" loading="lazy" /></button>
+                    }</div>
+                    <button class="mainImage" type="button" id="gallery-open" aria-label="@L["Phóng to ảnh tour"]"><img id="tour-main-image" src="@Model.Images[0]" alt="@t.TourName" /><span class="gallery-hint"><i data-lucide="expand"></i> @L["Xem ảnh"]</span></button>
+                </section>
+            }
+            else { <div class="detail-empty-image"><i data-lucide="image"></i><p>@L["Hình ảnh tour đang được cập nhật."]</p></div> }
+
+            <section class="td-calendar" id="departures" data-initial-month="@initialMonth" data-selected-departure="@Model.SelectedDepartureId">
+                <div class="calendarContainer"><h2 class="sectionTitle">@L["LỊCH KHỞI HÀNH"]</h2>
+                @if (Model.Departures.Count == 0)
+                { <div class="detail-empty"><i data-lucide="calendar-days"></i><p>@L["Chưa có lịch khởi hành sắp tới. Bạn có thể xem thông tin tour, lịch trình và liên hệ tư vấn bên dưới."]</p></div> }
+                else
+                {
+                    <div class="calendarWrapper"><div class="monthSelector"><h3>@L["Chọn tháng"]</h3>
+                        @foreach (var month in months)
+                        {
+                            var key = new DateTime(month.Key.Year, month.Key.Month, 1).ToString("yyyy-MM");
+                            <a class="monthBtn @(key == initialMonth ? "active" : "")" href="#month-@key" data-month-select="@key">@month.Key.Month/@month.Key.Year</a>
+                        }
+                    </div><div class="calendarGridArea">
+                        @foreach (var month in months)
+                        {
+                            var first = new DateTime(month.Key.Year, month.Key.Month, 1);
+                            var key = first.ToString("yyyy-MM");
+                            var offset = ((int)first.DayOfWeek + 6) % 7;
+                            <section id="month-@key" data-month-panel="@key" aria-label="@L["Tháng {0} năm {1}", month.Key.Month, month.Key.Year]">
+                                <div class="calendarHeader"><button type="button" data-month-step="-1" aria-label="@L["Tháng trước"]">‹</button><strong>@first.ToString("MMMM yyyy", L.Culture)</strong><button type="button" data-month-step="1" aria-label="@L["Tháng sau"]">›</button></div>
+                                <div class="weekDays">@foreach (var label in new[] { "T2", "T3", "T4", "T5", "T6", "T7", "CN" }) { <span>@L[label]</span> }</div>
+                                <div class="daysGrid">
+                                    @for (var blank = 0; blank < offset; blank++) { <div class="emptyDay" aria-hidden="true"></div> }
+                                    @for (var day = 1; day <= DateTime.DaysInMonth(month.Key.Year, month.Key.Month); day++)
+                                    {
+                                        var dates = month.Where(d => d.DepartureDate.Day == day).ToList();
+                                        <div class="dayCell @(dates.Count > 0 ? "hasTour" : "")"><span class="dateNum">@day</span>
+                                        @foreach (var departure in dates)
+                                        {
+                                            var price = departure.Pricings.FirstOrDefault(p => p.PassengerType == PassengerType.ADULT)?.EffectivePrice;
+                                            var shortPrice = price.HasValue ? (price >= 1000000 ? (price.Value / 1000000).ToString("0.#", vi) + L["tr"] : (price.Value / 1000).ToString("0", vi) + "k") : L["Liên hệ"];
+                                            <a class="departure-choice @(departure.DepartureID == Model.SelectedDepartureId ? "selected" : "")" href="?departureId=@departure.DepartureID#departure-detail" data-select-departure="@departure.DepartureID" data-bookable="@(departure.AvailableSlots > 0 && price.HasValue && price >= 0 ? "true" : "false")" data-month="@key" aria-current="@(departure.DepartureID == Model.SelectedDepartureId ? "true" : null)" aria-label="@L["Chọn lịch {0}, {1}, còn {2} chỗ", departure.DepartureDate.ToString(L.DateTimeFormat, L.Culture), Money(price), departure.AvailableSlots]"><span class="priceTag">@(departure.AvailableSlots > 0 ? shortPrice : L["Hết chỗ"])</span>@if (dates.Count > 1) { <small>@departure.DepartureDate.ToString("HH:mm")</small> }</a>
+                                        }</div>
+                                    }
+                                </div>
+                            </section>
+                        }
+                        <p class="note">@L["Quý khách vui lòng chọn ngày phù hợp để xem giá và phương tiện."]</p>
+                    </div></div>
+                    <div id="departure-detail" aria-live="polite">
+                    @foreach (var departure in Model.Departures)
+                    {
+                        <section class="departure-detail-panel" data-departure-panel="@departure.DepartureID" hidden="@(departure.DepartureID != Model.SelectedDepartureId)">
+                            <h3>@L["Khởi hành"] @departure.DepartureDate.ToString(L.DateTimeFormat, L.Culture) <span class="slots-label">@(departure.AvailableSlots > 0 ? L["Còn {0} chỗ", departure.AvailableSlots] : L["Đã hết chỗ"])</span></h3>
+                            <h4>@L["Phương tiện di chuyển"]</h4>
+                            @if (departure.Transports.Count == 0) { <p class="detail-muted">@L["Thông tin vận chuyển đang được cập nhật."]</p> }
+                            <div class="transport-grid">@foreach (var transport in departure.Transports.OrderBy(x => x.Type))
+                            {
+                                <article class="transport-card"><h4><i data-lucide="@(transport.VehicleType == VehicleType.PLANE ? "plane" : "bus")"></i> @(transport.Type == TransportType.OUTBOUND ? L["Chiều đi"] : L["Chiều về"])</h4><p><strong>@transport.VehicleName</strong> · @transport.TransportCode</p><div class="transport-route"><strong>@transport.StartPoint</strong><i data-lucide="arrow-right"></i><strong>@transport.EndPoint</strong></div><div class="transport-times"><span>@(transport.DepartTime?.ToString(L.DateTimeFormat, L.Culture) ?? L["Đang cập nhật"])</span><span>@(transport.ArrivalTime?.ToString(L.DateTimeFormat, L.Culture) ?? L["Đang cập nhật"])</span></div></article>
+                            }</div>
+                            <h4>@L["Bảng giá theo hành khách"]</h4>
+                            @if (departure.Pricings.Count == 0) { <p class="detail-muted">@L["Bảng giá đang được cập nhật. Vui lòng liên hệ để được tư vấn."]</p> }
+                            else
+                            { <div class="detail-table-wrap"><table class="detail-prices"><thead><tr><th>@L["Hành khách"]</th><th>@L["Độ tuổi / Ghi chú"]</th><th>@L["Giá gốc"]</th><th>@L["Giá bán"]</th></tr></thead><tbody>@foreach (var price in departure.Pricings.OrderBy(p => p.PassengerType)) { <tr><th>@PassengerName(price.PassengerType)</th><td>@L[price.AgeDescription]</td><td>@Money(price.OriginalPrice)</td><td><strong>@Money(price.EffectivePrice)</strong></td></tr> }</tbody></table></div> }
+                        </section>
+                    }
+                    </div>
+                }
+                </div>
+            </section>
+
+            <section class="td-information"><div class="infoContainer"><h2 class="sectionTitle">@L["THÔNG TIN THÊM VỀ CHUYẾN ĐI"]</h2><div class="infoGrid">@foreach (var item in info) { <div class="infoItem"><div class="iconWrapper"><i data-lucide="@item.Icon"></i></div><div class="textWrapper"><h3 class="label">@item.Label</h3><div class="content" data-rich-text>@(string.IsNullOrWhiteSpace(item.Content) ? L["Đang cập nhật"] : item.Content)</div></div></div> }</div></div></section>
+
+            <section class="td-itinerary"><div class="itineraryContainer"><h2 class="sectionTitle">@L["LỊCH TRÌNH"]</h2>
+            @if (t.ItineraryDays.Count == 0) { <p class="detail-empty">@L["Lịch trình chi tiết của tour này chưa được cập nhật."]</p> }
+            <div class="listWrapper">@foreach (var item in t.ItineraryDays.OrderBy(d => d.DayNumber))
+            {
+                <details class="dayItem" open="@(item.DayNumber == t.ItineraryDays.Min(d => d.DayNumber))"><summary class="dayHeader"><div class="headerContent"><h3 class="mainTitle">@L["Ngày {0}: {1}", item.DayNumber, item.Title]</h3>@if (!string.IsNullOrWhiteSpace(item.Meals)) { <p class="subInfo"><i data-lucide="utensils"></i>@item.Meals</p> }</div><i data-lucide="chevron-down"></i></summary><div class="itinerary-content" data-rich-text>@item.Description</div>@if (!string.IsNullOrWhiteSpace(item.Accommodation)) { <p class="itinerary-accommodation">@L["Lưu trú:"] @item.Accommodation</p> }</details>
+            }</div></div></section>
+
+            <div id="tour-policies"><div data-default-policy hidden="@Model.SelectedDepartureId.HasValue"><partial name="~/Views/PublicTours/_PublicTourPolicy.cshtml" model="Model.DefaultPolicy" /></div>
+            @foreach (var departure in Model.Departures)
+            { <div data-departure-policy="@departure.DepartureID" hidden="@(departure.DepartureID != Model.SelectedDepartureId)"><partial name="~/Views/PublicTours/_PublicTourPolicy.cshtml" model="@(departure.PolicyTemplate?.IsDeleted != true ? departure.PolicyTemplate : null)" /></div> }</div>
+        </div>
+        <aside class="rightColumn" aria-label="@L["Giá và thông tin khởi hành"]">
+            <div class="bookingSidebar">
+                <div data-default-sidebar hidden="@Model.SelectedDepartureId.HasValue"><div class="priceBox">@L["Giá từ:"] @if (Model.HeaderPrice != null && Model.HeaderPrice.OriginalPrice > Model.HeaderPrice.EffectivePrice) { <del class="originalPrice">@Money(Model.HeaderPrice.OriginalPrice)</del> }</div><div class="finalPrice">@Money(Model.HeaderPrice?.EffectivePrice)<span class="unit"> @L["/ khách"]</span></div><div class="infoGrid"><p class="infoRow"><i data-lucide="barcode"></i>@L["Mã tour:"] <strong>@t.TourCode</strong></p><p class="infoRow"><i data-lucide="map-pin"></i>@L["Khởi hành:"] <strong>@t.StartLocation?.LocationName</strong></p><p class="infoRow"><i data-lucide="clock"></i>@t.Duration</p><p class="infoRow"><i data-lucide="calendar-days"></i>@(Model.Departures.Count > 0 ? L["Vui lòng chọn ngày đi"] : L["Chưa có lịch sắp tới"])</p></div></div>
+                @foreach (var departure in Model.Departures)
+                {
+                    var price = departure.Pricings.FirstOrDefault(p => p.PassengerType == PassengerType.ADULT);
+                    <div data-sidebar-departure="@departure.DepartureID" hidden="@(departure.DepartureID != Model.SelectedDepartureId)"><div class="priceBox">@L["Giá người lớn:"] @if (price != null && price.OriginalPrice > price.EffectivePrice) { <del class="originalPrice">@Money(price.OriginalPrice)</del> }</div><div class="finalPrice">@Money(price?.EffectivePrice)<span class="unit"> @L["/ khách"]</span></div><div class="infoGrid"><p class="infoRow"><i data-lucide="barcode"></i>@L["Mã tour:"] <strong>@t.TourCode</strong></p><p class="infoRow"><i data-lucide="map-pin"></i>@L["Khởi hành:"] <strong>@t.StartLocation?.LocationName</strong></p><p class="infoRow"><i data-lucide="calendar-days"></i>@L["Ngày đi:"] <strong>@departure.DepartureDate.ToString(L.DateFormat, L.Culture)</strong></p><p class="infoRow"><i data-lucide="clock"></i>@t.Duration</p><p class="infoRow"><i data-lucide="users"></i><strong>@(departure.AvailableSlots > 0 ? L["Còn {0} chỗ", departure.AvailableSlots] : L["Đã hết chỗ"])</strong></p></div></div>
+                }
+                <div class="detail-sidebar-actions">@if (Model.Departures.Count > 0) { <a class="detail-date-button" href="#departures">@L["Chọn ngày khởi hành"]</a><a class="detail-contact-button" href="@bookingUrl" id="book-tour-link" data-tour-code="@t.TourCode">@(canBookSelected ? L["Đặt tour"] : selected == null ? L["Chọn ngày để đặt tour"] : L["Chọn lịch còn chỗ"])</a> } else { <a class="detail-contact-button" href="#tour-contact">@L["Tư vấn đặt tour"]</a> }</div>
+            </div>
+        </aside>
+    </div>
+    <section class="detail-contact" id="tour-contact"><i data-lucide="headset"></i><div><h2>@L["Bạn cần tư vấn thêm về chuyến đi?"]</h2><p>@L["Liên hệ để được hỗ trợ lựa chọn lịch khởi hành và giá phù hợp."]</p></div><a href="tel:19002045">1900 2045</a></section>
+    @if (Model.RelatedTours.Count > 0)
+    { <section class="detail-related"><h2>@L["CÁC CHƯƠNG TRÌNH KHÁC"]</h2><div class="detail-related-grid">@foreach (var related in Model.RelatedTours) { <a class="detail-related-card" href="/tour/@Uri.EscapeDataString(related.Code)"><img src="@(related.ImageUrl ?? "/images/home/ryan-le-8-hEg1OuFn8-unsplash.jpg")" alt="@related.Name" loading="lazy" /><div><h3>@related.Name</h3><p>@L["Khởi hành:"] @related.StartLocation · @related.Duration</p><strong>@Money(related.Price)</strong><span>@L["Xem chi tiết →"]</span></div></a> }</div></section> }
+</main></div>
+@if (Model.Images.Count > 0)
+{
+    <dialog id="tour-gallery-dialog" class="tour-gallery-dialog" aria-label="@L["Thư viện ảnh tour"]"><form method="dialog"><button class="gallery-close" aria-label="@L["Đóng ảnh"]">@L["×"]</button></form><div class="gallery-dialog-stage"><button type="button" data-gallery-step="-1" aria-label="@L["Ảnh trước"]">‹</button><img id="tour-gallery-image" src="@Model.Images[0]" alt="@t.TourName" /><button type="button" data-gallery-step="1" aria-label="@L["Ảnh tiếp theo"]">›</button></div><p id="gallery-counter" aria-live="polite">1 / @Model.Images.Count</p></dialog>
+}
+@section Scripts { <script src="~/js/tour-detail.js" asp-append-version="true"></script> }

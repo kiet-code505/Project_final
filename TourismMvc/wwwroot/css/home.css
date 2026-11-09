@@ -1,0 +1,126 @@
+/* MVC layout and responsive adjustments for the migrated homepage. */
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 90px; }
+body.user-home { margin: 0; color: #172033; background: #fff; font: 15px/1.6 'Be Vietnam Pro', sans-serif; }
+.user-home button, .user-home input, .user-home select { font: inherit; }
+.user-home a { color: inherit; text-decoration: none; }
+.user-home button { cursor: pointer; }
+.user-home button:disabled { cursor: default; }
+.user-home button:focus-visible, .user-home a:focus-visible { outline: 3px solid #38bdf8; outline-offset: 4px; }
+.user-home [hidden] { display: none !important; }
+.user-home svg { width: 22px; height: 22px; flex-shrink: 0; vertical-align: middle; }
+.user-home .skip-link { position: fixed; left: 16px; top: -80px; z-index: 999; background: #fff; color: #073763; padding: 12px; }
+.user-home .skip-link:focus { top: 12px; }
+.user-header { position: fixed; inset: 0 0 auto; height: 72px; z-index: 100; padding: 0 4%; display: flex; align-items: center; gap: 26px; color: #fff; background: linear-gradient(#03122350, transparent); transition: background .2s, box-shadow .2s; }
+.user-logo img { width: 128px; display: block; }
+.user-header nav { display: flex; align-items: center; gap: 22px; font-size: 13px; }
+.user-header nav > * { white-space: nowrap; }
+.user-header nav a { padding: 22px 0; }
+.user-header nav .active { border-bottom: 2px solid #fbbf24; font-weight: 700; }
+.user-header nav [aria-disabled] { opacity: .75; }
+.user-header-right { margin-left: auto; display: flex; align-items: center; gap: 10px; font-size: 13px; }
+.user-phone { display: flex; align-items: center; gap: 7px; white-space: nowrap; }
+.user-phone svg { width: 15px; }
+.user-header-right button { border: 1px solid #ffffff80; border-radius: 6px; padding: 8px 12px; color: inherit; background: transparent; white-space: nowrap; }
+.user-header-right .user-register { background: #fff; color: #073763; }
+.user-header.scrolled { background: #fffffffa; color: #334155; box-shadow: 0 4px 24px #0f172a15; }
+.user-header.scrolled .user-login { border-color: #cbd5e1; }
+.user-header.scrolled .user-register { background: #073763; color: white; }
+.menu-toggle { display: none; border: 0; background: none; color: inherit; }
+.home-main { max-width: 1240px; margin: 80px auto 20px; padding: 0 24px; }
+.home-cover { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.home-banner .coverCard { padding: 0; border: 0; transition: transform .42s, opacity .35s, filter .35s; }
+.home-banner .home-budget { color: #fff; background: transparent; border: 0; width: 100%; outline-offset: 3px; }
+.home-budget option { color: #172033; background: #fff; }
+.home-banner .inputLabels { min-width: 0; width: 100%; }
+.home-banner .inputField { width: 100%; }
+.home-arrow { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; border: 1px solid #ccc; color: #1a67ba; background: #fff; font-size: 22px !important; }
+.home-arrow:disabled { opacity: .35; }
+.home-explore .productCard { padding: 0; border: 0; text-align: left; }
+.home-explore .cardOverlay { position: relative; z-index: 1; padding-right: 15px; }
+.home-explore .cardTitle { display: block; }
+.home-explore .productsWrapper, .home-special .toursWrapper { overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+.home-explore .productCard, .home-special .tourCard { scroll-snap-align: start; }
+.home-special .detailRow { gap: 5px; }
+.home-special .detailRow svg { width: 16px; height: 16px; }
+.home-special .priceSection { gap: 6px; }
+.home-special .bookingButton { font-size: 12px; }
+.home-special .tourCard .home-slots { margin-left: auto; color: #1a67ba; font-size: 12px; }
+.home-empty { padding: 30px 20px; text-align: center; color: #64748b; background: #f8fafc; border-radius: 10px; }
+.home-results { padding: 50px 0 20px; }
+.home-results-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+.home-results .description a { color: #1a67ba; text-decoration: underline; }
+.home-destinations .destinationsGrid { grid-template-rows: none; grid-auto-rows: 240px; }
+.home-destinations .backgroundImage { position: relative; }
+.home-destinations .contentOverlay { background: linear-gradient(transparent, #0007); }
+.home-destinations .destinationItem:focus-visible .exploreButton, .home-destinations .item0 .exploreButton, .home-destinations .item3 .exploreButton { visibility: visible; opacity: 1; transform: none; }
+.home-trust .mainImage { position: relative; overflow: hidden; }
+.home-trust .decorativeElements { pointer-events: none; }
+.home-trust .exploreButton { width: fit-content; }
+.home-trust .imageColumn { min-width: 0; width: 100%; }
+.home-footer .socialIconBtn { --social-color: #1877f2; }
+.home-tour-dialog { border: 0; padding: 0; border-radius: 16px; width: min(620px, 92vw); max-height: 90vh; color: #172033; box-shadow: 0 24px 100px #0006; }
+.home-tour-dialog::backdrop { background: #071a32aa; backdrop-filter: blur(3px); }
+.dialog-close { position: absolute; right: 12px; top: 12px; border: 0; border-radius: 50%; width: 38px; height: 38px; font-size: 25px !important; background: #fff; color: #172033; }
+.dialog-image { display: block; width: 100%; height: 240px; object-fit: cover; }
+.dialog-body { padding: 24px; }
+.dialog-body h2 { line-height: 1.4; }
+.home-eyebrow { color: #64748b; font-size: 13px; }
+.dialog-price { color: #f15b2a; font-size: 23px; }
+@media (max-width: 1200px) {
+    .user-header nav { gap: 14px; }
+    .user-header nav [aria-disabled], .user-phone { display: none; }
+    .home-banner .content { grid-template-columns: minmax(0, 1.6fr) minmax(230px, .8fr); column-gap: 30px; }
+    .home-banner .searchBox { grid-template-columns: minmax(0, 1.2fr) minmax(170px, .8fr) 70px; }
+    .home-banner .inputGroup { padding: 0 14px; }
+}
+@media (max-width: 900px) {
+    .home-banner .content { grid-template-columns: 1fr; grid-template-areas: 'copy' 'search'; padding-top: 140px; }
+    .home-banner .galleryBox { display: none; }
+    .home-banner .bannerContainer { min-height: 620px; }
+    .home-explore .header, .home-special .header { padding-right: 100px; }
+    .home-explore .header .navigation, .home-special .header .navigation { top: 10px; }
+    .home-destinations .header .description { margin-right: 0; }
+    .home-explore .productCard { flex-basis: calc((100% - 20px) / 2); }
+    .home-special .tourCard { flex-basis: calc((100% - 10px) / 2); }
+    .home-results-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .home-destinations .destinationsGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 210px; }
+    .home-destinations .item0, .home-destinations .item4 { grid-row: auto; }
+    .home-destinations .exploreButton { opacity: 1; visibility: visible; transform: none; }
+    .home-trust .imageColumn { flex: none; }
+    .home-trust .decorativeElements { display: none; }
+    .home-trust .exploreButton { margin: auto; }
+}
+@media (max-width: 600px) {
+    .user-header { padding: 0 20px; gap: 12px; }
+    .user-logo img { width: 105px; }
+    .menu-toggle { display: block; margin-left: auto; }
+    .user-header-right { margin-left: 0; }
+    .user-header-right .user-login { display: none; }
+    .user-header nav { display: none; position: absolute; inset: 72px 0 auto; background: white; color: #334155; padding: 15px 24px; box-shadow: 0 10px 15px #0001; }
+    .user-header nav.open { display: flex; flex-direction: column; align-items: start; }
+    .user-header nav a { padding: 7px 0; }
+    .home-banner .headline { font-size: 34px; }
+    .home-banner .searchBox { display: flex; flex-wrap: wrap; }
+    .home-banner .inputGroup { width: 100%; min-height: 65px; border-right: 0; border-bottom: 1px solid #ffffff40; }
+    .home-banner .searchButton { width: 100%; height: 56px; min-height: 56px; align-self: auto; }
+    .home-banner .bannerContainer { min-height: 0; padding-bottom: 40px; }
+    .home-banner .bottomInfoStrip { position: relative; margin-top: 40px; display: grid; grid-template-columns: 1fr; gap: 20px; }
+    .home-banner .infoItem { width: 100%; padding: 0 12px; }
+    .home-main { margin-top: 40px; padding: 0 20px; }
+    .home-explore .header, .home-special .header { padding-right: 0; }
+    .home-explore .header .navigation, .home-special .header .navigation { position: static; margin-top: 20px; }
+    .home-explore .header .title, .home-special .header .title, .home-destinations .header .title, .home-trust .title { font-size: 23px; }
+    .home-explore .productCard { flex-basis: 88%; }
+    .home-special .tourCard { flex-basis: 90%; }
+    .home-results-grid { grid-template-columns: 1fr; }
+    .home-destinations .destinationsGrid { grid-auto-rows: 180px; gap: 10px; }
+    .home-destinations .name { font-size: 18px; }
+    .home-destinations .exploreButton { padding: 7px 14px; font-size: 13px; }
+    .home-destinations .regionTab { padding: 10px 14px; font-size: 15px; }
+    .home-trust .imageColumn { height: 320px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .user-home *, .user-home *::before, .user-home *::after { animation: none !important; transition: none !important; }
+}

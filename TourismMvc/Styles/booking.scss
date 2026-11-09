@@ -1,0 +1,942 @@
+// Migrated from tourism_frontend TourBooking component.
+.tour-booking {
+// ── Palette tối giản: ocean blue + đỏ chỉ cho lỗi/tổng tiền ─────────────────
+// $ink:       #0c4a6e    (chữ đậm, tiêu đề)
+// $primary:   #0369a1    (primary, links, focus)
+// $accent:    #0ea5e9    (accent nhẹ)
+// $bg-tint:   #f0f9ff    (background mềm)
+// $border:    #e0f2fe    (border thường)
+// $border-2:  #bae6fd    (border nhấn)
+// $muted:     #64748b    (chữ phụ)
+// $danger:    #e31b23    (chỉ dùng cho tổng tiền + lỗi)
+
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.pageContainer {
+  background: #f8fafc;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.mainContent {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 100px 15px 60px;
+  width: 100%;
+  flex: 1;
+}
+
+// ── Stepper ─────────────────────────────────────────────────────────────────
+.stepperContainer {
+  text-align: center;
+  margin-bottom: 44px;
+  animation: fadeSlideUp 0.4s ease both;
+}
+
+.pageTitle {
+  color: #0c4a6e;
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 28px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stepper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+
+  .step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #94a3b8;
+    font-weight: 600;
+    font-size: 13px;
+    width: 140px;
+    transition: color 0.25s ease;
+
+    .icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: #ffffff;
+      color: #cbd5e1;
+      border: 2px solid #e0f2fe;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 19px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      transition: all 0.3s ease;
+    }
+
+    &.active {
+      color: #0c4a6e;
+      .icon {
+        background: #0369a1;
+        color: #fff;
+        border-color: #0369a1;
+        box-shadow: 0 4px 12px rgba(3,105,161,0.3);
+      }
+    }
+  }
+
+  .line {
+    flex: 1;
+    height: 2px;
+    background: #e0f2fe;
+    margin-top: -30px;
+    max-width: 100px;
+    border-radius: 2px;
+  }
+}
+
+// ── Layout ──────────────────────────────────────────────────────────────────
+.bookingLayout {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+
+  @media (max-width: 992px) { flex-direction: column; }
+}
+
+.leftColumn { flex: 1; width: 100%; min-width: 0; }
+
+.rightColumn {
+  width: 380px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 100px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  @media (max-width: 992px) { width: 100%; position: static; }
+}
+
+// ── Card chung ──────────────────────────────────────────────────────────────
+.section {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 24px 26px;
+  margin-bottom: 16px;
+  border: 1px solid #e0f2fe;
+  box-shadow: 0 1px 3px rgba(12,74,110,0.04);
+  animation: fadeSlideUp 0.4s ease both;
+  transition: box-shadow 0.2s ease;
+
+  &:hover {
+    box-shadow: 0 3px 12px rgba(12,74,110,0.06);
+  }
+}
+
+.sectionHeader {
+  font-size: 16px;
+  font-weight: 700;
+  color: #0c4a6e;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e0f2fe;
+  letter-spacing: 0.3px;
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    width: 40px;
+    height: 2px;
+    background: #0369a1;
+    border-radius: 1px;
+  }
+}
+
+// ── Form grid + inputs ──────────────────────────────────────────────────────
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+
+  @media (max-width: 768px) { grid-template-columns: 1fr; }
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+
+  label {
+    font-weight: 600;
+    font-size: 13px;
+    color: #334155;
+    .required { color: #e31b23; margin-left: 3px; }
+  }
+
+  input, select, textarea {
+    height: 44px;
+    padding: 0 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    background: #ffffff;
+    color: #0f172a;
+    transition: border-color 0.2s, box-shadow 0.2s;
+
+    &::placeholder { color: #94a3b8; }
+
+    &:focus {
+      border-color: #0369a1;
+      box-shadow: 0 0 0 3px rgba(3,105,161,0.1);
+    }
+  }
+
+  textarea { height: auto; padding: 12px 14px; line-height: 1.5; }
+}
+
+// ── Passenger counter ───────────────────────────────────────────────────────
+.passengerGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+
+  @media (max-width: 768px) { grid-template-columns: 1fr; }
+}
+
+.passengerCounter {
+  border: 1px solid #e0f2fe;
+  border-radius: 10px;
+  padding: 14px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f8fafc;
+  transition: border-color 0.2s ease;
+
+  &:hover {
+    border-color: #bae6fd;
+  }
+
+  .info {
+    display: flex;
+    flex-direction: column;
+    .type { font-weight: 700; color: #0c4a6e; font-size: 15px; }
+    .desc { font-size: 12px; color: #64748b; margin-top: 2px; }
+  }
+
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    button {
+      width: 32px;
+      height: 32px;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      border-radius: 6px;
+      font-size: 17px;
+      font-weight: bold;
+      color: #0369a1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background: #0369a1;
+        color: #ffffff;
+        border-color: #0369a1;
+      }
+
+      &:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+    }
+
+    .count {
+      font-weight: 700;
+      font-size: 17px;
+      color: #0c4a6e;
+      min-width: 22px;
+      text-align: center;
+    }
+  }
+}
+
+.passengerGroup {
+  margin-bottom: 26px;
+  &:last-child { margin-bottom: 0; }
+}
+
+.groupHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #f0f9ff;
+  padding: 11px 15px;
+  border-radius: 8px;
+  color: #0369a1;
+  font-weight: 700;
+  margin-bottom: 14px;
+  border: 1px solid #e0f2fe;
+
+  .note {
+    font-weight: 400;
+    font-size: 13px;
+    color: #64748b;
+    font-style: italic;
+  }
+}
+
+.singlePassengerForm {
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px dashed #e0f2fe;
+
+  &:last-child { border-bottom: none; padding-bottom: 0; }
+
+  .passengerIndexLabel {
+    font-size: 12px;
+    font-weight: 700;
+    color: #0369a1;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    display: inline-block;
+    letter-spacing: 0.3px;
+  }
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr auto;
+  gap: 16px;
+  align-items: flex-start;
+
+  @media (max-width: 992px) { grid-template-columns: 1fr; }
+
+  &.noSingleRoom { grid-template-columns: 2fr 1fr 1fr; }
+}
+
+.nameInput, .smallInput { min-width: 0; }
+
+.dateWrapper {
+  position: relative;
+  width: 100%;
+
+  input { width: 100%; padding-right: 38px; }
+
+  .iconDate {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    pointer-events: none;
+    font-size: 15px;
+  }
+}
+
+.singleRoomOption {
+  flex: 1;
+  min-width: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: 0;
+
+  label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 8px;
+    line-height: 1.5;
+    white-space: nowrap;
+  }
+
+  .switchWrapper {
+    height: 44px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .surchargePrice {
+    font-size: 12px;
+    font-weight: 700;
+    color: #e31b23;
+    margin-top: 2px;
+  }
+}
+
+// ── Switch (toggle) ─────────────────────────────────────────────────────────
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 42px;
+  height: 24px;
+
+  input { opacity: 0; width: 0; height: 0; }
+
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: #cbd5e1;
+    transition: 0.25s;
+    border-radius: 34px;
+
+    &::before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background: white;
+      transition: 0.25s;
+      border-radius: 50%;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+    }
+  }
+
+  input:checked + .slider { background: #0369a1; }
+  input:checked + .slider::before { transform: translateX(18px); }
+}
+
+.noteArea textarea {
+  width: 100%;
+  min-height: 100px;
+  resize: vertical;
+  margin-top: 10px;
+  font-family: inherit;
+}
+
+// ── Right sidebar cards ─────────────────────────────────────────────────────
+.summaryCard, .couponCard {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(12,74,110,0.06);
+  border: 1px solid #e0f2fe;
+  animation: fadeSlideUp 0.4s ease both;
+}
+
+.tourSummary {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px dashed #e0f2fe;
+
+  .tourImg {
+    width: 88px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+
+  .tourText {
+    flex: 1;
+    min-width: 0;
+
+    h4 {
+      font-size: 14px;
+      margin: 0 0 5px;
+      line-height: 1.4;
+      color: #0c4a6e;
+      font-weight: 700;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .tourCode {
+      font-size: 12px;
+      color: #64748b;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+  }
+}
+
+// ── Flight timeline ─────────────────────────────────────────────────────────
+.flightInfoContainer {
+  margin-top: 8px;
+
+  .sectionTitle {
+    font-size: 13px;
+    font-weight: 700;
+    color: #0c4a6e;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+}
+
+.flightSection { display: flex; flex-direction: column; gap: 12px; }
+
+.dividerDashed {
+  border-bottom: 1px dashed #e0f2fe;
+  margin: 4px 0;
+}
+
+.flightColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  .topRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+
+    .label { color: #64748b; font-weight: 500; }
+    .flightCode {
+      font-weight: 700;
+      color: #0369a1;
+      background: #e0f2fe;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-size: 11px;
+    }
+  }
+
+  .timeRow {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 700;
+    font-size: 15px;
+    color: #0c4a6e;
+    margin-top: 4px;
+  }
+
+  .timelineBar {
+    position: relative;
+    height: 14px;
+    display: flex;
+    align-items: center;
+    margin: 4px 0;
+
+    .line {
+      flex: 1;
+      height: 2px;
+      background: #bae6fd;
+      margin: 0 4px;
+    }
+
+    .dotLeft, .dotRight {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      border: 2px solid #0369a1;
+      background: #fff;
+    }
+
+    .planeIcon {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 16px;
+      color: #0369a1;
+      background: #fff;
+      padding: 0 4px;
+    }
+  }
+
+  .routeInfo {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #475569;
+
+    .airportCode { font-weight: 600; cursor: help; color: #0c4a6e; }
+  }
+}
+
+// ── Coupon card ─────────────────────────────────────────────────────────────
+.couponCard {
+  .sectionTitle {
+    font-weight: 700;
+    font-size: 14px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    text-transform: uppercase;
+    color: #0c4a6e;
+    letter-spacing: 0.3px;
+  }
+
+  .btnAddCoupon {
+    width: 100%;
+    color: #0369a1;
+    background: #ffffff;
+    border: 1px dashed #0369a1;
+    padding: 11px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background 0.2s ease;
+
+    &:hover { background: #f0f9ff; }
+  }
+
+  .appliedCoupon {
+    background: #f0f9ff;
+    border: 1px solid #bae6fd;
+    padding: 12px 14px;
+    border-radius: 8px;
+    position: relative;
+
+    .couponCode {
+      font-weight: 700;
+      color: #0c4a6e;
+      display: block;
+      font-size: 14px;
+      letter-spacing: 0.3px;
+    }
+    .couponDesc { font-size: 12.5px; margin-top: 4px; color: #475569; }
+    .couponRemove {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      font-size: 12px;
+      color: #64748b;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: color 0.2s ease;
+
+      &:hover { color: #e31b23; }
+    }
+  }
+}
+
+// ── Pricing & Total ─────────────────────────────────────────────────────────
+.summaryTitle {
+  text-transform: uppercase;
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: #0c4a6e;
+  letter-spacing: 0.3px;
+}
+
+.pricingSummary {
+  border-bottom: 1px dashed #e0f2fe;
+  padding-bottom: 16px;
+  margin-bottom: 16px;
+
+  .priceRow {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    margin-bottom: 9px;
+    color: #475569;
+
+    span:last-child { font-weight: 600; color: #0c4a6e; }
+
+    &.discountRow {
+      color: #0369a1;
+      span:last-child { color: #0369a1; }
+    }
+  }
+
+  .divider {
+    margin: 12px 0;
+    border-top: 1px solid #e0f2fe;
+  }
+
+  .finalTotal {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+
+    span {
+      font-size: 15px;
+      font-weight: 700;
+      color: #0c4a6e;
+    }
+
+    .amount {
+      color: #e31b23;
+      font-size: 24px;
+      line-height: 1;
+      font-weight: 800;
+    }
+  }
+}
+
+// ── Checkbox Terms ──────────────────────────────────────────────────────────
+.termsAgreement {
+  margin: 14px 0;
+  font-size: 13px;
+  color: #475569;
+
+  .checkboxContainer {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    cursor: pointer;
+
+    input {
+      width: 16px;
+      height: 16px;
+      margin-top: 2px;
+      accent-color: #0369a1;
+      cursor: pointer;
+    }
+
+    .text { line-height: 1.45; }
+
+    a {
+      color: #0369a1;
+      text-decoration: underline;
+      font-weight: 500;
+
+      &:hover { color: #0c4a6e; }
+    }
+  }
+}
+
+// ── Submit button ───────────────────────────────────────────────────────────
+.btnSubmit {
+  width: 100%;
+  padding: 14px;
+  background: #0369a1;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 15px;
+  text-transform: uppercase;
+  cursor: pointer;
+  letter-spacing: 0.4px;
+  transition: background 0.2s ease, transform 0.15s ease;
+  box-shadow: 0 3px 10px rgba(3, 105, 161, 0.25);
+
+  &:hover {
+    background: #0c4a6e;
+    transform: translateY(-1px);
+    box-shadow: 0 5px 14px rgba(3, 105, 161, 0.35);
+  }
+
+  &:active { transform: translateY(0); }
+
+  &:disabled {
+    background: #cbd5e1;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+    color: #94a3b8;
+  }
+}
+
+// ── Modal coupon ────────────────────────────────────────────────────────────
+.modalOverlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(12, 74, 110, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.2s ease both;
+
+  .modalContent {
+    background: #ffffff;
+    width: 460px;
+    max-width: 90%;
+    border-radius: 12px;
+    overflow: hidden;
+    animation: fadeSlideUp 0.25s ease both;
+    border: 1px solid #e0f2fe;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+
+    .modalHeader {
+      padding: 15px 20px;
+      border-bottom: 1px solid #e0f2fe;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      h3 {
+        margin: 0;
+        font-size: 16px;
+        color: #0c4a6e;
+        font-weight: 700;
+      }
+
+      button {
+        background: transparent;
+        border: none;
+        font-size: 20px;
+        cursor: pointer;
+        color: #64748b;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        transition: all 0.2s ease;
+
+        &:hover {
+          background: #f0f9ff;
+          color: #0c4a6e;
+        }
+      }
+    }
+
+    .modalBody {
+      padding: 18px 20px;
+
+      .couponInputGroup {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 16px;
+
+        input {
+          flex: 1;
+          padding: 10px 12px;
+          border: 1px solid #cbd5e1;
+          border-radius: 8px;
+          outline: none;
+          transition: border-color 0.2s, box-shadow 0.2s;
+
+          &:focus {
+            border-color: #0369a1;
+            box-shadow: 0 0 0 3px rgba(3,105,161,0.1);
+          }
+        }
+
+        button {
+          padding: 0 18px;
+          background: #0369a1;
+          color: #fff;
+          border: none;
+          border-radius: 8px;
+          cursor: pointer;
+          font-weight: 600;
+          transition: background 0.2s ease;
+
+          &:hover { background: #0c4a6e; }
+        }
+      }
+
+      .couponList {
+        max-height: 350px;
+        overflow-y: auto;
+        padding-right: 4px;
+
+        &::-webkit-scrollbar { width: 5px; }
+        &::-webkit-scrollbar-thumb { background: #bae6fd; border-radius: 4px; }
+
+        .couponItem {
+          display: flex;
+          align-items: center;
+          padding: 12px;
+          border: 1px solid #e0f2fe;
+          border-radius: 10px;
+          margin-bottom: 8px;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          background: #ffffff;
+
+          &:hover {
+            background: #f0f9ff;
+            border-color: #bae6fd;
+          }
+
+          .couponIcon {
+            width: 40px;
+            height: 40px;
+            background: #f0f9ff;
+            color: #0369a1;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            font-size: 17px;
+            flex-shrink: 0;
+          }
+
+          .couponInfo {
+            flex: 1;
+            min-width: 0;
+
+            .code {
+              font-weight: 700;
+              font-size: 14.5px;
+              color: #0c4a6e;
+              margin-bottom: 2px;
+              letter-spacing: 0.3px;
+            }
+            .desc { font-size: 12.5px; color: #64748b; }
+          }
+
+          .selectBtn {
+            color: #cbd5e1;
+            font-size: 20px;
+            transition: color 0.2s ease;
+          }
+          &:hover .selectBtn { color: #0369a1; }
+        }
+      }
+    }
+  }
+}
+
+.flightInfo {
+  text-align: center;
+  margin-top: 0;
+  font-size: 12px;
+  font-weight: 500;
+  color: #475569;
+}
+
+// Stagger animation tinh tế
+.leftColumn > .section:nth-child(1) { animation-delay: 0.05s; }
+.leftColumn > .section:nth-child(2) { animation-delay: 0.1s; }
+.leftColumn > .section:nth-child(3) { animation-delay: 0.15s; }
+.leftColumn > .section:nth-child(4) { animation-delay: 0.2s; }
+.leftColumn > .section:nth-child(5) { animation-delay: 0.25s; }
+
+.rightColumn > *:nth-child(1) { animation-delay: 0.15s; }
+.rightColumn > *:nth-child(2) { animation-delay: 0.2s; }
+.rightColumn > *:nth-child(3) { animation-delay: 0.25s; }
+
+}

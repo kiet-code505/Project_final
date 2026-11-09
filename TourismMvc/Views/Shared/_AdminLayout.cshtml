@@ -1,0 +1,86 @@
+@{
+    var path = Context.Request.Path.Value ?? "";
+    string Active(string prefix) => path.StartsWith(prefix, StringComparison.OrdinalIgnoreCase) ? "active" : "";
+}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] · Tourism Admin</title>
+    <meta name="description" content="@(ViewData["Description"] ?? "Trang quản trị hệ thống du lịch")" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
+</head>
+<body class="admin">
+    <aside class="sidebar" id="sidebar">
+        <a class="brand" href="/admin/locations">
+            <span class="brand-logo"><i data-lucide="compass"></i></span>
+            <span class="brand-text">Tourism<small>Admin Console</small></span>
+        </a>
+
+        <nav class="nav">
+            <div class="nav-label">Danh mục</div>
+            <a class="nav-item @Active("/admin/locations")" href="/admin/locations">
+                <i data-lucide="map-pin"></i><span>Địa điểm</span>
+            </a>
+            <a class="nav-item @Active("/admin/branches")" href="/admin/branches">
+                <i data-lucide="building-2"></i><span>Chi nhánh</span>
+            </a>
+            <a class="nav-item @Active("/admin/policies")" href="/admin/policies">
+                <i data-lucide="file-text"></i><span>Chính sách</span>
+            </a>
+            <a class="nav-item @Active("/admin/tours")" href="/admin/tours">
+                <i data-lucide="map"></i><span>Tour</span>
+            </a>
+            <a class="nav-item @Active("/admin/departures")" href="/admin/departures"><i data-lucide="calendar-days"></i><span>Lịch khởi hành</span></a>
+
+            <div class="nav-label">Kinh doanh</div>
+            <a class="nav-item @Active("/admin/bookings")" href="/admin/bookings"><i data-lucide="ticket"></i><span>Booking</span></a>
+            <a class="nav-item @Active("/admin/users")" href="/admin/users"><i data-lucide="users"></i><span>Người dùng</span></a>
+            <a class="nav-item @Active("/admin/payments")" href="/admin/payments"><i data-lucide="credit-card"></i><span>Thanh toán</span></a>
+        </nav>
+
+        <div class="sidebar-foot">
+            <a href="/" class="nav-item"><i data-lucide="arrow-left"></i><span>Về trang chủ</span></a>
+        </div>
+    </aside>
+
+    <div class="main">
+        <header class="topbar">
+            <button class="icon-btn mobile-only" id="sidebarToggle" type="button" aria-label="Mở menu">
+                <i data-lucide="menu"></i>
+            </button>
+            <nav class="crumbs" aria-label="breadcrumb">
+                <span>Admin</span><i data-lucide="chevron-right"></i>
+                <strong>@ViewData["Title"]</strong>
+            </nav>
+            <div class="topbar-right">
+                <span style="font-size:13px;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">@User.Identity?.Name</span><form method="post" action="/admin/logout">@Html.AntiForgeryToken()<button class="btn btn-ghost" type="submit"><i data-lucide="log-out"></i> Đăng xuất</button></form>
+            </div>
+        </header>
+
+        <main class="content">
+            @RenderBody()
+        </main>
+    </div>
+
+    @* Toast từ TempData *@
+    <div class="toast-stack" id="toastStack">
+        @if (TempData["Success"] is string ok)
+        {
+            <div class="toast toast-success"><i data-lucide="check-circle-2"></i><span>@ok</span></div>
+        }
+        @if (TempData["Error"] is string err)
+        {
+            <div class="toast toast-error"><i data-lucide="alert-triangle"></i><span>@err</span></div>
+        }
+    </div>
+
+    <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+    <script src="~/js/admin.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

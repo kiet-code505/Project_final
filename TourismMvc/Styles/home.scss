@@ -1,0 +1,2117 @@
+// Styles migrated from the React homepage; each component is scoped to avoid collisions.
+.home-banner {
+$primary-color: #0a4685;
+$accent-color: #2f78d6;
+$text-color: #172033;
+$border-color: #e2e8f0;
+
+.bannerContainer {
+    position: relative;
+    width: 100%;
+    min-height: 670px;
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    overflow: visible;
+    isolation: isolate;
+}
+
+// ---- Clip wrapper: constrains bgLayer to banner bounds ----
+.bgClip {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    z-index: -1;
+    // Do NOT use transform here — it would re-parent fixed children
+}
+
+// ---- Animated background layer (Ken Burns) ----
+.bgLayer {
+    position: absolute;
+    inset: -10%;
+    background-image: url('/images/home/ryan-le-8-hEg1OuFn8-unsplash.jpg');
+    background-size: cover;
+    background-position: center 48%;
+    animation: heroBgMove 24s ease-in-out infinite alternate;
+    will-change: transform;
+}
+
+@keyframes heroBgMove {
+    0%   { transform: scale(1)    translate(0,     0); }
+    25%  { transform: scale(1.06) translate(-1.5%, -1%); }
+    50%  { transform: scale(1.04) translate(1.5%,  1.5%); }
+    75%  { transform: scale(1.08) translate(-0.5%, 2%); }
+    100% { transform: scale(1.05) translate(1%,   -0.5%); }
+}
+
+.overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background:
+        linear-gradient(180deg, rgba(4, 22, 38, 0.28) 0%, rgba(4, 22, 38, 0.18) 30%, rgba(4, 22, 38, 0.52) 100%),
+        linear-gradient(90deg, rgba(4, 22, 38, 0.48) 0%, rgba(4, 22, 38, 0.18) 50%, rgba(4, 22, 38, 0.32) 100%);
+    pointer-events: none;
+    backdrop-filter: blur(0.7px);
+}
+
+.content {
+    position: relative;
+    z-index: 30;
+    width: min(90%, 1280px);
+    margin: 0 auto;
+    display: grid;
+    grid-template-areas:
+        "copy info"
+        "search info"
+        "error info";
+    grid-template-columns: minmax(0, 1.85fr) minmax(320px, 0.78fr);
+    column-gap: clamp(42px, 7vw, 112px);
+    row-gap: 22px;
+    padding-top: 138px;
+}
+
+.heroCopy {
+    grid-area: copy;
+    max-width: 830px;
+}
+
+.headline {
+    margin: 0;
+    color: #ffffff;
+    font-size: clamp(2.1rem, 3.7vw, 3.45rem);
+    line-height: 1.08;
+    font-weight: 820;
+    letter-spacing: 0;
+    text-shadow: 0 12px 34px rgba(0, 0, 0, 0.32);
+    animation: heroSlideUp 0.62s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.subHeadline {
+    margin: 18px 0 0;
+    color: rgba(255, 255, 255, 0.93);
+    font-size: 1.02rem;
+    font-weight: 580;
+    line-height: 1.5;
+    text-shadow: 0 8px 22px rgba(0, 0, 0, 0.25);
+    animation: heroSlideUp 0.62s cubic-bezier(0.22, 1, 0.36, 1) 0.14s both;
+}
+
+.searchBox {
+    grid-area: search;
+    position: relative;
+    z-index: 40;
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(220px, 0.9fr) 104px;
+    min-height: 70px;
+    width: 100%;
+    max-width: 930px;
+    overflow: visible;
+    background: rgba(10, 27, 48, 0.44);
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    animation: heroSlideUp 0.62s cubic-bezier(0.22, 1, 0.36, 1) 0.26s both;
+    border-radius: 8px;
+    box-shadow: 0 20px 48px rgba(6, 17, 33, 0.22);
+    backdrop-filter: blur(2px);
+    animation: heroReveal 0.72s ease 0.08s both;
+    transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+
+    &:hover,
+    &:focus-within {
+        transform: translateY(-2px);
+        border-color: rgba(255, 255, 255, 0.36);
+        box-shadow: 0 26px 58px rgba(6, 17, 33, 0.28);
+    }
+}
+
+.inputGroup {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    padding: 0 24px;
+    transition: background-color 0.18s ease;
+
+    &:hover {
+        background-color: rgba(255, 255, 255, 0.08);
+    }
+
+    &:not(:last-of-type) {
+        border-right: 1px solid rgba(255, 255, 255, 0.15);
+    }
+}
+
+.destinationGroup,
+.budgetGroup {
+    min-width: 0;
+}
+
+.icon {
+    flex-shrink: 0;
+    margin-right: 16px;
+    color: rgba(255, 255, 255, 0.94);
+}
+
+.inputLabels {
+    width: 100%;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+
+    label {
+        color: #ffffff;
+        font-size: 0.88rem;
+        font-weight: 760;
+        line-height: 1.2;
+    }
+}
+
+.inputField,
+.selectDisplay {
+    width: 100%;
+    min-width: 0;
+    padding: 0;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.96);
+    font-size: 0.98rem;
+    font-weight: 520;
+    line-height: 1.35;
+    cursor: pointer;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    &::placeholder {
+        color: rgba(255, 255, 255, 0.62);
+        font-weight: 460;
+    }
+}
+
+.inputField {
+    cursor: text;
+}
+
+.selectDisplay.placeholder {
+    color: rgba(255, 255, 255, 0.62);
+    font-weight: 460;
+}
+
+.customSelectMenu {
+    position: absolute;
+    top: calc(100% + 12px);
+    left: 0;
+    z-index: 100;
+    width: min(280px, 100%);
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.98);
+    border: 1px solid $border-color;
+    border-radius: 8px;
+    box-shadow: 0 26px 60px rgba(15, 23, 42, 0.24);
+    backdrop-filter: blur(10px);
+}
+
+.menuItem {
+    padding: 11px 12px;
+    margin-bottom: 5px;
+    cursor: pointer;
+    color: $text-color;
+    font-weight: 650;
+    border: 1px solid transparent;
+    border-radius: 7px;
+    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+
+    &:hover {
+        color: $primary-color;
+        background-color: #eff6ff;
+        border-color: #bfdbfe;
+    }
+}
+
+.searchButton {
+    width: 104px;
+    height: 100%;
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    border: none;
+    border-radius: 0 8px 8px 0;
+    cursor: pointer;
+    background: linear-gradient(135deg, #38bdf8, #2563eb);
+    box-shadow: inset 1px 0 rgba(255, 255, 255, 0.12);
+    transition: transform 0.18s ease, filter 0.18s ease, box-shadow 0.18s ease;
+
+    &:hover {
+        filter: brightness(1.08);
+        box-shadow: inset 1px 0 rgba(255, 255, 255, 0.14), 0 12px 28px rgba(37, 99, 235, 0.2);
+    }
+
+    &:active {
+        transform: scale(0.985);
+    }
+}
+
+.searchIcon {
+    flex-shrink: 0;
+}
+
+.validationMessage {
+    grid-area: error;
+    width: fit-content;
+    max-width: 360px;
+    margin: 0;
+    padding: 10px 14px;
+    color: #ffffff;
+    background: rgba(220, 38, 38, 0.72);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 8px;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+}
+
+// ============================================================
+// 🌀 3D COVERFLOW GALLERY
+// ============================================================
+
+.sideInfoBox { display: none; }
+
+// ---- Gallery wrapper ----
+.galleryBox {
+    grid-area: info;
+    align-self: center;
+    justify-self: end;
+    width: min(100%, 430px);
+    margin-top: 20px;
+    padding: 0;
+    border-radius: 0;
+    background: transparent;
+    border: none;
+    overflow: visible;
+    position: relative;
+    animation: heroSlideUp 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.38s both;
+}
+
+// ---- 3D stage (horizontal coverflow) ----
+.coverflow {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    perspective: 900px;
+    perspective-origin: center 50%;
+    transform-style: preserve-3d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
+}
+
+// ---- Each photo card ----
+.coverCard {
+    position: absolute;
+    width: 78%;
+    height: 244px;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    will-change: transform, opacity, filter;
+    backface-visibility: hidden;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        pointer-events: none;
+        user-select: none;
+        filter: blur(1.6px);
+        transition: filter 0.35s ease;
+    }
+}
+
+// Ken Burns zoom on active card — box-shadow glow (no transform conflict)
+.coverCardActive {
+    animation: activeGlow 3s ease-in-out infinite alternate;
+    box-shadow: 0 20px 60px rgba(14, 165, 233, 0.45);
+}
+
+.coverCardActive img {
+    filter: blur(0);
+    animation: kenBurns 7s ease-in-out infinite alternate;
+}
+
+@keyframes activeGlow {
+    from { box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5); }
+    to   { box-shadow: 0 24px 64px rgba(14, 165, 233, 0.55); }
+}
+
+@keyframes floatUp {
+    from { transform: translateY(0px) rotateX(0deg) scale(1.0); }
+    to   { transform: translateY(-8px) rotateX(0deg) scale(1.0); }
+}
+
+@keyframes kenBurns {
+    from { transform: scale(1)    translate(0, 0); }
+    to   { transform: scale(1.08) translate(-1.5%, 1%); }
+}
+
+// ---- Dot indicators (hidden) ----
+.galleryDots {
+    display: none;
+}
+
+.galleryDot { display: none; }
+.galleryDotActive { display: none; }
+
+
+.gallerySlide {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    background: #0a1a2e;
+}
+
+.galleryImg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 5s ease;
+
+    &:hover {
+        transform: scale(1.04);
+    }
+}
+
+// Slide-in (from right or left)
+.slideIn {
+    animation: slideInFromRight 0.42s cubic-bezier(0.32, 0.76, 0.5, 1) both;
+}
+
+.slideOutLeft {
+    animation: slideOutToLeft 0.42s cubic-bezier(0.32, 0.76, 0.5, 1) both;
+}
+
+.slideOutRight {
+    animation: slideOutToRight 0.42s cubic-bezier(0.32, 0.76, 0.5, 1) both;
+}
+
+@keyframes slideInFromRight {
+    from { opacity: 0; transform: translateX(32px) scale(0.97); }
+    to   { opacity: 1; transform: translateX(0)     scale(1); }
+}
+@keyframes slideOutToLeft {
+    from { opacity: 1; transform: translateX(0); }
+    to   { opacity: 0; transform: translateX(-24px); }
+}
+@keyframes slideOutToRight {
+    from { opacity: 1; transform: translateX(0); }
+    to   { opacity: 0; transform: translateX(24px); }
+}
+
+// gradient overlay on photo
+.galleryOverlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg,
+        rgba(4, 16, 32, 0.06) 0%,
+        rgba(4, 16, 32, 0.44) 100%
+    );
+    pointer-events: none;
+    z-index: 2;
+}
+
+// Badge top-left
+.galleryBadge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 4;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 9px;
+    background: rgba(37, 99, 235, 0.82);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 999px;
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    backdrop-filter: blur(4px);
+    letter-spacing: 0.02em;
+}
+
+// Location bottom-left
+.galleryLocation {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    z-index: 4;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 9px;
+    background: rgba(4, 12, 28, 0.72);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 999px;
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    backdrop-filter: blur(4px);
+}
+
+// Prev / Next nav buttons
+.galleryNav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 5;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(6, 18, 36, 0.64);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 50%;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.18s ease, transform 0.18s ease;
+
+    &:hover {
+        background: rgba(37, 99, 235, 0.82);
+        transform: translateY(-50%) scale(1.12);
+    }
+}
+
+.galleryNavPrev { left: 8px; }
+.galleryNavNext { right: 8px; }
+
+// ---- Thumbnail strip ----
+.galleryThumbs {
+    display: flex;
+    gap: 6px;
+    padding: 10px 10px 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar { display: none; }
+}
+
+.galleryThumb {
+    flex-shrink: 0;
+    position: relative;
+    width: 52px;
+    height: 38px;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 2px solid transparent;
+    cursor: pointer;
+    padding: 0;
+    background: none;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.35s ease;
+    }
+
+    &:hover img {
+        transform: scale(1.1);
+    }
+}
+
+.galleryThumbActive {
+    border-color: #38bdf8;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(56, 189, 248, 0.4);
+}
+
+// Ripple effect on thumb hover
+.galleryThumbRipple {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center,
+        rgba(56, 189, 248, 0.32) 0%,
+        transparent 70%
+    );
+    opacity: 0;
+    transition: opacity 0.22s ease;
+    pointer-events: none;
+
+    .galleryThumb:hover & {
+        opacity: 1;
+    }
+}
+
+// ---- Dot indicators ----
+.galleryDots {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    padding: 6px 0 12px;
+}
+
+.galleryDot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.35);
+    cursor: pointer;
+    transition: background 0.22s ease, transform 0.22s ease, width 0.22s ease;
+    display: inline-block;
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.7);
+    }
+}
+
+.galleryDotActive {
+    width: 20px;
+    border-radius: 4px;
+    background: #38bdf8;
+    transform: none;
+}
+
+.featuredBadge,
+.featuredText {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    margin: 0 0 18px;
+    color: #fde68a;
+    font-size: 1.02rem;
+    font-weight: 820;
+    letter-spacing: 0;
+}
+
+.sideTitle {
+    margin: 0 0 8px;
+    color: #ffffff;
+    font-size: 1.18rem;
+    line-height: 1.35;
+    font-weight: 800;
+}
+
+.sideDetails {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.92rem;
+    font-weight: 560;
+}
+
+.priceLabel {
+    margin: 24px 0 6px;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.83rem;
+    font-weight: 620;
+}
+
+.priceRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.priceValue {
+    margin: 0;
+    color: #fbbf24;
+    font-size: clamp(1.6rem, 2.3vw, 2.05rem);
+    line-height: 1.05;
+    font-weight: 860;
+    letter-spacing: 0;
+
+    small {
+        display: block;
+        margin-top: 8px;
+        color: #ffffff;
+        font-size: 0.76rem;
+        font-weight: 560;
+        white-space: nowrap;
+    }
+}
+
+.arrowIcon {
+    flex: 0 0 56px;
+    width: 56px;
+    height: 56px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    background: linear-gradient(135deg, #60a5fa, #2563eb);
+    box-shadow: 0 16px 30px rgba(37, 99, 235, 0.24);
+    transition: transform 0.18s ease, filter 0.18s ease, box-shadow 0.18s ease;
+
+    &:hover {
+        filter: brightness(1.08);
+        transform: translateX(2px) translateY(-1px);
+        box-shadow: 0 18px 34px rgba(37, 99, 235, 0.3);
+    }
+}
+
+.bottomInfoStrip {
+    position: absolute;
+    left: 50%;
+    bottom: -52px;
+    z-index: 14;
+    transform: translateX(-50%);
+    width: min(90%, 1040px);
+    display: flex;
+    justify-content: space-around;
+    padding: 20px 0;
+    background: rgba(255, 255, 255, 0.97);
+    border: 1px solid rgba(226, 232, 240, 0.9);
+    border-radius: 8px;
+    box-shadow: 0 22px 46px rgba(15, 23, 42, 0.11);
+    backdrop-filter: blur(10px);
+    animation: floatUp 0.66s ease 0.2s both;
+}
+
+.infoItem {
+    flex: 1;
+    min-width: 0;
+    padding: 0 22px;
+    text-align: center;
+    color: $text-color;
+    border-right: 1px solid #e5eaf0;
+    transition: transform 0.2s ease;
+
+    &:hover {
+        transform: translateY(-2px);
+    }
+
+    &:last-child {
+        border-right: none;
+    }
+
+    p {
+        margin: 2px 0;
+        color: #1f2937;
+        font-size: 0.9rem;
+        line-height: 1.35;
+    }
+
+    strong {
+        color: $primary-color;
+        font-weight: 820;
+    }
+}
+
+.infoIcon {
+    width: 44px;
+    height: 44px;
+    margin: 0 auto 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+}
+
+.infoIconPrimary {
+    color: #0369a1;
+    background: linear-gradient(135deg, #e0f2fe, #bae6fd);
+}
+
+.infoIconReview {
+    color: #c2410c;
+    background: linear-gradient(135deg, #ffedd5, #fed7aa);
+}
+
+.infoIconDeal {
+    color: #0f766e;
+    background: linear-gradient(135deg, #ccfbf1, #99f6e4);
+}
+
+.statusMessage,
+.statusMessageError {
+    position: absolute;
+    left: 5%;
+    bottom: 24px;
+    z-index: 12;
+    margin: 0;
+}
+
+.statusMessage {
+    color: #ffffff;
+}
+
+.statusMessageError {
+    color: #fecaca;
+}
+
+@keyframes heroReveal {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes heroSlideUp {
+    from { opacity: 0; transform: translateY(32px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes floatUp {
+    from {
+        opacity: 0;
+        transform: translate(-50%, 14px);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .heroCopy,
+    .searchBox,
+    .sideInfoBox,
+    .bottomInfoStrip {
+        animation: none;
+    }
+
+    .searchBox,
+    .sideInfoBox,
+    .infoItem,
+    .arrowIcon {
+        transition: none;
+    }
+}
+
+@media (max-width: 1024px) {
+    .bannerContainer {
+        min-height: 710px;
+    }
+
+    .content {
+        grid-template-areas:
+            "copy"
+            "search"
+            "info"
+            "error";
+        grid-template-columns: 1fr;
+        padding-top: 116px;
+    }
+
+    .sideInfoBox {
+        justify-self: start;
+        align-self: start;
+        width: min(100%, 520px);
+    }
+
+    .bottomInfoStrip {
+        bottom: -62px;
+        width: calc(100% - 36px);
+    }
+}
+
+@media (max-width: 760px) {
+    .bannerContainer {
+        min-height: 790px;
+        background-position: center top;
+    }
+
+    .content {
+        width: calc(100% - 28px);
+        padding-top: 96px;
+        row-gap: 18px;
+    }
+
+    .headline {
+        font-size: clamp(2rem, 10vw, 2.65rem);
+    }
+
+    .searchBox {
+        grid-template-columns: 1fr;
+        min-height: auto;
+    }
+
+    .inputGroup {
+        min-height: 70px;
+        border-right: none !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+    }
+
+    .searchButton {
+        width: 100%;
+        min-height: 62px;
+        border-radius: 0 0 8px 8px;
+    }
+
+    .priceRow {
+        align-items: flex-start;
+    }
+
+    .bottomInfoStrip {
+        position: relative;
+        left: auto;
+        bottom: auto;
+        transform: none;
+        width: calc(100% - 28px);
+        margin: 28px auto -36px;
+        flex-direction: column;
+        gap: 14px;
+        padding: 18px;
+        animation: none;
+    }
+
+    .infoItem {
+        border-right: none;
+        border-bottom: 1px solid #e5eaf0;
+        padding: 0 0 14px;
+
+        &:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+    }
+}
+
+}
+.home-explore {
+/* File: src/components/homPageComponent/ExploreProductsComponent/ExploreProducts.module.scss */
+$primary-color: #1a67ba;
+.exploreProductsContainer {
+    padding: 60px 0;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+span {
+    /* Cho phép thiết lập width/height và margin/padding đầy đủ */
+    padding-right: 10px;
+}
+.header {
+    text-align: left;
+    margin-bottom: 40px;
+    position: relative;
+    padding-right: 400px; 
+    
+    .title {
+        font-size: 28px;
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 15px;
+        /* Thêm đường gạch chân cho tiêu đề */
+        &::after {
+            content: '';
+            display: block;
+            width: 150px;
+            height: 3px;
+            background-color: #007bff; /* Màu chủ đạo của VietTravel/Future Travel */
+            margin-top: 5px;
+        }
+    }
+
+    .description {
+        font-size: 16px;
+        color: #666;
+        line-height: 1.6;
+    }
+    
+    .navigation {
+        position: absolute;
+        top: 90px;
+        right: 0;
+        display: flex;
+        gap: 15px;
+        
+        .navArrow {
+            width: 40px;
+            height: 40px;
+            padding: 8px;
+            border-radius: 50%;
+            border: 1px solid #ccc;
+            padding: 10px;
+            transition: background-color 0.3s, opacity 0.3s;
+            
+            &:hover {
+                background-color: #f0f0f0;
+                border-color: #aaa;
+            }
+        }
+    }
+}
+
+/* Khung nhìn (Viewport) cho slider */
+.productsWrapper {
+    overflow-x: hidden; 
+    padding-bottom: 20px; 
+}
+
+/* Container chứa các card, thực hiện trượt (transform: translateX) */
+.productsGrid {
+    display: flex; 
+    gap: 20px;
+    /* transition cho hiệu ứng trượt */
+    transition: transform 0.5s ease-in-out; 
+}
+
+.productCard {
+    height: 300px; 
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+
+    /* Kích thước của mỗi card (Hiển thị 3 cột, trừ đi gap 20px) */
+    flex: 0 0 calc((100% / 3) - (40px / 3)); 
+
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    }
+}
+
+.imageWrapper {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: flex-end;
+    position: relative;
+    transition: transform 0.5s ease; /* Thêm transition cho zoom nhẹ khi hover nếu cần */
+}
+
+.cardOverlay {
+    width: 100%;
+    padding: 15px;
+    /* Overlay chuyển màu từ đen đậm ở dưới lên trong suốt */
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0));
+    color: white;
+    text-align: left;
+    
+    .cardTitle {
+        font-size: 16px; /* Giảm size chữ để phù hợp với hình ảnh bạn cung cấp */
+        font-weight: 600;
+        margin: 0;
+        text-transform: uppercase;
+        /* Đảm bảo chữ không bị ngắt quãng, phù hợp với thiết kế của bạn */
+        white-space: nowrap; 
+        overflow: hidden;
+        text-overflow: ellipsis; 
+    }
+}
+
+.viewAllButton {
+    background-color: $primary-color;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    
+    &:hover {
+        background-color: darken($primary-color, 20%);
+    }
+}
+
+}
+.home-special {
+// src/components/homPageComponent/SpecialToursComponent/SpecialTours.module.scss
+
+$primary-color: #1a67ba;
+$text-color: #333;
+$secondary-text-color: #666;
+$border-color: #ddd;
+$card-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+
+.specialToursContainer {
+    padding: 60px 0;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.header {
+    text-align: left;
+    margin-bottom: 40px;
+    position: relative;
+    padding-right: 400px; 
+    
+    .title {
+        font-size: 28px;
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 15px;
+        /* Thêm đường gạch chân cho tiêu đề */
+        &::after {
+            content: '';
+            display: block;
+            width: 150px;
+            height: 3px;
+            background-color: #007bff; /* Màu chủ đạo của VietTravel/Future Travel */
+            margin-top: 5px;
+        }
+    }
+
+    .description {
+        font-size: 16px;
+        color: #666;
+        line-height: 1.6;
+    }
+    
+    .navigation {
+        position: absolute;
+        top: 90px;
+        right: 0;
+        display: flex;
+        gap: 15px;
+        
+        .navArrow {
+            width: 40px;
+            height: 40px;
+            padding: 8px;
+            border-radius: 50%;
+            border: 1px solid #ccc;
+            padding: 10px;
+            transition: background-color 0.3s, opacity 0.3s;
+            
+            &:hover {
+                background-color: #f0f0f0;
+                border-color: #aaa;
+            }
+        }
+    }
+}
+/* Khung nhìn (Viewport) cho slider */
+.toursWrapper {
+    overflow-x: hidden; 
+    padding: 0 0 20px 0; 
+}
+
+/* Container chứa các card, thực hiện trượt (transform: translateX) */
+.toursGrid {
+    display: flex; 
+    gap: 10px; /* Giảm gap cho 4 cột */
+    transition: transform 0.5s ease-in-out; 
+}
+
+/* --- SpecialTourItem Styles --- */
+
+.tourCard {
+    background-color: white;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: $card-shadow;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s, border 0.3s;
+    border: 1px solid transparent;
+    margin-top: 2px;
+    margin-left: 1px;
+    
+    /* Kích thước của mỗi card (Hiển thị 4 cột, trừ đi gap 10px) */
+    /* Công thức: (100% / 4) - (3 * 10px / 4) */
+    flex: 0 0 calc((100% / 4) - 7.5px); 
+
+    &:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 0 0 1px #4a9eff, 0 0 15px rgba(74, 158, 255, 0.4);
+        border-color: #4a9eff;
+    }
+}
+
+.imageWrapper {
+    width: 100%;
+    height: 200px; 
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    overflow: hidden;
+    
+.saleRibbon {
+        position: absolute;
+        top: 10px; /* Khoảng cách từ trên xuống */
+        left: 0;
+        z-index: 10;
+        
+        background-color: #e53935; /* Màu đỏ nổi bật như trong ảnh */
+        color: white;
+        font-weight: bold;
+        font-size: 0.9rem; /* Kích thước chữ nhỏ hơn một chút cho card item */
+        padding: 8px 15px 8px 30px; /* Padding, padding-left lớn hơn để tạo khoảng trồi ra */
+        line-height: 1;
+        white-space: nowrap; /* Giữ chữ trên một hàng */
+        
+        /* Tạo hình dạng đặc biệt: cắt chéo bên phải */
+        /* Kỹ thuật: Sử dụng skewX() để tạo hình bình hành */
+        transform: skewX(-15deg); 
+        transform-origin: 0 50%; /* Quan trọng: Giữ mép trái cố định khi skew */
+        
+        /* Điều chỉnh vị trí để dải màu trồi ra khỏi mép trái */
+        margin-left: -20px; /* Đẩy sang trái một lượng nhất định */
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Thêm bóng nhẹ cho nổi bật */
+
+        /* Hoàn tác transform méo chữ cho nội dung bên trong */
+        span {
+            display: inline-block; /* Quan trọng để transform hoạt động */
+            transform: skewX(15deg); /* Áp dụng ngược lại transform cho nội dung chữ */
+        }
+    }
+
+    .favoriteButton {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background-color: white;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 14px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        z-index: 10;
+    }
+    
+    .timeInfoOverlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 10px;
+        background-color: rgba(255, 255, 255, 0.9);
+        color: $text-color;
+        font-weight: 600;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+
+        .timeBadge {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            
+            .timeIcon {
+                width: 16px;
+                height: 16px;
+                margin-right: 5px;
+            }
+        }
+        .timeValue {
+            font-size: 16px;
+        }
+    }
+}
+
+.cardContent {
+    padding: 15px;
+    
+    .cardTitle {
+        font-size: 16px;
+        font-weight: 700;
+        color: $text-color;
+        margin-top: 0;
+        margin-bottom: 10px;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        min-height: 40px; 
+        line-height: 1.3;
+    }
+    
+    .tourCode {
+        color: $secondary-text-color;
+        font-size: 15px;
+        margin-bottom: 10px;
+        font-weight: 600;
+        color: rgb(3, 3, 3);
+    }
+
+    .detailRow {
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+        color: $secondary-text-color;
+        margin-bottom: 8px;
+        
+        .detailIcon {
+            color: $primary-color;
+            margin-right: 8px;
+            width: 16px;
+        }
+        .detailValue {
+            color: $text-color;
+            font-weight: 600;
+        }
+        .seatsIcon {
+            width: 18px;
+            height: 18px;
+            margin-left: 15px;
+            margin-right: 5px;
+        }
+        .seatsLeft {
+            font-weight: 700;
+            color: red;
+        }
+    }
+}
+
+.priceSection {
+    display: flex;
+    flex-wrap: wrap; 
+    align-items: center;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px dashed $border-color;
+    
+    .originalPrice {
+        font-size: 12px;
+        color: $secondary-text-color;
+        text-decoration: line-through;
+        margin-right: 10px;
+    }
+    
+    .promotionalPrice {
+        font-size: 20px;
+        font-weight: 700;
+        color: #ff4500; /* Màu đỏ nổi bật cho giá ưu đãi */
+        margin-right: auto; 
+    }
+    
+    .bookingButton {
+        background-color: white;
+        color: #ff4500;
+        border: 1px solid #ff4500;
+        padding: 8px 15px;
+        border-radius: 5px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.2s;
+        
+        &:hover {
+            background-color: #ff4500;
+            color: white;
+        }
+    }
+}
+
+.viewAllButton {
+    background-color: $primary-color;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    
+    &:hover {
+        background-color: darken($primary-color, 20%);
+    }
+}
+}
+.home-destinations {
+$primary-color: #0a4685;
+$text-color: #fff;
+$card-radius: 8px;
+
+.favoriteDestinationsContainer {
+    padding: 60px 0;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.header {
+    text-align: left;
+    margin-bottom: 40px;
+    
+    .title {
+        font-size: 28px;
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 15px;
+        &::after {
+            content: '';
+            display: block;
+            width: 150px;
+            height: 3px;
+            background-color: #007bff;
+            margin-top: 5px;
+        }
+    }
+    .description {
+    font-size: 16px;
+    color: #666;
+    line-height: 1.6;
+    margin-right: 385px;
+    }
+}
+
+.destinationsGrid {
+    display: grid;
+    // Lưới 3 cột
+    grid-template-columns: repeat(4, 1fr);
+    // 4 hàng, mỗi hàng tối thiểu 300px để chứa 9 item với span 2
+    grid-template-rows: repeat(3, minmax(300px, auto)); 
+    gap: 12px;
+}
+
+/* --- Định nghĩa kích thước đặc biệt cho từng item --- */
+
+/* 1. QUẢNG NINH (Index 0): Chiếm 2 hàng */
+.item0 { 
+    grid-row: span 2;
+     
+}
+.item2 { 
+    grid-column: span 2; 
+}
+/* 4. NINH BÌNH (Index 3): Chiếm 2 hàng */
+.item3 { 
+    grid-column: span 2; 
+}
+.item4 { 
+    grid-row: span 2; 
+}
+
+
+
+/* --- FavoriteDestinationItem Styles --- */
+.destinationItem {
+    position: relative;
+    overflow: hidden;
+    border-radius: $card-radius;
+    height: auto; 
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    
+    &:hover {
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        transform: translateY(-5px);
+    }
+
+    .backgroundImage {
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-position: center;
+        transition: transform 0.6s ease;
+    }
+    
+    /* LỚP LÀM TỐI ẢNH (DIM/DARKEN) */
+    .dimOverlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0); /* Mặc định trong suốt */
+        transition: background-color 0.3s ease;
+        z-index: 1; /* Nằm dưới nội dung overlay */
+    }
+
+    /* HIỆU ỨNG TỐI KHI HOVER */
+    &:hover .dimOverlay {
+        background-color: rgba(0, 0, 0, 0.5); /* Làm tối 30% khi di chuột vào */
+    }
+
+    /* LỚP CHỨA NỘI DUNG (CHỮ VÀ NÚT) */
+    .contentOverlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0) 100%);
+        display: flex;
+        flex-direction: column;
+        justify-content: center; /* CĂN GIỮA DỌC */
+        align-items: center; /* CĂN GIỮA NGANG */
+       
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.5); 
+        z-index: 2; /* Nằm trên lớp tối */
+    }
+    
+    .name {
+        color: $text-color;
+        font-size: 23px; 
+        font-weight: 600;
+        text-align: center;
+        margin-bottom: 20px;
+        transition: opacity 0.3s;
+        // Bắt đầu ẩn nhẹ, hiện rõ hơn khi hover nếu bạn muốn hiệu ứng này
+        opacity: 0.9;
+    }
+    
+    .exploreButton {
+        opacity: 0; 
+        visibility: hidden;
+        transform: scale(0.8); 
+        transition: opacity 0.3s, transform 0.3s, background-color 0.2s;
+        
+        background-color: $primary-color;
+        color: $text-color;
+        border: none;
+        padding: 10px 25px;
+        border-radius: 5px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+
+        &:hover {
+            background-color: darken($primary-color, 10%);
+        }
+    }
+    
+    /* HIỆN NÚT KHI HOVER CHO TẤT CẢ ITEM */
+    &:hover .exploreButton {
+        opacity: 1;
+        visibility: visible;
+        transform: scale(1); 
+    }
+
+    /* GHI ĐÈ: NÚT KHÁM PHÁ CỦA QUẢNG NINH VÀ NINH BÌNH LUÔN HIỆN (như trong ảnh) */
+    .item0 .exploreButton,
+    .item3 .exploreButton {
+        opacity: 1;
+        visibility: visible;
+        transform: scale(1);
+    }
+}
+
+// FavoriteDestinations.module.scss (ĐÃ CHỈNH SỬA CHO ĐỘ DÀI BẰNG CHỮ)
+
+// ... (Các styles header, title, description giữ nguyên) ...
+
+/* --- STYLE CHO TABS MIỀN --- */
+.regionTabs {
+    display: flex;
+    margin-top: 20px;
+    // Bỏ border-bottom xám dài
+}
+
+.regionTab {
+    background: none;
+    border: none;
+    // Giữ padding ngang
+    padding: 10px 20px; 
+    font-size: 17px;
+    font-weight: 500;
+    cursor: pointer;
+    color: #666;
+    position: relative;
+    transition: color 0.3s;
+    
+    // Gạch chân transparent để giữ chiều cao nhất quán
+    border-bottom: 2px solid transparent; 
+    
+    &:hover {
+        color: #333;
+    }
+}
+
+.activeTab {
+    color: $primary-color; 
+    font-weight: 700;
+    border-bottom: 2px solid transparent; 
+}
+
+// Gạch chân màu xanh chỉ hiển thị cho tab active
+.activeIndicator {
+    position: absolute;
+    bottom: -2px; /* Đẩy xuống một chút để nằm dưới padding */
+    
+    // ✨ CẬP NHẬT 1: Giảm chiều rộng để chỉ bằng nội dung
+    width: 60%; /* Giả sử 60% là gần bằng chiều rộng chữ */
+    
+    // ✨ CẬP NHẬT 2: Căn giữa gạch chân
+    left: 50%;
+    transform: translateX(-50%); 
+    
+    height: 3px;
+    background-color: $primary-color;
+    transition: all 0.3s ease; 
+}
+
+// ... (destinationItem styles và các styles khác giữ nguyên) ...
+}
+.home-trust {
+$text-color-dark: #333;
+$text-color-secondary: #666;
+$primary-green: #5cb85c; 
+$primary-color: #1a67ba; 
+$background-light: #f9f9f9;
+$text-color: #fff; 
+
+// Keyframes cho quỹ đạo xoay của icon (BÁN KÍNH MỚI: 270px)
+@keyframes orbit {
+    0% { transform: rotate(0deg) translateX(270px) rotate(0deg); } 
+    100% { transform: rotate(360deg) translateX(270px) rotate(-360deg); } 
+}
+
+.trustAndStatsContainer {
+    padding: 80px 0;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+}
+
+.textColumn {
+    flex: 1;
+    max-width: 50%;
+    padding-right: 20px;
+}
+
+.title {
+        font-size: 28px;
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 15px;
+        /* Thêm đường gạch chân cho tiêu đề */
+        &::after {
+            content: '';
+            display: block;
+            width: 200px;
+            height: 3px;
+            background-color: #5cb85c; /* Màu chủ đạo của VietTravel/Future Travel */
+            margin-top: 5px;
+        }
+    }
+
+.description {
+    font-size: 16px;
+    color: $text-color-secondary;
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+.experiencePill {
+    display: inline-block;
+    padding: 5px 15px;
+    background-color: #eee;
+    color: $text-color-secondary;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 30px;
+
+    span {
+        font-weight: 700;
+        color: $text-color-dark;
+    }
+}
+
+.statsRow {
+    display: flex;
+    gap: 50px;
+    margin-bottom: 30px;
+}
+
+.statItem {
+    .statNumber {
+        font-size: 32px;
+        font-weight: 600;
+        color: $primary-green; 
+        line-height: 1;
+    }
+    .statLabel {
+        font-size: 16px;
+        color: $text-color-dark;
+        font-weight: 600;
+        margin-top: 5px;
+    }
+}
+
+.exploreButton {
+    background-color: $primary-green;
+    color: $text-color; 
+    border: none;
+    padding: 12px 30px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: flex;
+    align-items: center;
+
+    &:hover {
+        background-color: darken($primary-green, 10%);
+    }
+
+    .arrow {
+        margin-left: 8px;
+        font-size: 18px;
+        transition: transform 0.3s;
+    }
+
+    &:hover .arrow {
+        transform: translateX(5px);
+    }
+}
+
+/* --- Phần Hình ảnh và Chi tiết Trang trí --- */
+.imageColumn {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    max-width: 50%;
+    height: 500px; 
+    overflow: visible; 
+}
+
+.mainImage {
+    width: 70%; 
+    height: 70%;
+    background-size: cover;
+    background-position: center;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+}
+
+.decorativeElements {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    // Tăng kích thước container lên 140% để phù hợp với bán kính 270px
+    width: 140%; 
+    height: 140%;
+    z-index: 15;
+}
+
+/* Kiểu dáng chung cho các icon trang trí */
+.decorativeIcon {
+    position: absolute;
+    width: 30px; 
+    height:30px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    z-index: 20; 
+    
+    top: 50%; 
+    left: 50%;
+    margin-left: -20px; /* Căn giữa ngang icon */
+    margin-top: -20px;  /* Căn giữa dọc icon */
+    transform-origin: 50% 50%; 
+    
+    animation: orbit 20s linear infinite; 
+}
+
+/* Định vị và animation delay riêng cho từng icon (BÁN KÍNH MỚI: 270px) */
+.icon1 { 
+    transform: rotate(0deg) translateX(270px) rotate(0deg); 
+    animation-delay: 0s; 
+} 
+.icon2 { 
+    transform: rotate(72deg) translateX(270px) rotate(-72deg); 
+    animation-delay: -4s; 
+} 
+.icon3 { 
+    transform: rotate(144deg) translateX(270px) rotate(-144deg); 
+    animation-delay: -8s; 
+} 
+.icon4 { 
+    transform: rotate(216deg) translateX(270px) rotate(-216deg); 
+    animation-delay: -12s; 
+} 
+.icon5 { 
+    transform: rotate(288deg) translateX(270px) rotate(-288deg); 
+    animation-delay: -16s; 
+} 
+
+/* Responsive cho màn hình nhỏ hơn */
+@media (max-width: 992px) {
+    // Điều chỉnh lại quỹ đạo xoay cho màn hình nhỏ (Bán kính MỚI: 160px)
+    @keyframes orbit {
+        0% { transform: rotate(0deg) translateX(160px) rotate(0deg); } 
+        100% { transform: rotate(360deg) translateX(160px) rotate(-360deg); }
+    }
+
+    .content {
+        flex-direction: column;
+        gap: 50px;
+        text-align: center;
+    }
+    .textColumn {
+        max-width: 100%;
+        padding-right: 0;
+    }
+    .imageColumn {
+        max-width: 100%;
+        height: 400px;
+        overflow: visible; 
+    }
+    .mainImage {
+        width: 100%;
+        height: 100%;
+    }
+    .decorativeElements {
+        width: 160%; // Tăng thêm để icon không bị cắt trên mobile
+        height: 160%;
+    }
+    .statsRow {
+        justify-content: center;
+    }
+    .decorativeIcon {
+        width: 30px;
+        height: 30px;
+        margin-left: -15px; 
+        margin-top: -15px;
+    }
+    // Cập nhật transform cho bán kính 160px trên mobile
+    .icon1 { transform: rotate(0deg) translateX(160px) rotate(0deg); }
+    .icon2 { transform: rotate(72deg) translateX(160px) rotate(-72deg); }
+    .icon3 { transform: rotate(144deg) translateX(160px) rotate(-144deg); }
+    .icon4 { transform: rotate(216deg) translateX(160px) rotate(-216deg); }
+    .icon5 { transform: rotate(288deg) translateX(160px) rotate(-288deg); }
+}
+}
+.home-footer {
+/* ── Footer — Light, bold, compact ─────────────────────────── */
+
+.footer {
+  background: linear-gradient(180deg, #f8fafc 0%, #eff6ff 100%);
+  color: #1e293b;
+  padding: 56px 0 24px;
+  font-size: 14.5px;
+  position: relative;
+  overflow: hidden;
+  border-top: 1px solid #e2e8f0;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #3b82f6, #6366f1, #ec4899, #f59e0b);
+  }
+}
+
+.footerContainer {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ── Top section: Brand + Menu ── */
+
+.topSection {
+  display: grid;
+  grid-template-columns: 1.2fr 2.5fr;
+  gap: 56px;
+  padding-bottom: 36px;
+  border-bottom: 1px solid #e2e8f0;
+
+  @media (max-width: 980px) {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}
+
+.logoColumn {
+  display: flex;
+  flex-direction: column;
+}
+
+.brandHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.brandIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: #fff;
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35);
+}
+
+.logo {
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+  background: linear-gradient(135deg, #1e3a8a, #2563eb);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.brandTagline {
+  font-size: 15px;
+  font-weight: 500;
+  color: #475569;
+  line-height: 1.6;
+  margin: 0 0 20px 0;
+  max-width: 320px;
+}
+
+/* Hotline box nổi bật */
+.hotlineBox {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 18px;
+  background: #fff;
+  border: 1.5px solid #dbeafe;
+  border-radius: 14px;
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.08);
+  align-self: flex-start;
+}
+
+.hotlineIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.hotlineLabel {
+  font-size: 11px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.hotlineNumber {
+  font-size: 19px;
+  font-weight: 900;
+  color: #0f172a;
+  letter-spacing: -0.3px;
+  margin-top: 2px;
+}
+
+/* ── Link columns (3 cột) ── */
+
+.linkColumns {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+
+  @media (max-width: 760px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 28px;
+  }
+}
+
+.linkColumn {
+  min-width: 0;
+}
+
+.columnTitle {
+  font-size: 15.5px;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 16px 0;
+  letter-spacing: 0.2px;
+  position: relative;
+  padding-bottom: 10px;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 32px;
+    height: 3px;
+    background: linear-gradient(90deg, #3b82f6, #6366f1);
+    border-radius: 2px;
+  }
+}
+
+.menuList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.menuLink {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #475569;
+  text-decoration: none;
+  padding: 5px 0;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+
+  &:hover {
+    color: #2563eb;
+    transform: translateX(4px);
+  }
+}
+
+.menuIcon {
+  font-size: 16px;
+  color: #94a3b8;
+  flex-shrink: 0;
+}
+
+/* ── Middle section: Payment + Social trên 1 hàng ── */
+
+.middleSection {
+  display: grid;
+  grid-template-columns: 2.5fr 1fr;
+  gap: 32px;
+  align-items: start;
+  padding: 28px 0;
+  border-bottom: 1px solid #e2e8f0;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
+.blockTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15.5px;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 14px 0;
+  letter-spacing: 0.2px;
+
+  svg { color: #2563eb; }
+}
+
+.paymentBlock {
+  min-width: 0;
+}
+
+.paymentLogos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.paymentCard {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 84px;
+  height: 48px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 8px 12px;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.05);
+
+  img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    transition: transform 0.25s ease;
+  }
+
+  &:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 10px 24px rgba(59, 130, 246, 0.25);
+    border-color: #3b82f6;
+
+    img { transform: scale(1.08); }
+  }
+}
+
+/* ── Social ── */
+
+.socialBlock {
+  min-width: 0;
+}
+
+.socialRow {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.socialIconBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #fff;
+  border: 1.5px solid #e2e8f0;
+  color: #64748b;
+  text-decoration: none;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.05);
+
+  &:hover {
+    background: var(--social-color, #2563eb);
+    color: #fff;
+    transform: translateY(-3px);
+    border-color: var(--social-color, #2563eb);
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.2);
+  }
+}
+
+.socialIcon {
+  font-size: 18px;
+}
+
+/* ── Copyright ── */
+
+.copyright {
+  text-align: center;
+  padding-top: 20px;
+}
+
+.copyrightText {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #475569;
+  margin: 0;
+  letter-spacing: 0.1px;
+
+  strong { color: #0f172a; font-weight: 800; }
+}
+
+}

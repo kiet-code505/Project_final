@@ -20,6 +20,9 @@ public class Booking
     [Column("subtotal_price")] public decimal SubtotalPrice { get; set; }
     [Column("total_price")] public decimal TotalPrice { get; set; }
     [Column("booking_status")] public BookingStatus BookingStatus { get; set; } = BookingStatus.PENDING_CONFIRMATION;
+    [Column("payment_deadline")] public DateTime? PaymentDeadline { get; set; }
+    [Column("reserved_seats")] public int? ReservedSeats { get; set; }
+    [Column("seats_released")] public bool SeatsReleased { get; set; }
 
     [Column("departue_id")] public int DepartureId { get; set; }   // tên cột gõ sai từ bản Java, giữ nguyên
     [Column("user_id")] public int? UserId { get; set; }
@@ -27,6 +30,7 @@ public class Booking
     public User? User { get; set; }
 
     public List<BookingPassenger> Passengers { get; set; } = new();
+    public List<VnpayPayment> Payments { get; set; } = new();
 }
 
 [Table("booking_passengers")]

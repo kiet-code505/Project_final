@@ -1,0 +1,82 @@
+@model DepartureDetailViewModel
+@{
+    ViewData["Title"] = "Chi tiết lịch khởi hành";
+    var d = Model.Departure;
+    var vi = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+    string Money(decimal amount) => amount.ToString("N0", vi) + " ₫";
+    string PassengerName(PassengerType type) => type switch {
+        PassengerType.ADULT => "Người lớn", PassengerType.CHILD => "Trẻ em",
+        PassengerType.INFANT => "Em bé", PassengerType.SINGLE_SUPPLEMENT => "Phụ thu phòng đơn", _ => type.ToString()
+    };
+    string VehicleName(VehicleType type) => type switch {
+        VehicleType.PLANE => "Máy bay", VehicleType.BUS => "Xe khách", VehicleType.TRAIN => "Tàu hoả",
+        VehicleType.SHIP => "Tàu thuỷ", VehicleType.CAR => "Ô tô", _ => type.ToString()
+    };
+}
+<link rel="stylesheet" href="~/css/admin-departures.css" asp-append-version="true" />
+<header class="page-header">
+    <div class="title-block">
+        <a class="back-btn" href="@Model.ReturnUrl" title="Quay lại danh sách"><i data-lucide="arrow-left"></i></a>
+        <div><h1>Lịch khởi hành #@d.DepartureID</h1><p>@d.Tour?.TourCode · @d.Tour?.TourName</p></div>
+    </div>
+    <div class="departure-tools">
+        <span class="status-pill @(d.Status == true ? "status-on" : "status-off")">@(d.Status == true ? "Hoạt động" : "Tạm dừng")</span>
+        <a class="btn btn-primary" href="@Url.Action("Edit", "Departures", new { id = d.DepartureID, returnUrl = Model.ReturnUrl })"><i data-lucide="pencil"></i> Chỉnh sửa</a>
+        <a class="btn btn-ghost" href="@Url.Action("Clone", "Departures", new { id = d.DepartureID, returnUrl = Model.ReturnUrl })"><i data-lucide="copy"></i> Sao chép</a>
+        <form method="post" action="/admin/departures/@d.DepartureID/delete" data-departure-delete>@Html.AntiForgeryToken()<input type="hidden" name="returnUrl" value="@Model.ReturnUrl" /><button class="btn btn-danger" type="submit"><i data-lucide="trash-2"></i> Xóa</button></form>
+    </div>
+</header>
+<section class="stats-grid">
+    <div class="stat-card"><div class="stat-icon stat-blue"><i data-lucide="calendar-days"></i></div><div><div class="stat-label">Khởi hành</div><strong>@d.DepartureDate.ToString("dd/MM/yyyy HH:mm")</strong></div></div>
+    <div class="stat-card"><div class="stat-icon stat-green"><i data-lucide="armchair"></i></div><div><div class="stat-label">Chỗ còn trống</div><div class="stat-value">@d.AvailableSlots</div></div></div>
+    <div class="stat-card"><div class="stat-icon stat-amber"><i data-lucide="users"></i></div><div><div class="stat-label">Hành khách đã đặt</div><div class="stat-value">@Model.BookedSlots</div></div></div>
+    <div class="stat-card"><div class="stat-icon stat-blue"><i data-lucide="clock"></i></div><div><div class="stat-label">Thời lượng</div><strong>@d.Tour?.Duration</strong></div></div>
+</section>
+<div class="departure-detail-grid">
+    <div>
+        <section class="card">
+            <h3 class="card-title"><i data-lucide="map"></i> Thông tin tour</h3>
+            <a href="/admin/tours/@d.TourId"><strong>@d.Tour?.TourName</strong></a>
+            <p class="muted">@d.Tour?.StartLocation?.LocationName → @d.Tour?.EndLocation?.LocationName</p>
+        </section>
+        <section class="card">
+            <h3 class="card-title"><i data-lucide="banknote"></i> Bảng giá</h3>
+            @if (d.Pricings.Count == 0) { <p class="muted">Chưa có bảng giá.</p> }
+            else
+            {
+                <div class="table-wrap"><table class="table">
+                    <thead><tr><th>Loại khách</th><th>Độ tuổi</th><th>Giá gốc</th><th>Giá bán</th></tr></thead>
+                    <tbody>@foreach (var price in d.Pricings.OrderBy(p => p.PassengerType))
+                    {
+                        <tr><td>@PassengerName(price.PassengerType)</td><td>@price.AgeDescription</td><td>@Money(price.OriginalPrice)</td><td><strong>@Money(price.EffectivePrice)</strong></td></tr>
+                    }</tbody>
+                </table></div>
+            }
+        </section>
+        <section class="card">
+            <h3 class="card-title"><i data-lucide="plane"></i> Thông tin vận chuyển</h3>
+            @if (d.Transports.Count == 0) { <p class="muted">Chưa có thông tin vận chuyển.</p> }
+            @foreach (var t in d.Transports.OrderBy(t => t.Type).ThenBy(t => t.DepartTime))
+            {
+                <article class="departure-transport">
+                    <h4>@(t.Type == TransportType.OUTBOUND ? "Chiều đi" : "Chiều về") · @VehicleName(t.VehicleType)</h4>
+                    <div class="info-grid">
+                        <div><div class="info-label">Phương tiện</div><div class="info-value">@(t.VehicleName ?? "—")</div></div>
+                        <div><div class="info-label">Mã chuyến</div><div class="info-value">@(t.TransportCode ?? "—")</div></div>
+                        <div><div class="info-label">Điểm đi</div><div class="info-value">@(t.StartPoint ?? "—")</div></div>
+                        <div><div class="info-label">Điểm đến</div><div class="info-value">@(t.EndPoint ?? "—")</div></div>
+                        <div><div class="info-label">Khởi hành</div><div class="info-value">@(t.DepartTime?.ToString("dd/MM/yyyy HH:mm") ?? "—")</div></div>
+                        <div><div class="info-label">Đến nơi</div><div class="info-value">@(t.ArrivalTime?.ToString("dd/MM/yyyy HH:mm") ?? "—")</div></div>
+                    </div>
+                </article>
+            }
+        </section>
+    </div>
+    <aside>
+        <section class="card"><h3 class="card-title"><i data-lucide="user"></i> Hướng dẫn viên</h3><div class="departure-text">@(string.IsNullOrWhiteSpace(d.TourGuideInfo) ? "Chưa có thông tin hướng dẫn viên." : d.TourGuideInfo)</div></section>
+        <section class="card"><h3 class="card-title"><i data-lucide="file-text"></i> Chính sách áp dụng</h3><p>@(d.PolicyTemplate?.TemplateName ?? "Chưa có chính sách.")</p></section>
+        <section class="card"><h3 class="card-title"><i data-lucide="history"></i> Thông tin cập nhật</h3><p class="muted">Ngày tạo: @(d.CreatedAt?.ToString("dd/MM/yyyy HH:mm") ?? "—")</p><p class="muted">Cập nhật: @(d.UpdatedAt?.ToString("dd/MM/yyyy HH:mm") ?? "—")</p></section>
+    </aside>
+</div>
+<partial name="~/Views/Admin/Departures/_DeleteConfirmation.cshtml" />
+@section Scripts { <script src="~/js/admin-departures.js" asp-append-version="true"></script> }

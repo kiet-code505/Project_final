@@ -1,0 +1,116 @@
+@model TourismMvc.Models.ViewModels.PublicTourSearchViewModel
+@using TourismMvc.Models.ViewModels
+@{
+    Layout = "_UserLayout";
+    ViewData["Title"] = "Tìm kiếm tour";
+    ViewData["UserPage"] = "tours";
+    var f = Model.Filter;
+    var vi = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+    string Link(int page = 1, string? remove = null)
+    {
+        var values = new Dictionary<string, string?> {
+            ["searchNameTour"] = f.SearchNameTour, ["endLocationID"] = f.EndLocationID?.ToString(),
+            ["startLocationID"] = f.StartLocationID?.ToString(), ["budget"] = f.Budget,
+            ["transportation"] = f.Transportation, ["sort"] = f.Sort, ["page"] = page.ToString()
+        };
+        if (remove != null) values.Remove(remove);
+        return "/tours" + Microsoft.AspNetCore.Http.QueryString.Create(values.Where(v => !string.IsNullOrEmpty(v.Value))) + "#results";
+    }
+}
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="~/css/tour-search.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/tour-search-mvc.css" asp-append-version="true" />
+<div class="tour-search"><div class="pageWrapper">
+    <section class="heroSection">
+        <div class="heroOverlay"></div>
+        <div class="heroContent">
+            <h1 class="heroTitle">Tìm Chuyến Đi Hoàn Hảo</h1>
+            <p class="heroSub">Hơn 1000+ chuyến đi chờ bạn khám phá</p>
+            <form class="searchBar" action="/tours#results" method="get" role="search">
+                <input type="hidden" name="budget" value="@f.Budget" />
+                <input type="hidden" name="transportation" value="@f.Transportation" />
+                <input type="hidden" name="startLocationID" value="@f.StartLocationID" />
+                <input type="hidden" name="sort" value="@f.Sort" />
+                <div class="searchInputGroup">
+                    <i data-lucide="map-pin" class="searchIcon"></i>
+                    <input class="searchInput" type="search" id="tour-search-input" name="searchNameTour" value="@f.SearchNameTour" placeholder="Bạn muốn đi đâu?" list="tour-destinations" aria-label="Tìm theo tên tour, mã tour hoặc điểm đến" autocomplete="off" />
+                    <datalist id="tour-destinations">@foreach (var location in Model.Destinations) { <option value="@location.Name"></option> }</datalist>
+                </div>
+                <button class="searchBtn" type="submit"><i data-lucide="search"></i> Tìm kiếm</button>
+            </form>
+        </div>
+    </section>
+    <div class="mainContent" id="results"><div class="container">
+        <div asp-validation-summary="All" class="search-validation" role="alert"></div>
+        <div class="filterBar">
+            <div class="filterLeft">
+                <button class="filterToggle @(Model.ActiveFilterCount > 0 ? "filterToggleActive" : "")" type="button" id="filter-toggle" aria-controls="tour-filter-panel" aria-expanded="@(Model.ActiveFilterCount > 0 ? "true" : "false")"><i data-lucide="sliders-horizontal"></i> Bộ lọc @if (Model.ActiveFilterCount > 0) { <span class="filterBadge">@Model.ActiveFilterCount</span> }</button>
+                @if (f.Budget != null)
+                { <a class="filterChip" href="@Link(remove: "budget")" aria-label="Bỏ lọc ngân sách">@PublicTourSearchViewModel.Budgets.First(b => b.Value == f.Budget).Label <i data-lucide="x"></i></a> }
+                @if (!string.IsNullOrEmpty(f.Transportation))
+                { <a class="filterChip" href="@Link(remove: "transportation")" aria-label="Bỏ lọc phương tiện">@f.Transportation <i data-lucide="x"></i></a> }
+                @if (f.EndLocationID.HasValue)
+                { <a class="filterChip" href="@Link(remove: "endLocationID")" aria-label="Bỏ lọc điểm đến">@(Model.Destinations.FirstOrDefault(d => d.Id == f.EndLocationID)?.Name ?? "Điểm đến đã chọn") <i data-lucide="x"></i></a> }
+                @if (f.StartLocationID.HasValue)
+                { <a class="filterChip" href="@Link(remove: "startLocationID")" aria-label="Bỏ lọc điểm khởi hành">Từ @(Model.StartLocations.FirstOrDefault(d => d.Id == f.StartLocationID)?.Name ?? "điểm đã chọn") <i data-lucide="x"></i></a> }
+            </div>
+            <div class="search-result-tools">
+                <span class="resultCount"><strong>@Model.TotalItems</strong> chuyến đi</span>
+                <form method="get" action="/tours#results">
+                    <input type="hidden" name="searchNameTour" value="@f.SearchNameTour" /><input type="hidden" name="endLocationID" value="@f.EndLocationID" /><input type="hidden" name="startLocationID" value="@f.StartLocationID" /><input type="hidden" name="budget" value="@f.Budget" /><input type="hidden" name="transportation" value="@f.Transportation" />
+                    <select name="sort" class="sort-select" aria-label="Sắp xếp chuyến đi"><option value="newest" selected="@(f.Sort == "newest")">Mới nhất</option><option value="price-asc" selected="@(f.Sort == "price-asc")">Giá tăng dần</option><option value="price-desc" selected="@(f.Sort == "price-desc")">Giá giảm dần</option><option value="name" selected="@(f.Sort == "name")">Tên A–Z</option></select>
+                    <button type="submit" class="sort-submit">Sắp xếp</button>
+                </form>
+            </div>
+        </div>
+        <form class="filterPanel" id="tour-filter-panel" method="get" action="/tours#results" hidden="@(Model.ActiveFilterCount == 0)">
+            <input type="hidden" name="searchNameTour" value="@f.SearchNameTour" /><input type="hidden" name="sort" value="@f.Sort" />
+            <div class="filterGroup">
+                <label class="filterGroupLabel" for="tour-end-location"><i data-lucide="map-pin"></i> Điểm đến</label>
+                <select id="tour-end-location" name="endLocationID" class="location-select"><option value="">Tất cả điểm đến</option>@foreach (var location in Model.Destinations) { <option value="@location.Id" selected="@(f.EndLocationID == location.Id)">@location.Name</option> }</select>
+                <label class="filterGroupLabel start-location-label" for="tour-start-location"><i data-lucide="plane-takeoff"></i> Điểm khởi hành</label>
+                <select id="tour-start-location" name="startLocationID" class="location-select"><option value="">Tất cả điểm khởi hành</option>@foreach (var location in Model.StartLocations) { <option value="@location.Id" selected="@(f.StartLocationID == location.Id)">@location.Name</option> }</select>
+            </div>
+            <fieldset class="filterGroup"><legend class="filterGroupLabel"><i data-lucide="banknote"></i> Ngân sách</legend><div class="filterOptions">
+                <label class="filterOption"><input type="radio" name="budget" value="" checked="@(f.Budget == null)" />Tất cả</label>
+                @foreach (var budget in PublicTourSearchViewModel.Budgets) { <label class="filterOption"><input type="radio" name="budget" value="@budget.Value" checked="@(f.Budget == budget.Value)" />@budget.Label</label> }
+            </div></fieldset>
+            <fieldset class="filterGroup"><legend class="filterGroupLabel"><i data-lucide="bus"></i> Phương tiện</legend><div class="filterOptions">
+                <label class="filterOption"><input type="radio" name="transportation" value="" checked="@(string.IsNullOrEmpty(f.Transportation))" />Tất cả</label>
+                @foreach (var transport in PublicTourSearchViewModel.Transports) { <label class="filterOption"><input type="radio" name="transportation" value="@transport" checked="@(f.Transportation == transport)" />@transport</label> }
+            </div></fieldset>
+            <div class="filter-actions"><button class="applyFilter" type="submit">Áp dụng bộ lọc</button><a href="/tours#results" class="clear-filters">Xoá tất cả</a></div>
+        </form>
+        @if (Model.Items.Count == 0)
+        {
+            <div class="emptyState"><div class="emptyIcon"><i data-lucide="map"></i></div><h2>Không tìm thấy chuyến đi</h2><p>Hãy thử thay đổi từ khóa hoặc bộ lọc của bạn</p><a class="resetBtn" href="/tours">Xem tất cả chuyến đi</a></div>
+        }
+        else
+        {
+            <div class="tourGrid">
+            @foreach (var tour in Model.Items)
+            {
+                <article class="tourCard" data-tour-url="@tour.DetailUrl" data-tour-id="@tour.TourId" data-price="@tour.Price?.ToString(System.Globalization.CultureInfo.InvariantCulture)">
+                    <div class="tourCardImage"><img src="@(string.IsNullOrWhiteSpace(tour.ImageUrl) ? "/images/home/ryan-le-8-hEg1OuFn8-unsplash.jpg" : tour.ImageUrl)" alt="@tour.Name" loading="lazy" /><div class="tourCardBadge">@tour.EndLocation</div></div>
+                    <div class="tourCardBody"><h2 class="tourCardTitle">@tour.Name</h2><div class="tourCardMeta"><span class="metaItem"><i data-lucide="clock"></i>@tour.Duration</span><span class="metaItem"><i data-lucide="bus"></i>@tour.Transportation</span></div>
+                    <div class="search-departure"><i data-lucide="calendar-days"></i>@(tour.DepartureDate?.ToString("dd/MM/yyyy") ?? "Chưa có lịch sắp tới")</div>
+                    <div class="tourCardFooter"><div><span class="priceLabel">Giá từ</span><span class="priceValue">@(tour.Price.HasValue ? tour.Price.Value.ToString("N0", vi) + "đ" : "Liên hệ")</span></div><a class="detailBtn" href="@tour.DetailUrl" aria-label="Xem chi tiết @tour.Name">Chi tiết <i data-lucide="chevron-right"></i></a></div></div>
+                </article>
+            }
+            </div>
+            <div class="search-pagination"><p class="resultCount">Hiển thị @((f.Page - 1) * Model.PageSize + 1)–@Math.Min(f.Page * Model.PageSize, Model.TotalItems) trên @Model.TotalItems chuyến đi</p>
+                @if (Model.TotalPages > 1)
+                {
+                    <nav aria-label="Phân trang tour">
+                        @if (f.Page > 1) { <a href="@Link(f.Page - 1)" aria-label="Trang trước">←</a> }
+                        @for (var page = Math.Max(1, f.Page - 2); page <= Math.Min(Model.TotalPages, f.Page + 2); page++) { <a href="@Link(page)" class="@(page == f.Page ? "selected" : "")" aria-current="@(page == f.Page ? "page" : null)">@(page)</a> }
+                        @if (f.Page < Model.TotalPages) { <a href="@Link(f.Page + 1)" aria-label="Trang tiếp theo">→</a> }
+                    </nav>
+                }
+            </div>
+        }
+    </div></div>
+</div></div>
+@section Scripts {
+    <script src="~/js/tour-search.js" asp-append-version="true"></script>
+}

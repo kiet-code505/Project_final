@@ -1,0 +1,39 @@
+@model TourismMvc.Models.ViewModels.LoginViewModel
+@{
+    Layout = Model.IsAdminLogin ? "_AuthLayout" : "_UserLayout";
+    ViewData["Title"] = Model.IsAdminLogin ? L["Đăng nhập Admin"] : L["Đăng nhập"];
+    var action = Model.IsAdminLogin ? "/admin/login" : "/login";
+}
+<link rel="stylesheet" href="~/css/auth-components.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/auth.css" asp-append-version="true" />
+<div class="@(Model.IsAdminLogin ? "auth-admin" : "auth-login")"><div class="page">
+    <div class="bgShape1"></div><div class="bgShape2"></div><div class="bgShape3"></div>
+    <div class="container">
+        <section class="brandSide"><div class="brandInner">
+            <a class="brandLogo" href="/"><div class="brandLogoIcon"><i data-lucide="@(Model.IsAdminLogin ? "shield" : "plane")"></i></div><span class="brandName">@(Model.IsAdminLogin ? "ADMIN PORTAL" : "FUTURE TRAVEL")</span></a>
+            @if (Model.IsAdminLogin)
+            { <div class="adminBadge"><i data-lucide="shield-check"></i> Future Travel</div><h1 class="brandTitle">@L["Hệ thống quản trị"]<br /><span class="brandTitleAccent">Future Travel</span></h1><p class="brandSubtitle">@L["Đăng nhập bằng tài khoản quản trị để quản lý tour, địa điểm và lịch khởi hành."]</p> }
+            else
+            { <h1 class="brandTitle">@L["Khám phá Việt Nam,"]<br /><span class="brandTitleAccent">@L["chinh phục mọi điểm đến"]</span></h1><p class="brandSubtitle">@L["Tiếp tục hành trình khám phá và lựa chọn chuyến đi phù hợp cùng Future Travel."]</p><div class="featureList">@foreach (var item in new[] { ("map-pin", L["Khám phá điểm đến"], L["Từ Bắc vào Nam, biển đảo đến núi rừng"]), ("compass", L["Chọn hành trình phù hợp"], L["Thông tin tour và lịch khởi hành rõ ràng"]), ("sparkles", L["Tìm ưu đãi du lịch"], L["Khám phá các chuyến đi với giá tốt"]) }) { <div class="featureItem"><div class="featureIcon"><i data-lucide="@item.Item1"></i></div><div><div class="featureTitle">@item.Item2</div><div class="featureDesc">@item.Item3</div></div></div> }</div> }
+            <div class="brandFooter"><i data-lucide="shield-check"></i><span>@(Model.IsAdminLogin ? L["Khu vực dành cho quản trị viên"] : L["Đồng hành cùng bạn trên mọi chuyến đi"])</span></div>
+        </div></section>
+        <section class="formSide"><div class="formCard">
+            <div class="formHeader"><h2 class="formTitle">@ViewData["Title"]</h2><p class="formSubtitle">@(Model.IsAdminLogin ? L["Vui lòng sử dụng tài khoản có quyền quản trị."] : L["Chào mừng quay lại! Tiếp tục hành trình của bạn."])</p></div>
+            @if (!ViewData.ModelState.IsValid) { <div class="errorBox" role="alert"><div asp-validation-summary="All"></div></div> }
+            @if (TempData["AuthSuccess"] is string success) { <div class="successBox" role="status">@success</div> }
+            <form class="form auth-form" method="post" action="@action">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="ReturnUrl" value="@Model.ReturnUrl" />
+                <div class="formGroup"><label class="label" for="Email">@(Model.IsAdminLogin ? L["Email quản trị"] : "Email")</label><div class="inputWrap"><i data-lucide="mail" class="inputIcon"></i><input class="input" id="Email" name="Email" type="email" value="@Model.Email" autocomplete="email" required maxlength="254" placeholder="example@email.com" /></div></div>
+                <div class="formGroup"><label class="label" for="Password">@L["Mật khẩu"]</label><div class="inputWrap"><i data-lucide="lock" class="inputIcon"></i><input class="input" id="Password" name="Password" type="password" autocomplete="current-password" required maxlength="1024" placeholder="@L["Nhập mật khẩu của bạn"]" /><button type="button" class="toggleBtn" data-toggle-password="Password" aria-label="@L["Hiện mật khẩu"]" aria-pressed="false"><i data-lucide="eye"></i></button></div></div>
+                <label class="auth-remember"><input type="checkbox" name="RememberMe" value="true" checked="@Model.RememberMe" /> @L["Ghi nhớ đăng nhập"]</label>
+                <button class="submitBtn" type="submit">@(Model.IsAdminLogin ? L["Truy cập hệ thống"] : L["Đăng nhập"]) <i data-lucide="arrow-right"></i></button>
+            </form>
+            @if (Model.IsAdminLogin)
+            { <div class="warningNote"><i data-lucide="shield-check"></i><span>Chưa có tài khoản admin? Liên hệ quản trị viên hệ thống để được cấp quyền.</span></div><p class="formFooter"><a href="/login">@L["Đăng nhập người dùng"]</a> · <a href="/">@L["Về trang chủ"]</a></p> }
+            else
+            { <p class="formFooter">@L["Chưa có tài khoản?"] <a class="linkAccent" href="/register">@L["Đăng ký ngay"]</a></p><p class="auth-admin-link"><a href="/admin/login">@L["Đăng nhập quản trị viên"]</a></p> }
+        </div></section>
+    </div>
+</div></div>
+

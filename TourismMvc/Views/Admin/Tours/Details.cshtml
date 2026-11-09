@@ -1,0 +1,123 @@
+@model TourDetailViewModel
+@{
+    ViewData["Title"] = "Chi tiết tour";
+    ViewData["Description"] = $"Chi tiết tour {Model.TourCode} - {Model.TourName}";
+
+    var info = new (string Icon, string Label, string? Value)[]
+    {
+        ("clock", "Thời lượng", Model.Duration),
+        ("plane", "Phương tiện", Model.Transportation),
+        ("plane-takeoff", "Điểm khởi hành", Model.StartLocationName),
+        ("map-pin", "Điểm đến", Model.EndLocationName),
+        ("hotel", "Khách sạn", Model.Hotel),
+        ("utensils", "Ẩm thực", Model.Meals),
+        ("sun", "Thời gian lý tưởng", Model.IdealTime),
+        ("bus", "Di chuyển trong tour", Model.TripTransportation),
+        ("users", "Đối tượng phù hợp", Model.SuitableCustomer),
+        ("calendar-days", "Lịch khởi hành", $"{Model.DepartureCount} lịch"),
+        ("calendar-plus", "Ngày tạo", Model.CreatedAt?.ToString("dd/MM/yyyy HH:mm")),
+        ("calendar-check", "Cập nhật", Model.UpdatedAt?.ToString("dd/MM/yyyy HH:mm")),
+    };
+}
+
+<header class="page-header">
+    <div class="title-block">
+        <a href="/admin/tours" class="back-btn" title="Quay lại danh sách" id="btnBack"><i data-lucide="arrow-left"></i></a>
+        <div>
+            <h1>@Model.TourName</h1>
+            <p><span class="slug-chip"><i data-lucide="hash"></i>@Model.TourCode</span></p>
+        </div>
+    </div>
+    <div class="header-actions">
+        <a href="/admin/departures?tourId=@Model.TourID" class="btn btn-ghost"><i data-lucide="calendar-days"></i> Lịch khởi hành</a>
+        <a href="/admin/tours/@Model.TourID/edit" class="btn btn-primary" id="btnEditTour"><i data-lucide="pencil"></i> Chỉnh sửa</a>
+    </div>
+</header>
+
+<section class="tour-hero card">
+    <div class="tour-hero-img">
+        @if (!string.IsNullOrEmpty(Model.MainImageUrl))
+        {
+            <img src="@Model.MainImageUrl" alt="@Model.TourName" onerror="this.remove()" />
+        }
+        <i data-lucide="image"></i>
+    </div>
+    <div class="tour-hero-body">
+        <div class="route-cell route-lg">
+            <span class="route-pin route-start"><i data-lucide="plane-takeoff"></i>@Model.StartLocationName</span>
+            <i data-lucide="arrow-right" class="route-arrow"></i>
+            <span class="route-pin route-end"><i data-lucide="map-pin"></i>@Model.EndLocationName</span>
+        </div>
+        <span class="status-pill @(Model.Status ? "status-on" : "status-off")">
+            <i data-lucide="@(Model.Status ? "check-circle-2" : "power-off")"></i>
+            @(Model.Status ? "Đang hoạt động" : "Tạm dừng")
+        </span>
+        <div class="info-grid">
+            @foreach (var (icon, label, value) in info)
+            {
+                <div class="info-item">
+                    <div class="info-label"><i data-lucide="@icon"></i>@label</div>
+                    <div class="info-value">@(string.IsNullOrWhiteSpace(value) ? "—" : value)</div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<section class="card">
+    <h3 class="card-title"><i data-lucide="compass"></i> Điểm tham quan</h3>
+    <div class="prose">@Model.Attractions</div>
+</section>
+
+<section class="card">
+    <h3 class="card-title"><i data-lucide="list-ordered"></i> Lịch trình (@Model.ItineraryDays.Count ngày)</h3>
+    @if (Model.ItineraryDays.Count == 0)
+    {
+        <p class="muted">Chưa có lịch trình.</p>
+    }
+    else
+    {
+        <div class="timeline">
+            @foreach (var d in Model.ItineraryDays)
+            {
+                <details class="timeline-item" open="@(d.DayNumber == 1)">
+                    <summary>
+                        <span class="day-badge">Ngày @d.DayNumber</span>
+                        <strong>@d.Title</strong>
+                        <i data-lucide="chevron-down" class="accordion-arrow"></i>
+                    </summary>
+                    <div class="timeline-body">
+                        @if (!string.IsNullOrWhiteSpace(d.Meals) || !string.IsNullOrWhiteSpace(d.Accommodation))
+                        {
+                            <div class="timeline-meta">
+                                @if (!string.IsNullOrWhiteSpace(d.Meals)) { <span class="tour-stat"><i data-lucide="utensils"></i>@d.Meals</span> }
+                                @if (!string.IsNullOrWhiteSpace(d.Accommodation)) { <span class="tour-stat"><i data-lucide="bed-double"></i>@d.Accommodation</span> }
+                            </div>
+                        }
+                        <div class="prose">@Html.Raw(d.Description ?? "")</div>
+                    </div>
+                </details>
+            }
+        </div>
+    }
+</section>
+
+<section class="card">
+    <h3 class="card-title"><i data-lucide="images"></i> Thư viện ảnh (@Model.Images.Count)</h3>
+    @if (Model.Images.Count == 0)
+    {
+        <p class="muted">Chưa có hình ảnh.</p>
+    }
+    else
+    {
+        <div class="gallery-grid">
+            @foreach (var img in Model.Images)
+            {
+                <a class="gallery-item" href="@img.ImageURL" target="_blank" rel="noopener">
+                    <img src="@img.ImageURL" alt="Ảnh tour" loading="lazy" />
+                    @if (img.IsMainImage) { <span class="main-chip"><i data-lucide="star"></i> Ảnh chính</span> }
+                </a>
+            }
+        </div>
+    }
+</section>

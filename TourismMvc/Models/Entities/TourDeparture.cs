@@ -9,7 +9,7 @@ public class TourDeparture : BaseEntity
     [Key, Column("departureid")] public int DepartureID { get; set; }
     [Required(ErrorMessage = "Ngày khởi hành là bắt buộc"), Column("departure_date")] public DateTime DepartureDate { get; set; }
     [Column("status")] public bool? Status { get; set; } = true;
-    [Range(1, int.MaxValue, ErrorMessage = "Số chỗ tối thiểu là 1"), Column("available_slots")] public int AvailableSlots { get; set; }
+    [Range(0, int.MaxValue, ErrorMessage = "Số chỗ không được âm"), Column("available_slots")] public int AvailableSlots { get; set; }
     [Required(ErrorMessage = "Thông tin HDV là bắt buộc"), Column("tour_guide_info")] public string TourGuideInfo { get; set; } = "";
 
     [Column("policy_template_id")] public int PolicyTemplateId { get; set; }

@@ -1,0 +1,224 @@
+@model BranchIndexViewModel
+@{
+    ViewData["Title"] = "Quản lý Chi nhánh";
+    ViewData["Description"] = "Quản lý văn phòng và chi nhánh phụ trách các tour du lịch.";
+
+    string Link(int? page = null, string? search = "__keep", int? pageSize = null)
+    {
+        var qs = new Dictionary<string, string?>
+        {
+            ["search"] = search == "__keep" ? Model.Search : search,
+            ["page"] = (page ?? Model.Page).ToString(),
+            ["pageSize"] = (pageSize ?? Model.PageSize).ToString(),
+        };
+        return "/admin/branches" + Microsoft.AspNetCore.Http.QueryString.Create(qs.Where(kv => !string.IsNullOrEmpty(kv.Value)));
+    }
+
+    var currentUrl = Context.Request.Path + Context.Request.QueryString;
+    var fromItem = Model.TotalItems == 0 ? 0 : (Model.Page - 1) * Model.PageSize + 1;
+    var toItem = Math.Min(Model.Page * Model.PageSize, Model.TotalItems);
+}
+
+<header class="page-header">
+    <div class="title-block">
+        <div class="title-icon"><i data-lucide="building-2"></i></div>
+        <div>
+            <h1>Quản lý Chi nhánh & Chính sách</h1>
+            <p>Văn phòng phụ trách và các mẫu điều khoản áp dụng cho tour</p>
+        </div>
+    </div>
+    <div class="header-actions">
+        <a href="/admin/branches/create" class="btn btn-primary" id="btnCreateBranch">
+            <i data-lucide="plus"></i> Thêm chi nhánh
+        </a>
+    </div>
+</header>
+
+@* ── NAVIGATION TABS (Chi nhánh / Chính sách) ── *@
+<div class="sub-tabs">
+    <a href="/admin/branches" class="sub-tab sub-tab-active">
+        <i data-lucide="building-2"></i> Chi nhánh
+        <span class="sub-tab-badge">@Model.TotalItems</span>
+    </a>
+    <a href="/admin/policies" class="sub-tab">
+        <i data-lucide="file-text"></i> Mẫu chính sách (Policy)
+    </a>
+</div>
+
+@* ── STAT CARDS ── *@
+<section class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon stat-blue"><i data-lucide="building-2"></i></div>
+        <div>
+            <div class="stat-label">Tổng chi nhánh</div>
+            <div class="stat-value" data-count="@Model.StatTotal">@Model.StatTotal</div>
+            <div class="stat-hint">Văn phòng đại diện & phụ trách</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon stat-amber"><i data-lucide="file-text"></i></div>
+        <div>
+            <div class="stat-label">Tổng mẫu chính sách</div>
+            <div class="stat-value" data-count="@Model.StatTotalPolicies">@Model.StatTotalPolicies</div>
+            <div class="stat-hint">Đang gắn vào các chi nhánh</div>
+        </div>
+    </div>
+</section>
+
+@* ── TOOLBAR ── *@
+<form class="toolbar" method="get" action="/admin/branches" id="filterForm">
+    <label class="search-box">
+        <i data-lucide="search"></i>
+        <input type="search" name="search" id="searchInput" value="@Model.Search"
+               placeholder="Tìm theo tên chi nhánh, SĐT, email, địa chỉ…" autocomplete="off" />
+        @if (!string.IsNullOrEmpty(Model.Search))
+        {
+            <a class="clear-btn" href="@Link(page: 1, search: null)" title="Xoá tìm kiếm"><i data-lucide="x"></i></a>
+        }
+    </label>
+
+    <div class="filter-group">
+        <select name="pageSize" class="select" id="pageSizeSelect" onchange="this.form.submit()">
+            @foreach (var s in new[] { 6, 12, 24 })
+            {
+                <option value="@s" selected="@(Model.PageSize == s)">@s / trang</option>
+            }
+        </select>
+    </div>
+</form>
+
+@if (Model.Items.Count == 0)
+{
+    <div class="empty">
+        <div class="empty-icon"><i data-lucide="building-2"></i></div>
+        @if (!string.IsNullOrEmpty(Model.Search))
+        {
+            <h3>Không tìm thấy chi nhánh phù hợp</h3>
+            <p>Thử đổi từ khoá tìm kiếm khác</p>
+            <a href="/admin/branches" class="btn btn-ghost"><i data-lucide="rotate-ccw"></i> Xoá bộ lọc</a>
+        }
+        else
+        {
+            <h3>Chưa có chi nhánh nào</h3>
+            <p>Thêm chi nhánh đầu tiên để bắt đầu liên kết với các mẫu chính sách</p>
+            <a href="/admin/branches/create" class="btn btn-primary"><i data-lucide="plus"></i> Thêm chi nhánh đầu tiên</a>
+        }
+    </div>
+}
+else
+{
+    <div class="branch-grid">
+        @foreach (var item in Model.Items)
+        {
+            var b = item.Branch;
+            <div class="branch-card">
+                <div class="branch-card-header">
+                    <div class="branch-avatar"><i data-lucide="building-2"></i></div>
+                    <div class="branch-title-area">
+                        <h3>@b.BranchName</h3>
+                        <span class="branch-id"><i data-lucide="hash"></i>ID: @b.ContactID</span>
+                    </div>
+                </div>
+
+                <div class="branch-info-list">
+                    @if (!string.IsNullOrEmpty(b.Phone))
+                    {
+                        <div class="branch-info-item">
+                            <i data-lucide="phone"></i>
+                            <a href="tel:@b.Phone">@b.Phone</a>
+                        </div>
+                    }
+                    @if (!string.IsNullOrEmpty(b.Email))
+                    {
+                        <div class="branch-info-item">
+                            <i data-lucide="mail"></i>
+                            <a href="mailto:@b.Email">@b.Email</a>
+                        </div>
+                    }
+                    @if (!string.IsNullOrEmpty(b.Address))
+                    {
+                        <div class="branch-info-item">
+                            <i data-lucide="map-pin"></i>
+                            <span>@b.Address</span>
+                        </div>
+                    }
+                </div>
+
+                <div class="branch-card-footer">
+                    <span class="badge badge-central" title="Số mẫu chính sách gắn vào chi nhánh này">
+                        <i data-lucide="file-text"></i> @item.PolicyCount chính sách
+                    </span>
+
+                    <div class="row-actions">
+                        <a class="icon-btn icon-edit" href="/admin/branches/@b.ContactID/edit" title="Chỉnh sửa"><i data-lucide="pencil"></i></a>
+                        <button type="button" class="icon-btn icon-delete js-delete-branch" 
+                                data-id="@b.ContactID" data-name="@b.BranchName" data-policies="@item.PolicyCount"
+                                title="Xoá"><i data-lucide="trash-2"></i></button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    @if (Model.TotalPages > 1)
+    {
+        <footer class="table-foot" style="margin-top: 20px; background: var(--surface); border-radius: var(--radius);">
+            <span class="muted">Hiển thị <strong>@fromItem–@toItem</strong> trên <strong>@Model.TotalItems</strong> chi nhánh</span>
+            <nav class="pagination" aria-label="Phân trang">
+                <a class="page-btn @(Model.Page <= 1 ? "disabled" : "")" href="@Link(page: Model.Page - 1)"><i data-lucide="chevron-left"></i> Trước</a>
+                @for (var p = 1; p <= Model.TotalPages; p++)
+                {
+                    <a class="page-num @(p == Model.Page ? "active" : "")" href="@Link(page: p)">@p</a>
+                }
+                <a class="page-btn @(Model.Page >= Model.TotalPages ? "disabled" : "")" href="@Link(page: Model.Page + 1)">Sau <i data-lucide="chevron-right"></i></a>
+            </nav>
+        </footer>
+    }
+}
+
+@* ── CONFIRM DELETE MODAL ── *@
+<div class="modal-backdrop" id="confirmModal" hidden>
+    <form class="confirm-modal" method="post" action="/admin/branches/0/delete" id="deleteForm">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="returnUrl" value="@currentUrl" />
+        <div class="confirm-icon"><i data-lucide="alert-triangle"></i></div>
+        <h3 id="confirmTitle">Xoá chi nhánh này?</h3>
+        <p id="confirmMessage">Hành động này không thể hoàn tác.</p>
+        <div class="confirm-actions">
+            <button type="button" class="btn btn-ghost" data-close>Huỷ</button>
+            <button type="submit" class="btn btn-danger" id="confirmDeleteBtn"><i data-lucide="trash-2"></i> Xác nhận xoá</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        (function() {
+            const modal = document.getElementById('confirmModal');
+            const form = document.getElementById('deleteForm');
+            const title = document.getElementById('confirmTitle');
+            const msg = document.getElementById('confirmMessage');
+
+            document.querySelectorAll('.js-delete-branch').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const id = btn.dataset.id;
+                    const name = btn.dataset.name;
+                    const policies = +btn.dataset.policies;
+
+                    form.action = `/admin/branches/${id}/delete`;
+                    title.textContent = `Xoá "${name}"?`;
+                    if (policies > 0) {
+                        msg.textContent = `Chi nhánh này đang có ${policies} mẫu chính sách liên kết. Hệ thống sẽ chặn xoá để bảo đảm an toàn dữ liệu.`;
+                    } else {
+                        msg.textContent = 'Hành động này không thể hoàn tác.';
+                    }
+                    modal.removeAttribute('hidden');
+                });
+            });
+
+            const closeModal = () => modal.setAttribute('hidden', '');
+            modal?.addEventListener('click', e => { if (e.target === modal || e.target.closest('[data-close]')) closeModal(); });
+            document.addEventListener('keydown', e => { if (e.key === 'Escape' && modal && !modal.hidden) closeModal(); });
+        })();
+    </script>
+}

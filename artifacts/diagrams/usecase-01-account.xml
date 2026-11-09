@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<mxfile host="app.diagrams.net" type="device">
+  <diagram id="account-registration-and-authentication" name="Account Registration and Authentication">
+    <mxGraphModel dx="1250" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1250" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="boundary" value="Account Registration and Authentication" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=2;verticalAlign=top;spacingTop=20;align=center;fontFamily=Arial;fontSize=17;fontSize=22;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="230" y="60" width="940" height="820" />
+        </mxCell>
+        <mxCell id="guest" value="Guest" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#ffffff;strokeColor=#000000;fontFamily=Arial;fontSize=17;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="70" y="150" width="50" height="90" />
+        </mxCell>
+        <mxCell id="customer" value="Customer" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#ffffff;strokeColor=#000000;fontFamily=Arial;fontSize=17;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="70" y="420" width="50" height="90" />
+        </mxCell>
+        <mxCell id="admin" value="Administrator" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#ffffff;strokeColor=#000000;fontFamily=Arial;fontSize=17;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="70" y="690" width="50" height="90" />
+        </mxCell>
+        <mxCell id="register" value="Register Account" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;fontFamily=Arial;fontSize=17;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="330" y="160" width="230" height="85" />
+        </mxCell>
+        <mxCell id="validation" value="Validate Registration&#10;Information" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;fontFamily=Arial;fontSize=17;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="800" y="160" width="260" height="85" />
+        </mxCell>
+        <mxCell id="login" value="Log In" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;fontFamily=Arial;fontSize=17;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="330" y="410" width="230" height="85" />
+        </mxCell>
+        <mxCell id="authenticate" value="Authenticate Account" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;fontFamily=Arial;fontSize=17;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="800" y="410" width="260" height="85" />
+        </mxCell>
+        <mxCell id="remember" value="Remember Me" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;fontFamily=Arial;fontSize=17;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="800" y="600" width="260" height="85" />
+        </mxCell>
+        <mxCell id="logout" value="Log Out" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;fontFamily=Arial;fontSize=17;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="330" y="720" width="230" height="85" />
+        </mxCell>
+        <mxCell id="guest-register" value="" style="edgeStyle=none;html=1;strokeColor=#000000;strokeWidth=1.5;startArrow=none;fontFamily=Arial;fontSize=17;fontSize=14;labelBackgroundColor=#ffffff;endArrow=none;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="guest" target="register">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="customer-login" value="" style="edgeStyle=none;html=1;strokeColor=#000000;strokeWidth=1.5;startArrow=none;fontFamily=Arial;fontSize=17;fontSize=14;labelBackgroundColor=#ffffff;endArrow=none;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="customer" target="login">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="customer-logout" value="" style="edgeStyle=none;html=1;strokeColor=#000000;strokeWidth=1.5;startArrow=none;fontFamily=Arial;fontSize=17;fontSize=14;labelBackgroundColor=#ffffff;endArrow=none;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="customer" target="logout">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="admin-login" value="" style="edgeStyle=none;html=1;strokeColor=#000000;strokeWidth=1.5;startArrow=none;fontFamily=Arial;fontSize=17;fontSize=14;labelBackgroundColor=#ffffff;endArrow=none;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="admin" target="login">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="admin-logout" value="" style="edgeStyle=none;html=1;strokeColor=#000000;strokeWidth=1.5;startArrow=none;fontFamily=Arial;fontSize=17;fontSize=14;labelBackgroundColor=#ffffff;endArrow=none;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="admin" target="logout">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="register-include-validation" value="«include»" style="edgeStyle=none;html=1;strokeColor=#000000;strokeWidth=1.5;startArrow=none;fontFamily=Arial;fontSize=17;fontSize=14;labelBackgroundColor=#ffffff;dashed=1;endArrow=open;endFill=0;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="register" target="validation">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="login-include-authenticate" value="«include»" style="edgeStyle=none;html=1;strokeColor=#000000;strokeWidth=1.5;startArrow=none;fontFamily=Arial;fontSize=17;fontSize=14;labelBackgroundColor=#ffffff;dashed=1;endArrow=open;endFill=0;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="login" target="authenticate">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="remember-extend-login" value="«extend»&#10;[Remember Me selected]" style="edgeStyle=none;html=1;strokeColor=#000000;strokeWidth=1.5;startArrow=none;fontFamily=Arial;fontSize=17;fontSize=14;labelBackgroundColor=#ffffff;dashed=1;endArrow=open;endFill=0;exitX=0;exitY=0.5;entryX=1;entryY=0.9;" edge="1" parent="1" source="remember" target="login">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="caption" value="Figure X: Use Case Diagram for Account Registration and Authentication" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;fontFamily=Arial;fontSize=17;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="230" y="900" width="940" height="40" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

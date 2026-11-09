@@ -1,0 +1,64 @@
+@model TourismMvc.Models.ViewModels.BookingConfirmationViewModel
+@using TourismMvc.Models.Entities
+@{
+    Layout = "_UserLayout"; ViewData["Title"] = L["Đặt tour và thanh toán"]; ViewData["SolidHeader"] = true;
+    var b = Model.Booking;
+    var pending = b.BookingStatus == BookingStatus.PENDING_PAYMENT;
+    var status = b.BookingStatus switch { BookingStatus.PAID => L["Đã thanh toán"], BookingStatus.CANCELLED => L["Đã hủy"], BookingStatus.EXPIRED => L["Hết hạn thanh toán"], BookingStatus.PENDING_PAYMENT => L["Chờ thanh toán"], _ => L["Chờ xác nhận · Chưa thanh toán"] };
+    var title = Model.Payment.NeedsReview ? L["Giao dịch cần được đối soát"] : b.BookingStatus switch { BookingStatus.PAID => L["Thanh toán thành công"], BookingStatus.EXPIRED => L["Đơn đã hết hạn giữ chỗ"], BookingStatus.CANCELLED => L["Đơn đặt tour đã hủy"], _ => L["Đã nhận yêu cầu đặt tour"] };
+    var latest = Model.Payment.Attempts.FirstOrDefault();
+}
+<link rel="stylesheet" href="~/css/booking.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/payment.css" asp-append-version="true" />
+<div class="booking-complete payment-receipt" data-booking-code="@b.BookingCode" data-booking-status="@b.BookingStatus" data-needs-review="@Model.Payment.NeedsReview.ToString().ToLowerInvariant()">
+    <div class="booking-complete-icon @(b.BookingStatus == BookingStatus.PAID ? "payment-success-icon" : "payment-pending-icon")"><i data-lucide="@(b.BookingStatus == BookingStatus.PAID ? "check" : "ticket")"></i></div>
+    <h1>@title</h1><p>@L["Mã đặt tour:"] <strong>@b.BookingCode</strong></p><span class="booking-status" data-payment-status>@status</span>
+    @if (TempData["PaymentError"] is string error) { <p class="payment-message payment-error" role="alert">@error</p> }
+    @if (TempData["PaymentNotice"] is string notice) { <p class="payment-message" role="status">@notice</p> }
+    @if (Model.Payment.NeedsReview)
+    {
+        <p class="payment-message payment-warning" role="alert">@L["Đã ghi nhận giao dịch cần kiểm tra, có thể do thanh toán sau khi đơn hết hạn. Vui lòng không thanh toán thêm và liên hệ hỗ trợ kèm mã đặt tour để xác nhận hoặc hoàn tiền."]</p>
+    }
+    else if (b.BookingStatus == BookingStatus.EXPIRED)
+    {
+        <p class="payment-message">@L["Chỗ đã được hoàn lại cho chuyến đi. Bạn có thể chọn lịch khởi hành để tạo đơn mới. Nếu tài khoản đã bị trừ tiền, vui lòng liên hệ hỗ trợ để đối soát."]</p>
+    }
+    else if (b.BookingStatus == BookingStatus.PAID)
+    {
+        <p class="payment-message payment-success">@L["Đã xác nhận thanh toán và giữ chỗ cho chuyến đi của bạn. Vui lòng lưu mã đặt tour."]</p>
+    }
+    <section><h2>@b.TourDeparture?.Tour?.TourName</h2><p>@L["Ngày khởi hành:"] @b.TourDeparture?.DepartureDate.ToString(L.DateTimeFormat, L.Culture)</p><p>@L["Hành khách: {0} người", b.TotalPassengers]</p><p>@L["Tổng tiền:"] <strong class="payment-amount">@b.TotalPrice.ToString("N0", L.Culture) ₫</strong></p></section>
+    @if (pending && !Model.Payment.NeedsReview)
+    {
+        <section class="payment-checkout"><div class="payment-provider"><span class="vnpay-wordmark"><b>VN</b>PAY</span><span class="payment-sandbox">@L["Sandbox · Thanh toán thử nghiệm"]</span></div><h2>@L["Thanh toán đặt tour"]</h2>
+            @if (b.PaymentDeadline.HasValue)
+            {
+                <p>@L["Hạn thanh toán:"] <strong>@b.PaymentDeadline.Value.ToString(L.TimeDateFormat, L.Culture)</strong> @L["(giờ Việt Nam)"]</p><p class="payment-countdown" data-payment-seconds="@Math.Max(0, (int)(b.PaymentDeadline.Value - Model.Payment.Now).TotalSeconds)">@L["Thời gian giữ chỗ còn lại:"] <strong id="payment-countdown">@TimeSpan.FromSeconds(Math.Max(0, (b.PaymentDeadline.Value - Model.Payment.Now).TotalSeconds)).ToString(@"mm\:ss")</strong></p>
+            }
+            @if (latest?.Status == VnpayPaymentStatus.FAILED)
+            { <p class="payment-message payment-warning">@L["Lần thanh toán trước chưa thành công. Bạn có thể thử lại khi đơn còn thời hạn."]</p> }
+            else if (latest?.Status == VnpayPaymentStatus.PENDING)
+            { <p class="payment-message">@L["Giao dịch chưa được xác nhận. Nếu bạn đã hoàn tất trên VNPAY, hãy bấm “Kiểm tra thanh toán”."]</p> }
+            @if (!Model.Payment.Configured)
+            { <p class="payment-message payment-warning">@L["Thanh toán VNPAY đang được cấu hình. Vui lòng liên hệ hỗ trợ."]</p> }
+            else if (Model.Payment.CanPay)
+            {
+                <form method="post" action="/booking/complete/@b.BookingCode/pay" id="vnpay-payment-form">@Html.AntiForgeryToken()<button type="submit" class="payment-primary" id="pay-vnpay"><i data-lucide="credit-card"></i>@L["Thanh toán qua VNPAY"]<i data-lucide="arrow-up-right"></i></button></form>
+                <p class="payment-help">@L["Bạn sẽ được chuyển đến cổng VNPAY Sandbox để thực hiện thanh toán bằng dữ liệu thử nghiệm."]</p>
+            }
+            else
+            { <p class="payment-message">@L["Thời gian thanh toán đã hết hoặc còn dưới một phút. Hệ thống đang kiểm tra kết quả trước khi hoàn lại chỗ."]</p> }
+        </section>
+    }
+    @if (latest != null)
+    {
+        <section class="payment-transaction"><h2>@L["Giao dịch VNPAY"]</h2><p>@L["Mã giao dịch:"] <span class="payment-reference">@latest.TransactionRef</span></p>@if (!string.IsNullOrEmpty(latest.ProviderTransactionNo) && latest.ProviderTransactionNo != "0") { <p>@L["Mã giao dịch VNPAY:"] @latest.ProviderTransactionNo</p> } @if (!string.IsNullOrEmpty(latest.BankCode)) { <p>@L["Ngân hàng:"] @latest.BankCode</p> } @if (latest.SettledAt.HasValue) { <p>@L["Thời gian thanh toán:"] @latest.SettledAt.Value.ToString("HH:mm:ss dd/MM/yyyy")</p> }</section>
+    }
+    @if (latest?.Status is VnpayPaymentStatus.PENDING or VnpayPaymentStatus.EXPIRED)
+    {
+        <form method="post" action="/booking/complete/@b.BookingCode/refresh" class="payment-refresh-form">@Html.AntiForgeryToken()<button class="payment-secondary" type="submit"><i data-lucide="refresh-cw"></i>@L["Kiểm tra thanh toán"]</button></form>
+    }
+    <section><h2>@L["Thông tin liên hệ"]</h2><p>@b.ContactFullName · @b.ContactPhone</p><p>@b.ContactEmail</p><p>@b.ContactAddress</p>@if (!string.IsNullOrWhiteSpace(b.CustomerNote)) { <p>@L["Ghi chú:"] @b.CustomerNote</p> }</section>
+    <div class="booking-complete-actions"><a href="/tours">@L["Khám phá chuyến đi khác"]</a><a href="tel:19002045">@L["Liên hệ 1900 2045"]</a></div>
+</div>
+@section Scripts { <script src="~/js/payment.js" asp-append-version="true"></script> }

@@ -1,0 +1,157 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<mxfile host="app.diagrams.net" type="device">
+  <diagram id="tour-administration" name="Tour Administration">
+    <mxGraphModel dx="1500" dy="1320" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1500" pageHeight="1320" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="boundary" value="Tour Administration" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=2;verticalAlign=top;align=center;spacingTop=18;fontFamily=Arial;fontSize=18;fontSize=25;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="240" y="60" width="1140" height="1150" />
+        </mxCell>
+        <mxCell id="admin" value="Administrator" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#ffffff;strokeColor=#000000;fontFamily=Arial;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="65" y="580" width="55" height="100" />
+        </mxCell>
+        <mxCell id="precondition" value="Precondition: Signed in with the ADMIN role." style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontFamily=Arial;fontSize=18;fontSize=16;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="330" y="125" width="580" height="45" />
+        </mxCell>
+        <mxCell id="caption" value="Figure X: Use Case Diagram for Tour Administration" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;fontFamily=Arial;fontSize=18;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="240" y="1240" width="1140" height="40" />
+        </mxCell>
+        <mxCell id="view-tours" value="View Tours" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;fontFamily=Arial;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="400" y="200" width="250" height="90" />
+        </mxCell>
+        <mxCell id="admin-view-tours" value="" style="edgeStyle=none;html=1;strokeColor=#000000;strokeWidth=1.5;startArrow=none;fontFamily=Arial;fontSize=18;fontSize=14;labelBackgroundColor=#ffffff;endArrow=none;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="admin" target="view-tours">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="tour-details" value="View Tour Details" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;fontFamily=Arial;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="400" y="350" width="250" height="90" />
+        </mxCell>
+        <mxCell id="admin-tour-details" value="" style="edgeStyle=none;html=1;strokeColor=#000000;strokeWidth=1.5;startArrow=none;fontFamily=Arial;fontSize=18;fontSize=14;labelBackgroundColor=#ffffff;endArrow=none;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="admin" target="tour-details">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="create-tour" value="Create Tour" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;fontFamily=Arial;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="400" y="500" width="250" height="90" />
+        </mxCell>
+        <mxCell id="admin-create-tour" value="" style="edgeStyle=none;html=1;strokeColor=#000000;strokeWidth=1.5;startArrow=none;fontFamily=Arial;fontSize=18;fontSize=14;labelBackgroundColor=#ffffff;endArrow=none;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="admin" target="create-tour">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="edit-tour" value="Edit Tour" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;fontFamily=Arial;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="400" y="650" width="250" height="90" />
+        </mxCell>
+        <mxCell id="admin-edit-tour" value="" style="edgeStyle=none;html=1;strokeColor=#000000;strokeWidth=1.5;startArrow=none;fontFamily=Arial;fontSize=18;fontSize=14;labelBackgroundColor=#ffffff;endArrow=none;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="admin" target="edit-tour">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="delete-tour" value="Delete Tour" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;fontFamily=Arial;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="400" y="800" width="250" height="90" />
+        </mxCell>
+        <mxCell id="admin-delete-tour" value="" style="edgeStyle=none;html=1;strokeColor=#000000;strokeWidth=1.5;startArrow=none;fontFamily=Arial;fontSize=18;fontSize=14;labelBackgroundColor=#ffffff;endArrow=none;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="admin" target="delete-tour">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="toggle-tour" value="Toggle Tour Visibility" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;fontFamily=Arial;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="400" y="950" width="250" height="90" />
+        </mxCell>
+        <mxCell id="admin-toggle-tour" value="" style="edgeStyle=none;html=1;strokeColor=#000000;strokeWidth=1.5;startArrow=none;fontFamily=Arial;fontSize=18;fontSize=14;labelBackgroundColor=#ffffff;endArrow=none;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="admin" target="toggle-tour">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="find-tours" value="Search / Filter /&#10;Sort Tours" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;fontFamily=Arial;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="930" y="200" width="280" height="90" />
+        </mxCell>
+        <mxCell id="validate-tour" value="Validate Tour&#10;Information" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;fontFamily=Arial;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="930" y="575" width="280" height="90" />
+        </mxCell>
+        <mxCell id="check-tour-deletion" value="Check Tour&#10;Deletion Constraints" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;fontFamily=Arial;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="930" y="800" width="280" height="90" />
+        </mxCell>
+        <mxCell id="find-extends-view" value="«extend»&#10;[Criteria or order changed]" style="edgeStyle=none;html=1;strokeColor=#000000;strokeWidth=1.5;startArrow=none;fontFamily=Arial;fontSize=18;fontSize=14;labelBackgroundColor=#ffffff;dashed=1;endArrow=open;endFill=0;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" edge="1" parent="1" source="find-tours" target="view-tours">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="create-includes-validation" value="«include»" style="edgeStyle=none;html=1;strokeColor=#000000;strokeWidth=1.5;startArrow=none;fontFamily=Arial;fontSize=18;fontSize=14;labelBackgroundColor=#ffffff;dashed=1;endArrow=open;endFill=0;exitX=1;exitY=0.5;entryX=0;entryY=0.25;" edge="1" parent="1" source="create-tour" target="validate-tour">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="edit-includes-validation" value="«include»" style="edgeStyle=none;html=1;strokeColor=#000000;strokeWidth=1.5;startArrow=none;fontFamily=Arial;fontSize=18;fontSize=14;labelBackgroundColor=#ffffff;dashed=1;endArrow=open;endFill=0;exitX=1;exitY=0.5;entryX=0;entryY=0.75;" edge="1" parent="1" source="edit-tour" target="validate-tour">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="delete-includes-constraints" value="«include»" style="edgeStyle=none;html=1;strokeColor=#000000;strokeWidth=1.5;startArrow=none;fontFamily=Arial;fontSize=18;fontSize=14;labelBackgroundColor=#ffffff;dashed=1;endArrow=open;endFill=0;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="delete-tour" target="check-tour-deletion">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="tour-validation-note" value="Validation includes a unique tour code, valid start/end locations and valid form data. Tour images and itinerary entries are maintained within the create/edit form." style="shape=note;whiteSpace=wrap;html=1;size=18;fillColor=#fff2cc;strokeColor=#b7a361;align=left;verticalAlign=top;spacing=12;fontFamily=Arial;fontSize=18;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="890" y="365" width="410" height="135" />
+        </mxCell>
+        <mxCell id="tour-delete-note" value="Deletion is blocked when bookings, images, itinerary days or departures reference the tour.&#10;Toggle Tour Visibility enables or disables the tour; it does not delete the tour." style="shape=note;whiteSpace=wrap;html=1;size=18;fillColor=#fff2cc;strokeColor=#b7a361;align=left;verticalAlign=top;spacing=12;fontFamily=Arial;fontSize=18;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="890" y="990" width="410" height="155" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="location-administration" name="Location Administration">
+    <mxGraphModel dx="1500" dy="1320" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1500" pageHeight="1320" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="boundary" value="Location Administration" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=2;verticalAlign=top;align=center;spacingTop=18;fontFamily=Arial;fontSize=18;fontSize=25;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="240" y="60" width="1140" height="1150" />
+        </mxCell>
+        <mxCell id="admin" value="Administrator" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#ffffff;strokeColor=#000000;fontFamily=Arial;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="65" y="580" width="55" height="100" />
+        </mxCell>
+        <mxCell id="precondition" value="Precondition: Signed in with the ADMIN role." style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontFamily=Arial;fontSize=18;fontSize=16;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="330" y="125" width="580" height="45" />
+        </mxCell>
+        <mxCell id="caption" value="Figure X: Use Case Diagram for Location Administration" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;fontFamily=Arial;fontSize=18;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="240" y="1240" width="1140" height="40" />
+        </mxCell>
+        <mxCell id="view-locations" value="View Locations" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;fontFamily=Arial;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="400" y="220" width="250" height="90" />
+        </mxCell>
+        <mxCell id="admin-view-locations" value="" style="edgeStyle=none;html=1;strokeColor=#000000;strokeWidth=1.5;startArrow=none;fontFamily=Arial;fontSize=18;fontSize=14;labelBackgroundColor=#ffffff;endArrow=none;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="admin" target="view-locations">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="create-location" value="Create Location" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;fontFamily=Arial;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="400" y="470" width="250" height="90" />
+        </mxCell>
+        <mxCell id="admin-create-location" value="" style="edgeStyle=none;html=1;strokeColor=#000000;strokeWidth=1.5;startArrow=none;fontFamily=Arial;fontSize=18;fontSize=14;labelBackgroundColor=#ffffff;endArrow=none;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="admin" target="create-location">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="edit-location" value="Edit Location" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;fontFamily=Arial;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="400" y="690" width="250" height="90" />
+        </mxCell>
+        <mxCell id="admin-edit-location" value="" style="edgeStyle=none;html=1;strokeColor=#000000;strokeWidth=1.5;startArrow=none;fontFamily=Arial;fontSize=18;fontSize=14;labelBackgroundColor=#ffffff;endArrow=none;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="admin" target="edit-location">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="delete-locations" value="Delete Location(s)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;fontFamily=Arial;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="400" y="950" width="250" height="90" />
+        </mxCell>
+        <mxCell id="admin-delete-locations" value="" style="edgeStyle=none;html=1;strokeColor=#000000;strokeWidth=1.5;startArrow=none;fontFamily=Arial;fontSize=18;fontSize=14;labelBackgroundColor=#ffffff;endArrow=none;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="admin" target="delete-locations">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="find-locations" value="Search / Filter /&#10;Sort Locations" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;fontFamily=Arial;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="930" y="220" width="280" height="90" />
+        </mxCell>
+        <mxCell id="validate-location" value="Validate Location&#10;Information" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;fontFamily=Arial;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="930" y="580" width="280" height="90" />
+        </mxCell>
+        <mxCell id="check-location-usage" value="Check Location&#10;Usage by Tours" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;fontFamily=Arial;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="930" y="950" width="280" height="90" />
+        </mxCell>
+        <mxCell id="find-extends-view" value="«extend»&#10;[Criteria or order changed]" style="edgeStyle=none;html=1;strokeColor=#000000;strokeWidth=1.5;startArrow=none;fontFamily=Arial;fontSize=18;fontSize=14;labelBackgroundColor=#ffffff;dashed=1;endArrow=open;endFill=0;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" edge="1" parent="1" source="find-locations" target="view-locations">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="create-includes-validation" value="«include»" style="edgeStyle=none;html=1;strokeColor=#000000;strokeWidth=1.5;startArrow=none;fontFamily=Arial;fontSize=18;fontSize=14;labelBackgroundColor=#ffffff;dashed=1;endArrow=open;endFill=0;exitX=1;exitY=0.5;entryX=0;entryY=0.25;" edge="1" parent="1" source="create-location" target="validate-location">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="edit-includes-validation" value="«include»" style="edgeStyle=none;html=1;strokeColor=#000000;strokeWidth=1.5;startArrow=none;fontFamily=Arial;fontSize=18;fontSize=14;labelBackgroundColor=#ffffff;dashed=1;endArrow=open;endFill=0;exitX=1;exitY=0.5;entryX=0;entryY=0.75;" edge="1" parent="1" source="edit-location" target="validate-location">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="delete-includes-usage" value="«include»" style="edgeStyle=none;html=1;strokeColor=#000000;strokeWidth=1.5;startArrow=none;fontFamily=Arial;fontSize=18;fontSize=14;labelBackgroundColor=#ffffff;dashed=1;endArrow=open;endFill=0;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="delete-locations" target="check-location-usage">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="location-validation-note" value="Validation checks location name/slug uniqueness, form data and any submitted image. Image upload is optional within create/edit." style="shape=note;whiteSpace=wrap;html=1;size=18;fillColor=#fff2cc;strokeColor=#b7a361;align=left;verticalAlign=top;spacing=12;fontFamily=Arial;fontSize=18;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="890" y="390" width="410" height="125" />
+        </mxCell>
+        <mxCell id="location-delete-note" value="Delete Location(s) supports one or multiple selections. Each location used as a tour start or destination is blocked; eligible locations may still be deleted." style="shape=note;whiteSpace=wrap;html=1;size=18;fillColor=#fff2cc;strokeColor=#b7a361;align=left;verticalAlign=top;spacing=12;fontFamily=Arial;fontSize=18;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="350" y="1090" width="950" height="85" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

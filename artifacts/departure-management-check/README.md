@@ -1,0 +1,9 @@
+# Departure management verification
+
+The MVC admin module now includes create/edit, four passenger pricing rows, optional transport in both directions, clone, single/bulk delete, date presets, expand/collapse groups and a CSV download for the current filtered page. The reference was the DepartureManagement React components and TourDepartureManagementController/TourDepartureServiceImpl in the original frontend/backend projects.
+
+Existing bookings retain their prices and seat reservations when departure data is edited. Updates lock the departure row and compare its saved revision; a stale edit must be reloaded. Creates and clones serialize duplicate date checks per tour. Cloning copies prices, policies and guide details, shifts all transport times by the departure-date difference, and opens a new set of seats without copying bookings. Any booking, including a cancelled booking, blocks deletion; bulk deletion succeeds or rolls back as a group. No database migration is required.
+
+Build the main app in Release, then run it locally on port 5041 with the TourismMvc content root. Build this console project, run `seed`, then `test` and `extra`. Run `cleanup` after browser verification. The fixture file contains temporary credentials; do not publish it. Cleanup only targets the generated `DEP-CHECK-` tour and its `departure-check-…@example.invalid` accounts.
+
+`check-ui.cjs` uses a dedicated headless Chrome profile/debugging port 9250. It verifies native form submission, edit values, group controls, selection/cancel confirmation, quick dates and desktop/mobile layout; screenshots are saved beside the script. The HTTP/database checks cover role restrictions, antiforgery protection, validation, duplicate dates, zero seats, stale revisions, clone timing, protected deletion, CSV, concurrent creation and successful/blocked bulk deletion.

@@ -1,0 +1,5 @@
+@{
+    Layout = "_UserLayout"; ViewData["Title"] = L["Không xác thực được thanh toán"]; ViewData["SolidHeader"] = true;
+}
+<link rel="stylesheet" href="~/css/booking.css" asp-append-version="true" />
+<div class="booking-complete"><h1>@L["Không xác thực được kết quả thanh toán"]</h1><p>@L["Thông tin trả về chưa hợp lệ hoặc không khớp với giao dịch. Hệ thống chưa ghi nhận thanh toán từ đường dẫn này."]</p><p>@L["Vui lòng mở lại trang đặt tour trong trình duyệt đã đặt chỗ và kiểm tra trạng thái. Nếu tài khoản đã bị trừ tiền, hãy liên hệ hỗ trợ kèm mã đặt tour."]</p><div class="booking-complete-actions"><a href="/tours">@L["Tìm tour"]</a><a href="tel:19002045">@L["Liên hệ hỗ trợ"]</a></div></div>

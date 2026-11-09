@@ -1,0 +1,40 @@
+@model TourismMvc.Models.ViewModels.AdminBookingDetailsViewModel
+@{
+    ViewData["Title"] = "Chi tiết booking";
+    var b = Model.Booking;
+    var departure = b.TourDeparture;
+    var currentUrl = Context.Request.Path + Context.Request.QueryString;
+    string Money(decimal value) => value.ToString("N0", System.Globalization.CultureInfo.GetCultureInfo("vi-VN")) + " ₫";
+}
+<link rel="stylesheet" href="~/css/admin-bookings.css" asp-append-version="true" />
+<header class="page-header"><div class="title-block"><div class="title-icon"><i data-lucide="ticket"></i></div><div><h1>@b.BookingCode</h1><p>Ngày đặt: @b.BookingDate.ToString("HH:mm dd/MM/yyyy")</p></div></div><a class="btn btn-ghost" href="@Model.ReturnUrl"><i data-lucide="arrow-left"></i>Danh sách booking</a></header>
+<section class="booking-overview"><div><span class="booking-status @b.BookingStatus.CssClass()">@b.BookingStatus.Label()</span>@if (b.PaymentDeadline.HasValue) { <p class="muted">Hạn thanh toán: @b.PaymentDeadline.Value.ToString("HH:mm dd/MM/yyyy")</p> }</div><div class="booking-overview-actions">
+    @if (Model.CanConfirm) { <a class="btn btn-primary" id="confirm-booking" href="@Url.Action("Confirm", "Bookings", new { id = b.BookingID, returnUrl = currentUrl })"><i data-lucide="circle-check"></i>Xác nhận đã thu tiền</a> }
+    @if (Model.CanCancel) { <a class="btn btn-danger" id="cancel-booking" href="@Url.Action("Cancel", "Bookings", new { id = b.BookingID, returnUrl = currentUrl })"><i data-lucide="circle-x"></i>Hủy booking</a> }
+    @if (b.Payments.Any(p => p.Status is VnpayPaymentStatus.PENDING or VnpayPaymentStatus.EXPIRED)) { <form method="post" action="/admin/bookings/@b.BookingID/refresh-payment">@Html.AntiForgeryToken()<button class="btn btn-ghost" type="submit"><i data-lucide="refresh-cw"></i>Kiểm tra thanh toán</button></form> }
+</div></section>
+@if (b.Payments.Any(p => p.Status == VnpayPaymentStatus.REVIEW_REQUIRED)) { <p class="booking-notice" role="status">Đơn có giao dịch cần đối soát. Vui lòng kiểm tra thông tin tại mục Thanh toán trước khi xử lý tiếp.</p> }
+@if (b.BookingStatus == BookingStatus.PAID) { <p class="booking-notice booking-success">Đơn đã thanh toán. Chức năng hủy chỉ áp dụng cho booking chưa thanh toán.</p> }
+<div class="booking-detail-grid">
+    <section class="booking-panel"><h2><i data-lucide="map"></i>Thông tin chuyến đi</h2><h3>@departure?.Tour?.TourName</h3><dl class="booking-info"><div><dt>Mã tour</dt><dd>@departure?.Tour?.TourCode</dd></div><div><dt>Khởi hành</dt><dd>@departure?.DepartureDate.ToString("HH:mm dd/MM/yyyy")</dd></div><div><dt>Thời lượng</dt><dd>@departure?.Tour?.Duration</dd></div><div><dt>Hành trình</dt><dd>@departure?.Tour?.StartLocation?.LocationName → @departure?.Tour?.EndLocation?.LocationName</dd></div><div><dt>Hành khách</dt><dd>@b.TotalPassengers người</dd></div><div><dt>Tổng tiền</dt><dd class="booking-total">@Money(b.TotalPrice)</dd></div></dl><a class="booking-inline-link" href="/admin/departures/@b.DepartureId">Xem lịch khởi hành <i data-lucide="arrow-up-right"></i></a></section>
+    <section class="booking-panel"><h2><i data-lucide="contact"></i>Thông tin liên hệ</h2><dl class="booking-info"><div><dt>Họ tên</dt><dd>@b.ContactFullName</dd></div><div><dt>Số điện thoại</dt><dd>@b.ContactPhone</dd></div><div><dt>Email</dt><dd>@b.ContactEmail</dd></div><div><dt>Địa chỉ</dt><dd>@b.ContactAddress</dd></div><div><dt>Người đặt</dt><dd>@if (b.UserId.HasValue) { <a class="booking-inline-link" href="/admin/users/@b.UserId">@(Model.AccountName ?? "Tài khoản #" + b.UserId)</a><small class="booking-cell-note">@Model.AccountEmail</small> } else { <span>Khách vãng lai</span> }</dd></div></dl>@if (!string.IsNullOrWhiteSpace(b.CustomerNote)) { <div class="booking-customer-note"><strong>Ghi chú của khách</strong><p>@b.CustomerNote</p></div> }</section>
+</div>
+<section class="booking-panel"><h2><i data-lucide="users"></i>Danh sách hành khách <span class="muted">(@b.Passengers.Count)</span></h2>
+@if (b.Passengers.Count == 0) { <p class="muted">Đơn chưa có thông tin hành khách chi tiết.</p> }
+else
+{
+    <div class="table-wrap"><table class="table booking-passengers"><thead><tr><th>Họ tên</th><th>Giới tính</th><th>Ngày sinh</th><th>Loại vé</th><th>Giá vé</th></tr></thead><tbody>@foreach(var person in b.Passengers.OrderBy(p => p.BookingPassengerID)) { <tr><td>@person.FullName</td><td>@person.Gender</td><td>@person.DateOfBirth.ToString("dd/MM/yyyy")</td><td>@(person.PassengerType switch { "ADULT" => "Người lớn", "CHILD" => "Trẻ em", "INFANT" => "Em bé", _ => person.PassengerType })</td><td class="booking-money">@Money(person.BasePrice)</td></tr> }</tbody></table></div>
+}
+</section>
+@if (departure?.Transports.Count > 0)
+{
+    <section class="booking-panel"><h2><i data-lucide="bus"></i>Phương tiện di chuyển</h2><div class="booking-transports">@foreach(var transport in departure.Transports.OrderBy(t => t.Type)) { <article><strong>@(transport.Type == TransportType.OUTBOUND ? "Chiều đi" : "Chiều về") · @(transport.VehicleName ?? departure.Tour?.Transportation)</strong><p>@transport.StartPoint → @transport.EndPoint</p><p class="muted">@transport.DepartTime?.ToString("HH:mm dd/MM/yyyy") @if (!string.IsNullOrEmpty(transport.TransportCode)) { <span>· @transport.TransportCode</span> }</p></article> }</div></section>
+}
+<section class="booking-panel"><h2><i data-lucide="credit-card"></i>Lịch sử thanh toán</h2>
+@if (b.Payments.Count == 0)
+{ <p class="muted">Chưa có giao dịch VNPAY cho booking này.</p> }
+else
+{
+    <div class="table-wrap"><table class="table booking-payment-table"><thead><tr><th>Mã giao dịch</th><th>Ngày tạo</th><th>Số tiền</th><th>Trạng thái</th><th>VNPAY / Ngân hàng</th></tr></thead><tbody>@foreach (var payment in b.Payments.OrderByDescending(p => p.Id)) { <tr><td class="booking-reference">@payment.TransactionRef</td><td>@payment.CreatedAt.ToString("HH:mm dd/MM/yyyy")</td><td class="booking-money">@Money(payment.Amount)</td><td><span class="booking-status @(payment.Status == VnpayPaymentStatus.SUCCEEDED ? "booking-paid" : payment.Status == VnpayPaymentStatus.REVIEW_REQUIRED ? "booking-cancelled" : "booking-pending")">@payment.StatusLabel</span></td><td>@(string.IsNullOrEmpty(payment.ProviderTransactionNo) ? "—" : payment.ProviderTransactionNo)<small class="booking-cell-note">@payment.BankCode</small>@if (payment.SettledAt.HasValue) { <small class="booking-cell-note">@payment.SettledAt.Value.ToString("HH:mm dd/MM/yyyy")</small> }</td></tr> }</tbody></table></div>
+}
+</section>

@@ -1,0 +1,2159 @@
+
+--- PDF PAGE 1 ---
+1 1
+Design and Development of a FullStack Cineverse Ticket
+Booking and Management System with Real Time Features and
+Intelligent Analytics
+Final Year Project Report
+Student Name:HuynhAnhKhoa
+Student ID:001362093
+Programme:BachelorofSciencewithHonoursinComputing
+Institution:UniversityofGreenwich
+Supervisor:HuynhTanCanh
+Submission Date:August1st,2026
+
+--- PDF PAGE 2 ---
+1 2
+Abstraction:
+TheconceptanddevelopmentofHAKCineverse,afullstackwebsiteformanaging
+andbookingmovietickets,isdescribedinthisproject.Slowseatchanges,few
+paymentalternatives,andsubparadministrationinterfacesarecommonproblemswith
+traditionalmovietheaterplatforms.Byutilizingcutting-edgeonlinetechnologiesto
+provideaquickandsafeexperience,HAKCineverseresolvestheseproblems.
+ASpringBootbackendandaReactfrontendareusedinthesystem'sconstruction.
+Redisisusedtotemporarilylockseatsduringcheckout,WebSocketsisusedto
+quicklyupdateseatavailabilityforallusers,andMongoDBisusedtostoredata.
+Consumersmayselectcombinationpackages,purchasetickets,andmakesafe
+paymentsviaStripe,MoMo,ZaloPay,orVietQR.Additionally,theplatformoffersan
+AIchatbothelper,arewardpointssystem,emailticketdeliverywithQRcodes,and
+facerecognitionlogin.
+Lastly,toguaranteeexcellentperformanceandstabilityunderhightraffic,the
+completeapplicationiscontainerizedusingDockerandmonitoredwithPrometheus
+andGrafana.
+Acknowledgements:
+Iwouldliketothankmyprojectsupervisor,HuỳnhTấnCảnh,fortheirguidanceand
+advicethroughoutthisproject.
+Ialsothankmyfamily,friends,anduniversitylecturersfortheircontinuoussupport
+andencouragement.
+
+--- PDF PAGE 3 ---
+1 3
+Table of Contents
+1.Introduction:...............................................................................................................6
+1.1Overview:.........................................................................................................6
+1.2ProjectObjective..............................................................................................6
+1.3ProjectPlan......................................................................................................7
+1.4ProjectOutcome..............................................................................................8
+1.4.1ThereactFrontendWebApplication....................................................8
+1.4.2TheSpringBootBackendAPIServer..................................................8
+1.4.3TheReal-TimeBookingandCachingEngine......................................8
+1.4.4DeploymentandMonitoringInfrastructure..........................................8
+1.5ProjectEvaluation............................................................................................8
+1.5.1AchievementofProjectobjective.........................................................8
+1.5.2ProjectManagement.............................................................................9
+1.5.3OverallProject......................................................................................9
+2.LiteratureReview:.....................................................................................................9
+2.1PurchasingTicketsOnlineintheDigitalAge.................................................9
+2.2AutomatedTicketReservationSystem’sAdvantages...................................10
+2.3CustomerIncentivesforonlineReservation..................................................10
+2.4CustomerEngagementandGamificationFeatures.......................................10
+2.5EcommerceUI/UXDesignandSeatMapping.............................................10
+2.6SeatReservationinRealTimeandTemporaryLockingSystems................11
+2.7DynamicShowtimeManagementandResourceAllocation.........................11
+2.8FullStackWebFrameworks...........................................................................11
+2.9RealtimeSynchronizationandBiometricFacialRecognition......................11
+2.10Monitoringserversandcontainerization.....................................................11
+3.TechnologyandTools.............................................................................................12
+3.1.FrontendDevelopment ................................................................................12
+3.1.1React...................................................................................................12
+3.1.2ReactThreeFiber................................................................................12
+3.1.3FaceAPI.............................................................................................12
+3.2.BackendDevelopment..................................................................................12
+3.2.1Springboot..........................................................................................12
+3.2.2SpringSecurity&JWT.......................................................................13
+3.2.3WebSocket(STOMPProtocol)..........................................................13
+3.3.DataStorage&Search(Database&Cache)................................................13
+3.3.1NoSQL(MongoDB)............................................................................13
+3.3.2Redis...................................................................................................13
+3.3.3Elasticsearch.......................................................................................13
+3.4Algorithms&Logic.......................................................................................13
+3.4.1RedisTTLExpiration.........................................................................13
+3.4.2 CosineSimilarityforFaceMatching.................................................14
+3.4.3 BM25RelevanceRanking.................................................................14
+3.5Infrastructure&Integrations.........................................................................14
+3.5.1DockerCompose.................................................................................14
+3.5.2PaymentmethodAPIs........................................................................14
+3.5.3PrometheusAndGrafana....................................................................14
+4.SoftwareProductRequirements..............................................................................14
+4.1EvaluationandSynopsisofRelatedProducts...............................................14
+4.1.1CGVCinemasVietNam.....................................................................15
+4.1.2LotteCinemaVietNam.......................................................................15
+
+--- PDF PAGE 4 ---
+1 4
+4.1.3GalaxyCinemaVietNam....................................................................15
+4.1.4BHDStarCineplex.............................................................................16
+4.1.5TableofComparision forMajorFilmChains...................................16
+4.2UseCaseDiagram..........................................................................................16
+4.2.1UserProfileandAccountManagement......................................................17
+4.2.2TicketBookingandReservationMechanics......................................17
+4.2.3InteractiveSeatSelection&3DCurtainInterface.............................18
+4.2.4HomeNavigation&MutilGatewayPaymentCheckout...................19
+4.2.5FoodandConcessionComboStore....................................................19
+4.2.6VouchershopandE-GiftCardStore..................................................20
+4.2.7DailySpinWheelandMembershipRanks.........................................20
+4.2.8MovieRanking,ReviewsandAIChatboxRecommendations..........21
+4.3ClassDiagram................................................................................................22
+4.3.1UserandSupportModule...................................................................22
+4.3.2Cinema,Movie,andSchedulingModule...........................................23
+4.3.3ReservationandCheckoutModule.....................................................23
+4.4ERD...............................................................................................................24
+4.4.1UserandAuthenticationModule........................................................24
+4.4.2Movie,CinemaandShowtimeModule..............................................25
+4.4.3BookingandPaymentModule...........................................................27
+4.4.4ContentandSupportModule..............................................................28
+4.5Sitemap..........................................................................................................28
+4.5.1CustomerPortalandBookingFlowSitemap.....................................28
+4.5.2AdministrativeOperationsPortal.......................................................28
+5.ReviewofSoftwareDevelopmentMethodologies..................................................29
+5.1WaterfallModel.............................................................................................29
+5.2SpiralModel..................................................................................................29
+5.3RapidApplicationDevelopment(RAD).......................................................30
+5.4AgileMethodology........................................................................................31
+5.5SelectedMethodologyandJustification........................................................32
+5.5.1ChangingConditions..........................................................................32
+5.5.2 Sprint-BasedIterativeDelivery.........................................................32
+5.5.3SizeoftheTeamandCooperation......................................................32
+5.5.4ComparingSoftwareDevelopmentMethodologies...........................32
+6.DesignandImplementationofproduct...................................................................33
+6.1FundamentalDesignSystemsandComputationalLogic..............................33
+6.1.1RealtimeSessionCoordinationviaSTOMPWebsocket...................33
+6.1.2MathematicalFoundationsofFaceIDRecognition ..........................34
+6.1.3BiometricFaceVerificationPipeline.................................................34
+6.1.4ColorTokensandDarkModeGlassmorphismDesignSystem.........35
+6.2FeatureandScreenshots.................................................................................36
+6.2.1CustomerOnboardingandAuthenticationProcess............................36
+6.2.2CustomerMovieDiscoveryandSearchflow.....................................38
+6.2.3CoreTicketBookingandCheckoutflow...........................................42
+6.2.4ComboandConcessionStore.............................................................45
+6.2.5GamificationandCustomerSupportFlow.........................................51
+6.2.6AdminDashboardandAnalytics........................................................52
+6.3ProductImplementation.................................................................................80
+6.3.1LockingRedisSeatsusingTTL..........................................................80
+6.3.2SubcriptiontoWebsocketSeatUpdates.............................................81
+
+--- PDF PAGE 5 ---
+1 5
+6.3.3CosineSimilarityforBiometricFaceMatching.................................83
+6.3.4BM25FullTextSearchwithElasticsearch........................................83
+6.3.5 FilterchainforStatelessJWTSecurity.............................................84
+6.3.6SeatPriceCalculationbySeatType...................................................85
+6.3.7MoMoPaymentWebhookHMAC-SHA256Verification.................86
+6.3.8 TransactionalTicketBookingwithLockValidation .......................87
+6.3.9JWTRoleBasedAuthenticationFilter...............................................88
+6.4Evaluationofproduct.....................................................................................89
+6.4.1SuccessesandAdvantages..................................................................89
+6.4.2RestrictionsandPotentialImprovements...........................................89
+6.4.3UpcomingDevelopmentStrategies....................................................90
+7.Conclusion...............................................................................................................90
+7.1Informationacquiredfromthisproject..........................................................90
+7.2Theoutcomeofthisendeavor........................................................................90
+7.3FurtherDevelopmentofThisProject............................................................91
+REFERENCE...............................................................................................................92
+Appendix1...................................................................................................................94
+Appendix2...................................................................................................................94
+Project:
+Github link:https://github.com/anhkhoahuynh270705-boop/React-Springboot
+
+--- PDF PAGE 6 ---
+1 6
+1. Introduction:
+1.1 Overview:
+WatchingmoviesatthetheaterhasgrowntobeaverypopularpastimeinVietnamin
+recentyears.Everyday,especiallyonweekendsandholidays,largemovietheater
+chainsincludingCGV,LotteCinema,GalaxyCinema,andBHDStarwelcomeahuge
+numberofpatrons.Systemsforreservingticketsonlinearenownecessarytomeet
+thisdemand.Insteadofwaitinginhugelinesattheactualmovietheatercounter,
+patronsexpecttoexploreshowtimes,bookseats,andmakepaymentsonlineusing
+theirlaptopsormobiledevices.
+However,therearestillanumberofoperationalandtechnologicalproblemswith
+manyofthecurrentonlinemovieplatforms.Theabsenceofrealtimeseat
+synchronizationisthemostseriousissue.Hundredsofpeopleattempttoreservethe
+samepremiumseatsatpreciselythesamemomentwhenawellknownfilmis
+released.Thisfrequentlyresultsindatabaseracesituationswithoutaquickupdate
+method,whichcancausemultiplebookingsorsystemproblemsduringcheckout.
+Conventionaldatabasesaretoosluggishtodynamicallylockseatswithout
+compromisingserverperformance(Fowler,2018).Inordertomanagequick,
+temporaryseatlocks,acontemporaryinmemorydatabaselikeRedisisneeded(Redis,
+2024).WebSocketsarethenusedtoimmediatelysendlivechangestoallactiveusers.
+Theabsenceofintegratedpaymentoptionsisanotherproblem.Manymovietheater
+websitesonlytakepaymentcardsfromothercountries.ManyconsumersinVietnam
+favordirectmobilebankingwithVietQRcodesorlocaldigitalwalletslikeMoMo
+andZaloPay(MoMo,2024;ZaloPay,2024).Tomakethecheckoutprocessautomated
+andsimple,allofthesepaymentoptionsmustbeintegratedwithsecurewebhook
+handlers.Additionally,movietheateroperatorsfrequentlylackdigitaltoolstomonitor
+salesfromamanagementperspective.Todeterminedailyincome,moviepopularity,
+andseatoccupancyrates,theyhavetomanuallyexportspreadsheets.Theyareunable
+tomakepromptbusinesschoiceswithoutdynamicreportingandanalyticsdashboards
+(Bassetal.,2021).
+ThisprojectsuggestscreatingHAKCineverse,afullStackplatformformanagingand
+reservingmovietickets,inordertofilltheseshortcomings.UsingSpringBootforthe
+backendserver(PivotalSoftware,2024)andReactVitefortheuserinterface(React,
+2024),thesystemisbasedonacontemporarywebarchitecture.Redisisusedfor
+temporaryseatlocking,WebSocketsisusedforrealtimeseatsyncing,andMongoDB
+servesastheprimarydatabaseformovietheaterdata(MongoDB,2024).HAK
+Cineversecaterstotwousergroups:administratorswhoreceiveamanagementportal
+withintegratedanalyticsandPrometheusandGrafanaservermonitoringtools,and
+customerswhoreceiveaseamlessbookingexperiencewithlocalpayments,reward
+points,andanAIchatbotassistant(GrafanaLabs,2024).
+1.2 Project Objective
+Themaintargetofthisprojectistodevelopacompletefullstackcineverseticket
+bookingandmanagementsystemusingReact,SpringBoot,MongoDB,andRedis.
+Theprojecthastofulfillthesespecificachievementsinordertoachievethemain
+target:
+
+--- PDF PAGE 7 ---
+1 7
+ CoreSystemDesignandSetup:CreateRESTAPIcontractstolinkthefrontend
+andbackend,setupthedevelopmentenvironment,andconstructMongoDB
+databaseschema.
+ ImplementationofSecureAuthentication:UsingSpringSecurityandJWTtokens,
+createasafeuserandadminloginsystemthatincludesfacerecognitionand
+sociallogins(GoogleandGitHubOAuth2).
+ DevelopmentoftheSeatReservationEngine:Toavoidmultiplereservations,
+writethelogictouseRedistotemporarilylockseatsfortenminutes(Redis,2024)
+andconfigureWebSocketstocommunicateliveseatstatus.
+ IntegrationofPaymentGateways:Automateticketconfirmationandseatbooking
+byintegratingwebhookhandlerswithpaymentmethodssystems.
+ FrontendCustomerPortal:CreatearesponsivewebsiteusingReactthatallows
+customerstopurchasepopcorncombinations,exploremovies,chooseseats(with
+a3Dcurtainanimation),spinadailygamewheel,andconversewithanAI
+assistant.
+ FrontendAdminDashboard:UsingChart.jsandintegratedPowerBIreports,
+createasecuresitewheremanagerscanchangemoviedata,showtimes,seats,and
+revenuecharts.
+ Infrastructure&MonitoringSetup:SetupPrometheusandGrafanadashboardsto
+trackserverhealthandlatency,anduseDockerComposetobundleallservices.
+ ValidationandSystemTesting:Writeautomatedunittestsforbookingcode,run
+manualusertests,andconductloadtestingtoensuretheseatlockingsystem
+worksunderhightraffic.
+1.3 Project Plan
+Thisprojectisplannedasa9monthgraduationprojectdividedintoseveralphases,as
+describedintheproposal'sganttchart.
+ Phase 1: Research & Design (October 2025 - November 2025):Thisphase
+focusedonthefoundation.InOctober,Iresearchedcompetitorsystemsandread
+academicpapersonwebsecurity,databasedesign,andrealtimedata
+synchronizationtowritetheprojectproposal.InNovember,Idesigned
+MongoDBdatabasetables,wroteRESTAPIcontracts,anddrewsequence
+diagramsforthebookingandpaymentprocess.Finally,IsetupbasicSpring
+BootandReactprojectdirectorieswithaGitversioncontrolsystem.
+ Phase 2: Implementation (December 2025 - April 2026):Thisistheproject's
+primarycodingphase.Icreatedthebiometricfaceloginbackend,integrated
+GoogleandGitHubsociallogins,andconfiguredSpringSecurityusingJWT
+tokensinDecember.IcreatedtheemailservicewithQRcodeticketcreationand
+codedalltheCRUDAPIsforhandlingmovies,theaters,showtimes,
+combinations,andnewsinJanuary.Theseatreservationengine,Redisseatlocks,
+WebSocketSTOMPbrokers,andtheintegrationofStripe,MoMo,ZaloPay,and
+VietQRwerethefocusofFebruary.IcreatedthecustomerfacingReactsitesin
+March,whichincludedtheThree.js3Dcurtainanimationandinteractiveseat
+map.Ifinishedtheadmindashboard,theAIchatbotinterface,thePowerBIsales
+reports,andtheuseraccountfeatures(spinwheel,membershiprewards)inApril.
+ Phase 3: Evaluation & Finalization (May 2026 - June 2026): Deployment,
+testing,andreportwritingarethemainobjectivesofthisphase.Icreatedbackend
+unittests,configuredPrometheusandGrafanadashboards,installedRedis
+
+--- PDF PAGE 8 ---
+1 8
+Sentinel,andbuiltDockerComposescriptsinMay.Iconductedmanualload
+testinganduseracceptabilitytesting(UAT)inJunetolookforfaultsduring
+traffic.Icreatedthelivesystemdemoandauthoredthisfinalgraduationreport
+whenthesystemwasstable.
+Tocontroltheprojectscheduleandminimizerisks,IusedGitfeaturebranchingto
+keepmycodeorganized.Imetwithmyprojectsupervisorweeklytopresentmy
+progress,getfeedback,andadjustmyplaniftaskstooklongerthanexpected.
+1.4 Project Outcome
+Theproject'sfinishedoutputisafullyfunctional,productionreadywebapplication
+formanagingandbookingmovies.Therearefourprimarycomponentstothe
+deliverables:
+1.4.1 The react Frontend Web Application
+Acutting-edge,responsiveUIthatfunctionsflawlesslyonPCsandmobiledevices.
+Customersmaychoosefromshowtimes,amovielistingpage,aseatmapthatis
+updatedinstantlyusingWebSockets,andamovielocationsearch.Comboselection,
+paymentcheckouts,agamifieddailyspinwheel,anAIchatbot,andauserprofile
+withbookinghistoryareallincluded.Itprovidesadministratorswithasafegateway
+withinteractiverevenuedisplays,CRUDadministrationtables,andclientcomplaint
+handlers.
+1.4.2 The Spring Boot Backend API Server
+Alldatabaseoperationsandbusinessrulesaremanagedbyasecurebackendserver.
+Face-API descriptorcomparison,GoogleandGitHubOAuthlogins,andSpring
+SecuritywithJWTtokensareallincluded.ItmanagesallbackendRESTcontrollers,
+usessecurewebhookstoprocessStripecardtransactionsandlocalmobilewallets
+(MoMo,ZaloPay,VietQR),andgeneratesandsendsHTMLemailswithticketQR
+codesautomaticallyusingSpringMail.
+1.4.3 The Real-Time Booking and Caching Engine
+ARedis-basedhighperformancecachinglayer.Duringcheckout,seatsare
+momentarilylockedfortenminutestoavoidduplicatereservations.Redis
+immediatelyreleasestheseatsifthe10minutetimerendswithoutpayment;ifthe
+userpays,theseatsarerecordedasreservedinMongoDB.Theuserinterface
+automaticallyrefresheswithoutrequiringapagerefreshsincetheWebSocketSTOMP
+brokerdistributesseatupdatestoallotherusersviewingthesameshowtime.
+1.4.4 Deployment and Monitoring Infrastructure
+Aninfrastructureconfigurationusingcontainers.Withonlyonecommand,the
+completeapplicationcanbestartedonanyhostusingDockerCompose.Ithasa
+monitoringstack(PrometheusandGrafana)thatgathersandshowsJVMmemory,
+CPUutilization,APIlatency,andactiveWebSocketconnections,aswellasaRedis
+Sentinelconfigurationtosafeguardthesystemfromcacheserverfailures.
+1.5 Project Evaluation
+1.5.1 Achievement of Project objective
+
+--- PDF PAGE 9 ---
+1 9
+ SystemArchitecture&Setup:ToprovideacleardivisionbetweenSpringBoot
+andReact,databasemodelsandRESTAPIrequirementsweredevelopedand
+testedpriortodevelopment.
+ AuthenticationSystem:Regularregistrations,JWTtokenlogins,Googleand
+GitHubsociallogins,andbiometricfacerecognitionareallhandledbythe
+systemwithsuccess.
+ Real-TimeBooking:Theengineforbookingseatswascompletelyoperational.
+Toavoidmultiplereservations,seatsarelockedusingRedisforpreciselyten
+minutes.Updatesarepromptlybroadcasttoallactiveclientscreensviathe
+WebSocketSTOMPbroker.
+ PaymentIntegration:Usingwebhooklisteners,fourpaymentgatewayStripe,
+MoMo,ZaloPay,andVietQweresuccessfullyintegratedandverified.
+ UserPortals:ThecustomerportaloffersanAIchatbot,adailyspinwheel,loyalty
+pointawards,andafullbookingprocess.UsingincorporatedPowerBIreports,
+theadminsiteshowssalesfiguresandenablescompleteadministrationofmovie
+theaterresources.
+ InfrastructureandMonitoring:PrometheusandGrafanacontinuallymonitorthe
+wholestack,whichoperateswithinDockercontainers.
+1.5.2 Project Management
+Theprojectwashandledmethodicallyusingrigoroustimemanagementandstructured
+developmentprocessestoguaranteethatitwascompletedwithintheallottednine
+months.IusedanAgileframeworktofollowaniterativedevelopmentschedulethat
+allowedforearlyissueidentificationandresolutionbybuilding,testing,andmerging
+featuresoneatatime.IusedGitforversioncontroltokeepthecodebasestable,using
+featurebranchestosegregatenewcodeandenablesmoothrollbacksintheeventthat
+experimentalfeaturesfailed.Inordertokeepthecorebookinglogicpreciselyon
+scheduleagainstourweeklytargets,Idynamicallymodifiedmyworkinghourswhen
+difficultiesemerged,suchasintegrationdelayswithlocalVietnamesewalletslike
+MoMoandZaloPayowingtoabruptAPIchanges.
+1.5.3 Overall Project
+Allthingsconsidered,HAKCineverseisaproductionready,secure,andhigh-
+performingcineversemanagementsystem:
+Performance:Accordingtosystemtesting,seatvalidationishandledbytheRedis
+cacheinabout0milliseconds,whilebackendAPIsreactinlessthan200milliseconds.
+HighavailabilityisensuredbytheRedisSentinelsetup.
+UserExperience:Usingoptimizedmediaqueries,thecustomerportalisincredibly
+responsive,easilyadjustingtovariousscreensizes.TheAIchatbotoffersuseful
+customerservice,andpagetransitionsaresmooth.
+AdminValue:TheincorporatedPowerBIreportsofferclearinsightsintorevenueand
+audiencebehavior,andadministratorscanmanagethewholechainoftheaterswithout
+theneedformanualspreadsheets.
+Security:Usingcontemporaryauthentication,inputvalidation,andbottraps,the
+systemsafeguardsuserdataandstopsspam.
+2. Literature Review:
+2.1 Purchasing Tickets Online in the Digital Age
+
+--- PDF PAGE 10 ---
+1 10
+Vietnam'sfilmindustryhasexpandedquicklyinrecentyears.Millionsofmoviegoers
+visitbigtheaterchainsincludingCGV,LotteCinema,GalaxyCinema,andBHDStar
+everyyear.Customersdemandhighspeedwebservicesinthisdigitalage.Users
+prefertousetheirlaptopsorcellphonestoexploreshowtimes,checkticketprices,and
+reserveseatsratherthangoingtothemoviesandwaitinginhugelinestopurchase
+actualpapertickets.Allcontemporaryentertainmententerprisesarenowrequiredto
+switchfromphysicalticketcounterstoweb-basedticketbookingplatforms.Tothrive
+inthecutthroatmovieindustry,awebsitethatisquick,dependable,andeasily
+accessibleisessential.
+2.2 Automated Ticket Reservation System’s Advantages
+Bothmovietheatercompaniesandpatronsmayprofitgreatlyfromautomated
+ticketingsystems.Automationlowerstheexpenseofhiringemployeestoselltickets
+atphysicalcountersformovietheateroperators.Additionally,itremoveshumanerror
+fromticketsalesmonitoring,cashmanagement,andbookkeeping.Customersmay
+buyticketsevenlateatnightthankstoanautomatedsystemthatoperatesaroundthe
+clock.Thetechnologygivesusersinstantaccesstopriceinformation,seatmaps,and
+movieschedules.Additionally,itreducespaperwasteandkeepscustomersfrom
+misplacingtheirphysicalticketsbyintegratingelectronicticketswithQRcodesthat
+aredeliveredstraighttotheiremail.
+2.3 Customer Incentives for online Reservation
+Designingasuccessfulsystemrequiresanunderstandingofthereasonsdrivingonline
+ticketpurchases.Convenienceisthemaindrivingforce.Consumerswanttopurchase
+ticketsanywhere,inlessthantwominutes.Thesecondreasoniscontrol:peoplelike
+tolookatseatingmapsandselecttheirfavoritespots,suchthefinestviewingspotin
+themiddleofthehallorseatsforcouples.Economicgainisthethirdreason.Movie
+theaterscanprovidedigitaldiscountcoupons,specialpackages,andloyaltybenefits
+thataren'talwaysavailableattraditionalticketcountersthankstoonlinebooking
+systems.
+2.4 Customer Engagement and Gamification Features
+Gamificationandloyaltyprogramsareusedbycontemporaryonlineappstocultivate
+enduringconsumerconnections.AccordingtoVincent-Lancrinetal.(2019),
+gamificationistheprocessofincorporatinggamelikeelementsintonon-gaming
+applications,suchasdailyspinwheels,membershiplevels,andpointincentives.
+Customersmayincreasetheirmembershiplevel(fromBronzetoSilver,Gold,and
+VIP)byearningloyaltypointswhentheypurchasetickets.Youmayexchangethese
+pointsfordiscountvouchersorfreepopcorn.Customersareencouragedtovisitthe
+websiteeverydaybyfeatureslikeadailyspinwheel,whichboostsconsumer
+engagementandbrandloyalty.
+2.5 E commerce UI/UX Design and Seat Mapping
+Whetheraconsumersuccessfullycompletesatransactionorexitsthewebsitein
+frustrationisdeterminedbythedesignoftheuserinterface(UI)anduserexperience
+(UX).Cleartypographyandatidylayoutarecrucial.Themostimportantuser
+interfaceelementonamovietheaterwebsiteistheseatbookingmap.Itmustdepict
+therealphysicalarrangementofthemovietheater,usingclear,readablecolorsto
+indicateoccupied,available,andVIPseats.Thebookingprocessseemsupscaleand
+interactivebecausetotheuseofcontemporaryCSStransitionsandmicroanimations,
+
+--- PDF PAGE 11 ---
+1 11
+likea3Dtheaterscreencurtainopeningwhilechoosingaseat.Additionally,the
+interfacehastobecompletelydynamic,instantlyadaptingtosmallmobiledisplaysso
+thatusersmayjusttapchairswithonehand.
+2.6 Seat Reservation in Real Time and Temporary Locking Systems
+Databaseconcurrencyisasignificantproblemwithabusyticketbookingservice.A
+doublebookingissueresultsinconsumercomplaintsandfinancialreturnswhentwo
+customersclickandpayfortheexactsameseatatthesametime.Developersusea
+temporaryseatlockingsystemtoaddressthis(Fowler,2018).Thesystemlocksaseat
+inaninmemorydatabasefortenminutesafterauserclicksonit.Otherusersare
+unabletochoosetheseatduringthisperiodbecausetheyseeitaslocked.Theseat
+statusispermanentlymaintainedasbookediftheusercompletesthepaymentwithin
+tenminutes.Thelockisautomaticallyunlockedifthetimergoesoffwithoutpayment.
+2.7 Dynamic Showtime Management and Resource Allocation
+Keepingtrackofshowtimesisadifficultadministrativeendeavor.Amovietheater
+hasmanysites,eachwithseveralroomsofvaryingsizes.Moviesmustbeabletobe
+assignedbyadministratorstoparticularroomsatvarioustimeswithoutcausing
+overlaps.Aroomcannotbeassignedtotwoseparatemoviesatthesametime,
+accordingtothedatabase.Dynamicscheduling,suchasautomaticallyretrieving
+movielistsfromexternalserversandadjustingticketpricingaccordingtoseatkinds
+andshowtimes,mustalsobesupportedbythesystem.
+2.8 FullStack Web Frameworks
+Selectingtheappropriatesoftwarestackisessentialtocreatingadependableonline
+application.Adecoupledclient-serverarchitectureispreferredinmodernweb
+engineering(Newman,2021).OnefrontendlibraryforcreatingSinglePage
+ApplicationsiscalledReactVite(React,2024).Itoffersaseamlessandquickuser
+experiencebyusingaVirtualDOMtoupdatejustthealtereditemsonthescreen
+withoutrequiringapagerefresh.
+SpringBoot:DevelopedinJava,SpringBootisapowerfulbackendframework
+(PivotalSoftware,2024).Ithasbuiltinfacilitiesfordatabaseconnectionsanduser
+authenticationbySpringSecurity,isverysecure,andcaneasilymanagemassive
+networktraffic.
+2.9 Real time Synchronization and Biometric Facial Recognition
+Modernsecurityandcommunicationelementsarenecessaryforadvancedsystems:
+WebSocketSTOMPProtocol:WebSocketsmaintainaconstant,twowaysconnection
+betweenthebrowserandtheserver,incontrasttoconventionalHTTPqueriesthat
+requirethebrowsertorefreshinordertoviewupdates.Thisenablesthebackendto
+rapidlytransmitseatbookingupdatestoanyclientscreenthatiscurrentlyactive.
+BiometricLogin(Face-API):Acontemporary,passwordlessloginalternativeis
+offeredbyfacerecognitionlogin.Usingacamera,thebrowsertakesapictureofthe
+user'sface,usingaJavaScriptlibrarycalledFace-APItoextractdistinctface
+descriptors,andthentransmitsthesevectorstotheSpringBootbackendsotheycan
+becomparedtothedatabase.
+2.10 Monitoring servers and containerization
+
+--- PDF PAGE 12 ---
+1 12
+Itmightbechallengingtoimplementandmanageafullstacksystemwithseveral
+databases(Redis,MongoDB).
+ DockerCompose:Dockercreatesseparatecontainersforthefrontend,backend,
+anddatabases.Withonlyonesetupcommand,thisguaranteesthattheentire
+systemoperatesconsistentlyonanyserver.
+ RedisSentinel:RedisSentinelcoordinatesmanyRedisnodesandautomatically
+promotesabackupnodetotakeoverinthecasethattheprimarynodegoes
+offline,preventingsystemfailuresintheeventthatthecachedatabasefails
+(Redis,2024).
+ PrometheuswithGrafana:Toassistdevelopersinkeepinganeyeonserverhealth
+andidentifyingperformancebottlenecksearlyon,PrometheusgathersCPU,
+memory,anddatabaseconnectionmetricsfromtheactiveSpringBootserver,
+whileGrafanapresentsthesedataoninteractivedashboards(GrafanaLabs,2024).
+3. Technology and Tools
+3.1. Frontend Development
+3.1.1 React
+Awell-likedopen-sourceJavaScriptframeworkforcreatinguserinterfaces,
+particularlySinglePageApplications,iscalledReact(React,2024).Reactservesas
+theprimaryframeworkfortheadmindashboardandclientinterfaceinthisproject.
+Whenretrievingbackenddata,Reactenablestheuserinterfacetochangedynamically
+withoutrequiringacompletepagereload.ThebuildtoolfortheReactdevelopment
+serveriscalledVite.Viteswiftlygathersassets,offeringtinyproductionbundlesand
+aspeedydevelopmentapproach.
+3.1.2 React Three Fiber
+Three.jsisalightweightJavaScriptlibraryusedtodisplay3Dgraphicsinaweb
+browserusingWebGL.InHAKCineverse,itisintegratedviaReactThreeFiberto
+buildthe3Dtheaterscreenandopeningcurtainintroanimationwhenacustomer
+openstheseatselectionpage.This3Delementmakesthebookingapplicationfeel
+premiumandinteractive,simulatingtheatmosphereofenteringaphysicalcineverse
+hall.
+3.1.3 Face API
+AJavaScriptframeworkcalledface-API.js,whichisbasedonTensorFlow.js,allows
+forfaceidentificationanddetectionfromwithinthewebbrowser.Thisprojectuses
+cameraframesfromtheloginpagetofindtheuser'sfaceandextractafacedescriptor,
+whichisa128dimensionalarrayofvaluesthatrepresentsthestructureoftheface.
+Thepasswordlessfaceloginprocedureisthencompletedbysendingthisdescriptorto
+thebackendserver.
+3.2. Backend Development
+3.2.1 Spring boot
+BuildingindependentRESTfulAPIispossiblewithSpringBoot,anenterprisegrade
+Javabackendframework(PivotalSoftware,2024).Astheprimaryapplicationserver
+forHAKCinevese,itmanagesdatabasequeries,externalAPIcalls,booking
+validations,andbusinesslogic.SpringBootenablesdeveloperstolaunchtheserver
+quicklyanddelivercleanendpointsbysimplifyingsetupanddependency
+management.
+
+--- PDF PAGE 13 ---
+1 13
+3.2.2 Spring Security & JWT
+SpringSecurityisapowerfulframeworkforhandlingauthenticationandaccess
+controlforSpringbasedapplications(PivotalSoftware,2024).Iconfigureditto
+protectRESTAPIendpoints,allowingauthorizedadministratorsaccessonly.JWTis
+usedforstatelessauthentication.Whenauserlogsin,theservergeneratesa
+cryptographicallysignedtoken.Theclientsendsthistokenintheheaderof
+subsequentrequests,eliminatingtheneedforasessiondatabase.
+3.2.3 WebSocket (STOMP Protocol)
+Apersistent,lowlatency,twowaysTCPconnectionisestablishedbetweentheclient
+browserandbackendserverviatheWebSocketcommunicationprotocol.The
+STOMPprotocolfacilitatesWebSocketcommunicationinHAKCineverse.Inorder
+toprovidelivesynchronizationofseatmaps,ifaconsumerchoosesorreleasesaseat,
+theupdateistransmittedtothebackendandimmediatelybroadcasttoallotherusers
+viewingatthesameshowtime.
+3.3. Data Storage & Search (Database & Cache)
+3.3.1 NoSQL(MongoDB)
+MongoDBisadocumentorientedNoSQLdatabasethatusesflexibleBSON
+documentsthatresembleJSONtostoredata(MongoDB,2024).MongoDBallows
+fieldstochangebetweendocumentsandsupportsnestedarrays,incontrastto
+conventionalSQLdatabases.Whenmovies,showtimes,useraccounts,andbillshave
+differentdataformatsandneedlayeredrepresentationswithoutcostlytablejoins,this
+isperfectformovietheaterstructures.
+3.3.2 Redis
+Redisisanopensource,inmemorykey-valuepairdatabaseusedtomediateandstore
+messages(Redis,2024).Itsquerytimeislessthanamillisecondbecauseitoperatesin
+thecomputer'sRAM.Redisisthemaincomponentofthetemporaryreservation
+systematHAKcineverse.Toavoidduplicatereservations,itstorestheseatselection
+statusduringcheckoutwithanexpirationtimeof10minutes.
+3.3.3 Elasticsearch
+ElasticsearchisadistributedsearchandanalyticsenginebuiltontopofApache
+LucenethatusesJSON.ItcollaborateswithMongoDBinparallelinthisproject.A
+server-sideschedulerupdatesElasticsearchwiththemoviedatawheneveranewor
+updatedmovieisadded.Whencustomerslookformovies,thisallowsforfuzzy
+filtering,automaticrecommendations,andfastfulltextqueries.
+3.4 Algorithms & Logic
+3.4.1 Redis TTL Expiration
+Theautomaticcleanupoftemporaryreservationsismanagedbythismethod.The
+backendsystemwritesakeywitha10minutestimetolife(TTL)toRediswhena
+customermakesareservation.TheseatisstoredtoMongoDBandtheRediskeyis
+removedifthepaymentwebhookverifiesasuccessfulpayment.Redisimmediately
+cancelsthekeyandcreatesanexpirationevent,releasingtheseat,ifthetimerunsout
+withoutpayment.
+
+--- PDF PAGE 14 ---
+1 14
+3.4.2 Cosine Similarity for Face Matching
+Duringtheloginprocedure,thisprogramcomparesfacialbiometricdata.Theserver
+obtainstheuser'scurrent128dimensionalfacialdescriptionarrayandcomparesit
+withthedescriptionarraykeptintheMongoDBprofilewhentheuserwishestologin
+usingtheirface.Itdeterminesthetwovectors'cosinesimilarity.Thesystem
+recognizesthefaceasamatchandcreatesaJWTaccesstokenifthesimilarityscore
+isgreaterthanapredeterminedthreshold.
+3.4.3 BM25 Relevance Ranking
+ElasticsearchranksmoviesearchresultsusingtheBM25algorithm.Inordertoensure
+thatthemostrelevantfilmsshowupfirstinsearchresults,BM25determinesa
+document'srelevancescorebasedontermfrequency,orhowfrequentlyakeyword
+appearsinamovietitleordescription,andinversedocumentfrequency,orhow
+uncommonthesearchphraseisacrossallmovies.
+3.5 Infrastructure & Integrations
+3.5.1 Docker Compose
+Multi-containerDockerapplicationscanbedefinedandexecutedusingDocker
+Compose.Redis,Elasticsearch,Prometheus&Grafana,SpringBoot,andReactmay
+allbeconfiguredusingonlyoneYAMLfile.Systemdeploymentismadeeasyand
+dependablebylaunchingallserviceswithinisolatedcontainersandconnectingthem
+overavirtualnetworkwhenthe`docker-composeup`commandisrun.
+3.5.2 Payment method APIs
+ElectronicpaymentsarehandledbyexternalAPIs:
+Stripe:UsesPCIcompliantserverstosafelyprocesscreditanddebitcardtransactions.
+MoMoandZaloPay:UseswebhookcallbacksandsecureAPIinterfacestolink
+regionaldigitalwalletsthatarewelllikedinVietnam.
+VietQR:CreatesdynamicbanktransferQRcodesthatautomaticallyverifybank
+transfersbyprovidingthepreciseticketpriceandtransactiondata.
+3.5.3 Prometheus And Grafana
+Thesetoolsoverseehealthvisualizationandbackendservermonitoring:
+Prometheus:EstablishesaconnectiontotheActuatorendpointsofSpringBootin
+ordertoscrapemetricslikeCPUandmemoryutilizationaswellasHTTPrequest
+counts.
+Grafana:CreatesdashboardsdisplayingrealtimegraphsofAPIspeed,database
+health,andservermemoryalertsbyconnectingtoPrometheusasadatasource
+(GrafanaLabs,2024).
+4. Software Product Requirements
+4.1 Evaluation and Synopsis of Related Products
+Customersofallagesaredrawntoonlinemovieticketbookingappsbecauseoftheir
+easyandefficientbookingprocess,whichhasmadethemoneofthemostpopular
+platformsintheentertainmentsector.Thisarticlewillexamineafewwellknown
+platformsthatarenowofferedintheVietnamesemarketinordertohaveabetter
+understandingoftheuserinterfacedesign,bookingprocedure,andoperational
+requirementsofcontemporarymovieportals.Thefourbiggestmovietheaterchainsin
+VietnamareBHDStarCineplex,LotteCinema,GalaxyCinema,andCGVCinemas.
+
+--- PDF PAGE 15 ---
+1 15
+AccordingtoDecisionLab(2023),thispartwilllookattheirexistingfeatures,
+advantages,andtechnologicalconstraints.
+4.1.1 CGV Cinemas VietNam
+Withaverywelllikedwebsiteandmobileapplication,CGVisthetopmovietheater
+chaininVietnam.
+Strengths:
+ Movieposters,trailers,andpromosareshownonarichandeyecatching
+interface.
+ Completeuseraccountportalwithmemberlevelsandloyaltypoints(CGV
+Points).
+ Supportsavarietyofpaymentmechanisms,suchaslocalwalletslikeMoMoand
+creditcards.
+Weaknesses:
+ HighLatency:Heavymarketingadsandintricatescriptsfrequentlycausethe
+websiteandmobileapptoloadslowly.
+ NoRealTimeSeatSynchronization:Theseatmapdoesnotdynamicallyupdate
+whenseatsarechosen.Itcanbeannoyingiftwopeopleopenatthesamemoment
+andclickonthesameseats,onlytodiscoverthatoneistakenduringthepayment
+checkoutprocess.
+4.1.2 Lotte Cinema VietNam
+LotteCinemaisasignificantrivalwithasizableclientele.
+Strengths:
+ Quickticketbookingisthemainfocusofthisstraightforward,usefulinterface.
+steadyresponsetimesfromtheserverwhentrafficisnormal.
+Weaknesses:
+ UI/UXoutdated:Usersmustzoomintotapseatsbecausetheuserexperience
+feelsoutdatedandisnotentirelysuitableformobilebrowsers.
+ AbsenceofInteractiveFeatures:Aftermakingareservation,thereareno
+gamificationfeatures(suchasspinwheelsorminigames)tokeepusersinterested.
+simpleCustomerSupport:BecausetheplatformlacksanAIassistantchatbot,
+consumersmustcontacthotlinesorsubmitemailstogetsimplequestions
+answered.
+4.1.3 Galaxy Cinema VietNam
+Awell-knowndomesticbrand,GalaxyCinemaisrenownedforprovidingreasonably
+pricedticketsandsnacks.
+Strengths:
+ Dueofitsaffordableprices,itisverywelllikedbystudentsandyoung
+moviegoers.
+ Withregularmovieupdatesandreviewscores,theonlinebookingprocessis
+straightforwardandefficient.
+Weaknesses:
+ PerformanceProblemsDuringPeaks:Duringsignificantfilmreleasesor
+advertisingcampaigns,thewebsiteandapplicationexperiencesignificant
+slowdownsortimeouts.
+
+--- PDF PAGE 16 ---
+1 16
+ NoDynamicSeatUpdates:Transactionalseatcollisionsoccurbecausethe
+bookingsystem,likeCGVandLotte,doesnotsynchronizeactiveseatselections
+inrealtime.
+ SimpleLoyalty&help:Insteadofasophisticated,embeddedsystem,social
+mediamessagingchatbotsareusedforhelp,andthemembersystemis
+rudimentary.
+4.1.4 BHD Star Cineplex
+Vietnam'sBHDStarCineplexisarapidlyexpandingmovietheatercompanythat
+isespeciallywelllikedinSoutherncities.
+Strengths:
+ Moderncinemaarchitecturewithadvancedprojectiontechnology(suchas
+DolbyAtmos).
+ Combobundlesandflexiblepromostailoredtoyoungerconsumers.
+Weaknesses:
+ Mobileappinstability:OnbothiOSandAndroidsmartphones,theappis
+pronetofailures,particularlyduringupgrades.
+ Absenceofliveseatsynchronization:Similartootherrivals,theuserinterface
+isnotupdateddynamicallyduringtheselectionprocess,whichcouldresultin
+paymentissuesifmanyusersselectthesameseat.
+ Basicaccountsystem:Customerserviceisprovidedbyapersonhelpline,and
+theonlineloyaltyprogramlacksinteractivegamificationfeatures.
+4.1.5 Table of Comparision for Major Film Chains
+Table1:ComparisonofMajorCinemaChainBookingSystems
+Feature/Metric CGVCinemas LotteCinema GalaxyCinema BHDStarCineplex
+FrontendArchitecture HeavyMultiPage
+Web
+Outdated
+Monolith
+StandardWeb
+Client
+StandardWeb/Mobile
+RealTimeSeatSync No(requirespage
+reloád)
+No(Staticmaps) No(Static
+selection)
+No(Staticselection)
+SeatLockingCache RelationalDatabase
+Lock
+Databaserow
+lock
+Databaserowlock Databaserowlock
+Authentication PasswordorSMS
+OTP
+Password Password/OTP PasswordorSMSOTP
+SearchPerformance SlowSQLtext
+search
+StandardSQL
+Like
+StandardSQL
+query
+StandardSQLquery
+InteractiveFeatures LoyaltyTieronly Basicpoints Basicloyaltystars Basicloyaltypoints
+SystemDeployment Standardphysical
+servers
+Standardservers Standardservers Standardservers
+
+--- PDF PAGE 17 ---
+1 17
+4.2 Use Case Diagram
+4.2.1 User Profile and Account Management
+Figure1: AccountManagementandUserProfile
+Overview:
+Identityandaccountmanagementforbothguestandcustomeractorsarecoveredin
+thisdiagram.ItincorporatesbiometricFaceIDauthentication,OAuth2sociallogin,
+andregularpasswordlogin,allofwhicharedelegatedtothebackendSecuritySystem.
+Customerswhohavebeenauthenticatedcanalsochecktheirbookinghistoryand
+updatetheirprofileinformation.
+4.2.2 Ticket Booking and Reservation Mechanics
+
+--- PDF PAGE 18 ---
+1 18
+Figure2:MechanismsforBookingandReversingTickets
+Overview:
+TheseatreservationprocessbetweenthecustomerandtheWebSocketBrokeris
+depictedinthisdiagram.AseatisatomicallylockedinRedisfortenminutesafterit
+ischosen.Ifitisnotpaidfor,itisautomaticallyreleased.Tomaintainconsistency
+acrossallcurrentsessions,allseatstatuschangesarebroadcastinrealtime.
+4.2.3 Interactive Seat Selection & 3D Curtain Interface
+Figure3:InteractiveSeatChoicewith3DCurtainDisplay
+Overview:
+Theinteractiveandvisualcomponentsoftheseatbookingpageareincludedinthis
+diagram.A3DWebGLcurtainanimationandthemovietheaterlayoutloadwhenthe
+
+--- PDF PAGE 19 ---
+1 19
+pageisopened.TheWebSocketBrokerallowstheconsumertofilterseatkindsand
+streamrealtimeseatupdates.
+4.2.4 Home Navigation & Mutil Gateway Payment Checkout
+Figure4:HomenavigationandMultiGatewayPaymentVertification
+Overview:
+Themainuserjourney,fromfindingamovietomakingapaymentandreceivingane-
+ticket,isdepictedinthisdiagram.Elasticsearchallowsbothvisitorsandpatronsto
+peruseandsearchthefilmcatalog.Customersthathavebeenverifiedmoveontothe
+checkoutprocess,whichinitiatespaymentbyStripe,MoMo,ZaloPay,orVietQR.An
+automaticQRcodee-ticketissubsequentlysentviaemail.
+4.2.5 Food and Concession Combo Store
+Figure5:ConcessionandFoodCombinationStore
+
+--- PDF PAGE 20 ---
+1 20
+Overview:
+Theconcessionorderingflowthatisintegratedintothecheckoutprocedureis
+modeledinthisdiagram.Theconsumerperusescombinationsofpopcornand
+beverages,modifiesamounts,andmayapplyabundleddiscount.Priortofinal
+payment,confirmedgoodsareaddedtothebookinginvoice.
+4.2.6 Voucher shop and E-Gift Card Store
+Figure6:E-GiftCardStoreandVoucherShop
+Overview:
+Theplatformispromotionaleconomyisdepictedinthisgraphic,whereuserscan
+browsecoupons,buye-giftcards,applydiscountcodesatcheckout,andexchange
+loyaltypointsforpromocodes.Bysettingredemptioncapsandvoucherrelease
+schedules,theadministratoroverseesthesupplyside.
+4.2.7 Daily Spin Wheel and Membership Ranks
+
+--- PDF PAGE 21 ---
+1 21
+Figure7:SpinWheelforEachDayandMembershipRanks
+Overview:
+Thegamificationlayeroftheplatformisdepictedinthisdiagram.Consumerscanwin
+loyaltypoints,coupons,orcomboproductsbyspinningthedailyluckywheelonce.
+Thecustomer'sloyaltyprofileshowsthemembershiptier(Member,VIP,andVVIP),
+whichisbasedontotalticketpurchases.
+4.2.8 Movie Ranking ,Reviews and AI Chatbox Recommendations
+Figure8:AIChatbotSuggestions,Reviews,andMovieRankings
+
+--- PDF PAGE 22 ---
+1 22
+Overview:
+Intelligentcontentdiscoveryandcommunityparticipationarecoveredinthisdiagram.
+ConsumerscaninteractwiththeintegratedAIChatbot,examinethetopratedmovie
+rankings,andwritereviewsandratings.Arecommendationsystemthatprovides
+tailoredmovierecommendationsdependingontheuser'squestionprolongschatbot
+sessions.
+4.3 Class Diagram
+4.3.1 User and Support Module
+Figure9:DiagramoftheUserManagementandSupportClass
+Overview:
+Administrativeresponsibilities,userprofiles,andsupportfeedbackareallmanaged
+bythismodule.Customers'basiccontactdetailsandfacecharacteristicsarecaptured
+
+--- PDF PAGE 23 ---
+1 23
+bythesystemandusedforpasswordlesslogin.Additionally,itkeepstrackofclient
+commentsandcomplaintssothatadministratorscanexamineandaddressthem
+methodically,andithandlesauthenticationtokensforpasswordresets.
+4.3.2 Cinema, Movie, and Scheduling Module
+Figure10:ClassDiagramforCinema,Film,andScheduling
+Overview:
+Movielists,theaterlocations,andschedulingaremanagedbythismodule.Movie
+screeningschedulesforparticulardatesandtimesaremanagedbyeachmovietheater.
+Thesystemisabletoautomaticallygenerateandtrackindividualseatavailabilityfor
+eachshowtimesincethesesessionsaremappedtotheaterroomswithrowandcolumn
+layoutcombinations.
+4.3.3 Reservation and Checkout Module
+
+--- PDF PAGE 24 ---
+1 24
+Figure11:ReservationandCheckoutClassDiagram
+Overview:
+Customerreservationsandcheckouttransactionsarehandledbythismodule.The
+systemgeneratesaticketreservationwithinformationonthechosenmoviesession,
+seats,andpopcornandbeveragecombinationsafteracustomercompletesapurchase.
+Inordertomanageentryvalidationandhandleanycancellationorrefundrequests,
+thetransactionadditionallylogsthepaymentstatusandbillinginformation.
+4.4 ERD
+4.4.1 User and Authentication Module
+
+--- PDF PAGE 25 ---
+1 25
+Figure12:UserandAuthenticationModule
+Overview:
+Theentitiesinchargeofuseraccountmanagement,authentication,anduserrelated
+servicesaredepictedintheUserandAuthenticationERD.Whileadministratorsare
+representedindependentlytooverseeprivilegedsystemactivities,itsimulatesthe
+interactionsbetweenusersandauxiliaryfeatureslikenotifications,dailycheckins,
+chatmessages,andcontactdetails.Thefoundationforsafeaccessanduseridentity
+managementacrossthewholemoviebookingplatformisprovidedbythismodule.
+4.4.2 Movie, Cinema and Showtime Module
+
+--- PDF PAGE 26 ---
+1 26
+Figure13:Movie,CinemaandShowtimeModule
+Overview:
+Themainorganizationsconcernedintheschedulingandpresentationoffilmsare
+representedbytheMovie,Cinema,andShowtimeERD.Itexplainshowmoviesare
+connectedtotheatersbymeansofshowtimes,eachofwhichistiedwithaparticular
+seatarrangementandmatchingseatavailability.Bycontrollingmoviescreeningsand
+theaterscheduling,thismoduleservesasthesystem'soperationalfoundation.
+
+--- PDF PAGE 27 ---
+1 27
+4.4.3 Booking and Payment Module
+Figure14:ReservationsandPayment
+Overview:
+Theentitiesinvolvedintheticketreservationandpaymentprocessaredescribedin
+theBookingandPaymentERD.Itensuresthateachreservationislinkedtoa
+legitimatepaymenttransactionandseatassignmentbymodelingtherelationships
+betweenusers,tickets,showtimes,seats,paymentorders,andconsumercomplaints.
+Secureticketpurchasesandsystemtransactionmanagementaresupportedbythis
+module.
+
+--- PDF PAGE 28 ---
+1 28
+4.4.4 Content and Support Module
+Figure15:ModuleforContentandSupport
+Overview:
+Theentitiesassociatedwithusergeneratedcontentandadministrativesupportare
+depictedintheContentandSupportERD.Moviereviews,newsarticles,complaints,
+andadministratormanagedcontentareallincluded.Userscanprovidecomments
+whileadministratorscanpublishcontentandaddressclientconcerns.Thismodule
+makesiteasierforpatronstocommunicatewiththetheatermanagementsystemand
+increasesuserengagement.
+4.5 Sitemap
+4.5.1 Customer Portal and Booking Flow Sitemap
+Figure16:SitemapfortheCustomerPortalandBookingFlow
+Overview:
+Therearethreemainpathsinthecustomerportallayout.Forms,sociallogins,and
+facialbiometricsetupsaremanagedviatheregistrationandauthenticationpath.Pages
+forsearching,seeingmoviespecifications,postingreviews,andplayingloyalty
+gamesmayallbefoundinthemaincontentdirectory.Choosingscreentimings,
+selectingseatsonarealtimemap,purchasingconcessionitems,confirmingpayment
+information,andcreatingadigitalreceiptthatcanbescannedareallstepsinthe
+checkoutprocess.
+4.5.2 Administrative Operations Portal
+Figure17:SitemapoftheAdministrativeOperationsPortal
+Overview:
+
+--- PDF PAGE 29 ---
+1 29
+Therearefourprimaryoperationalelementsthatmakeuptheadministratorinterface.
+Customeraccountsaremanagedandcurrentloginsaretrackedusingtheuser
+managementpanel.Theprogramcalendarandcatalogchangesaremanagedusingthe
+scheduleconfigurationpanel.Seatingcapacities,seatclassifications,andtheater
+setupsarealloverseenbythelayoutdesigner.Lastly,thetransactionandsupportdesk
+keepsaneyeoncustomerassistancerequests,paymentlogs,concessionlists,and
+salesdata.
+5. Review of Software Development Methodologies
+5.1 Waterfall Model
+Oneoftheearliestandmostwellknownsequentialsoftwaredevelopmentapproaches
+isthewaterfallmodel.ItwasfirstpresentedbyWinstonW.Roycein1970and
+arrangesthedevelopmentprocessintoarigidlylinearsequenceofstages.Theflowis
+likewaterpouringdownasetofstepsbecauseeachphasemustbefinishedand
+documentedbeforethenextonestarts.
+KeyPhase
+ThefollowingsuccessivestepsmakeupthetraditionalWaterfallmodel:
+1.RequirementsAnalysis:Aspecificationdocumentiscreatedbycompilingand
+freezingallfunctionalandnonfunctionalrequirements.
+2.SystemDesign:Basedonthespecifications,thesystemarchitecture,database
+schema,anduserinterfacemockupsarecreated.
+3.Implementation:Developersadherecloselytothedesigndocumentationwhen
+writingcode.
+4.TestingandVerification:Thefinishedsystemisexaminedincomparisontothe
+initialspecifications.
+5.Deployment:Usersaregivenaccesstotheverifiedproduct.
+6.Maintenance:Afterlaunch,bugfixesandsmallupdatesareimplemented.
+Strengths:
+ Clearstructureanddocumentation:Foracademicandcomplianceenvironments,
+eachphasegeneratesclearlydefineddeliverablesanddocumentation.
+ Easytomanage:Trackingandreportingmilestonesismadesimplebythelinear
+progression.
+ Suitableforfixedrequirements:Whenrequirementsareclearlyunderstoodand
+unlikelytoalter,itfunctionswell.
+Weaknesses:
+ Inflexibletochange:Itisexpensiveanddisruptivetogobackonceaphaseis
+finished.Reexaminingpriorphasesisnecessaryifrequirementschangelaterin
+thedevelopmentprocess.
+ Lateriskdiscovery:Afterthemajorityofthecodingworkhasbeencompleted,
+bugsanddesignissuesarefrequentlyonlyfoundduringthetestingphase.
+ Notsuitableforcomplexprojects:TheWaterfallmodelisusuallysoonoutgrown
+bymodernsoftwareproductswithenormousscopeorchangingneeds.
+5.2 Spiral Model
+TheWaterfallmodel'smethodicalcontrolandtheiterativenatureofprototypingare
+combinedinBarryBoehm's1986Spiralmodel.Developmentfollowsmultiplecycles,
+
+--- PDF PAGE 30 ---
+1 30
+or"spirals,"ratherthanasinglelinearpath,witheachloopdeepeningthesystem's
+implementationandcomprehension.
+Keyphase
+TheSpiralmodelgoesthroughfourquadrantsineachiteration:
+1.Planning:Specifygoals,options,andlimitationsforthecurrentcycle.
+Riskanalysisistheprocessofidentifyingandassessingpossiblebusinessand
+technologicalhazards.Ifnecessary,prototypedifferentsolutions.
+2.Engineering:Create,write,andevaluatethecurrentspiral'ssoftware.
+3.Evaluation:Planthenextspiralanddiscusstheresultswithstakeholders.
+Strengths:
+ Strongriskmanagement:Eachcycle'sdetailedriskanalysisenablesteamsto
+identifyandaddresshighimpactproblemsbeforetheyspread.
+ Incrementaldelivery:Attheconclusionofeachspiral,usablesoftwareiscreated,
+givingstakeholdersearlyvalue.
+ Flexibletochanges:Atthebeginningofanewspiral,evolvingrequirementscan
+bemetwithoutcompletelyruiningtheproject.
+Weaknesses:
+ Complicatedtomanage:Managingtheriskanalysesandoverlappingcycles
+necessitatesseasonedprojectmanagersandaddsasubstantialadministrative
+burden.
+ Expensiveforsmallprojects:Eachiteration'scompleteriskassessmentprocedure
+addstimeandexpensethatmightnotbewarrantedforsimplerorsmallersystems.
+ Notwidelyadopted:ComparedtoAgileorWaterfall,theSpiralapproachhasa
+smallerbaseofbestpractices,documentationstandards,andtools.
+5.3 Rapid Application Development (RAD)
+JamesMartindevelopedtheRapidApplicationDevelopment(RAD)approachin
+1991,whichputsdeliveryspeedaheadofmeticulouspreparation.Tospeedup
+developmentcycles,itplacesastrongemphasisoniterativeprototyping,ongoinguser
+feedback,andcomponentreuse.Thefundamentalideaistocreateafunctional
+prototypeassoonaspossibleandimproveitbasedonactualuserfeedbackratherthan
+detailedupfrontrequirements.
+Keyphase
+ThereareusuallyfourstagestotheRADmodel:
+1.Requirementsplanningisaquickstageinwhichtheproject'sscopeandhighlevel
+requirementsarejointlydetermined.
+2.UserDesign:UsingvisualmodelingtoolsandquickUIbuilders,developersand
+userscollaboratetocreateprototypes.
+RapidConstruction:Usinguserinputateachstage,developersconstructandimprove
+theprototypeiteratively.
+3.Cutover:Datamigrationandusertrainingareincludedinthefinaltestedproduct's
+transitionfromprototypetoproductionsystem.
+Strengths:
+ Fastdeliverycycles:Earlyfeedbackismadepossiblebytherapiddeliveryof
+prototypes,whichlowersthepossibilityofcreatingtheincorrectproduct.
+
+--- PDF PAGE 31 ---
+1 31
+ Stronguserinvolvement:Constantcommunicationwithendusersguaranteesthat
+theprovidedsystemcloselymatchesactualrequirements.
+ Reusingcomponents:RADpromotestheusageofpremadeframeworksand
+componentstocutdownonunnecessarywork.
+Weaknesses:
+ Riskofscopecreep:Userrequeststocontinuouslybroadentheproject'sscopeare
+madesimplebytheabsenceofformalrequirementfreezing.
+ Activeuserparticipationisnecessarysincethefeedbackdrivencyclefailsif
+stakeholdersareabsentorunresponsive.
+ Scalabilitymaybesacrificed:Theneedtoprovideprototypesassoonaspossible
+mayresultinarchitecturalshortcutsthateventuallyresultintechnologicaldebt.
+5.4 Agile Methodology
+TheAgileManifesto,whichwaswrittenbyseventeensoftwareprofessionalsin2001,
+servesasthefoundationfortheAgilefamilyofincrementalanditerativesoftware
+developmentapproaches.Agiledoesnotcreateafinal,monolithicproductallatonce,
+incontrasttoWaterfall.Rather,itproducesfunctionalsoftwareinbrief,recurring
+cyclesknownassprints(usuallylastingonetofourweeks),eachofwhichresultsina
+productincrement.
+Scrum,whichestablishesparticularteamroles,events,andartifactstoorganizethe
+developmentprocess,isthemostpopularAgileframework.
+KeyScrumRolesandEvents
+1.ProductOwner:Definesandrankstheproductbackloginaccordancewithuserand
+businessdemands.
+2.ScrumMaster:Overseestheteam'sadherencetoAgileprinciples,removes
+obstacles,andfacilitatestheScrumprocess.
+3.Thecrossfunctionaldevelopersthatcreate,implement,andtestfeaturesduring
+eachsprintmakeupthedevelopmentteam.
+4.SprintPlanning:Ameetingtochoosebacklogitemsandestablishthesprintgoalat
+thebeginningofeachsprint.
+5.DailyStandups:Quickdailycheckinswhereteammembersdiscussobstaclesand
+progress.
+6.SprintReviewandRetrospective:Meetingsheldattheendofasprinttopresent
+finishedfeaturesandconsiderwaystoenhancetheprocess.
+Strengths:
+ Adaptabletochange:Withoutaffectingtheproject'soverallschedule,
+requirementscanbechangedinbetweensprintsinresponsetofeedback.
+ Earlyandongoingdelivery:Aftereachsprint,functionalsoftwareisdelivered,
+ensuringongoingstakeholdervisibility.
+ Highlevelsofteamwork:Sprintreviewsanddailystandupsencourage
+communicationandsharedcodebaseownership.
+ Clearprojectvisibilityismadepossiblebytoolslikesprintburndowncharts,
+velocitymeasurements,andKanbanboards.
+Weaknesses:
+ Lesspredictabilityinlongtermplanning:Itcanbechallengingtoadheretoexact
+longtermtimetablesbecausethescopechangesovertime.
+
+--- PDF PAGE 32 ---
+1 32
+ Experiencedteamsarenecessarybecause,intheabsenceofdisciplinedsprint
+planningandbacklogmanagement,Agile'sflexibilitycandevolveintochaos.
+ Documentationmaybelighter:Agileplacesmoreemphasisonfunctional
+softwarethanthoroughdocumentation,whichmaybeproblematicinsettings
+wherecomplianceiscrucial.
+5.5 Selected Methodology and Justification
+TheteamchosetheAgiletechniquewiththeScrumframeworkasthemainsoftware
+developmentmethodologyforthecreationofHAKCineverse.
+5.5.1 Changing Conditions
+RealtimeseatreservationsviaWebSockets,biometricFaceIDauthentication,multi
+gatewaypayments,gamificationmechanics,andAIchatbotsupportarejustafewof
+themanyfeaturesintegratedintoHAKCineverse,afullStackwebapplication.Notall
+needswereproperlyspecifiedatthebeginningoftheproject,especiallywithregardto
+thegamificationsystem'sscopeandtherealtimesynchronizationbehavior.Theteam
+wasabletograduallyimprovetheproductbasedontestingoutcomesandsupervisor
+inputthankstoAgile'sallowanceofshiftingrequirementsbetweensprints.
+5.5.2 Sprint-Based Iterative Delivery
+Thedevelopmentwasdividedintotwoweeklongsprints.Earlysprintsconcentrated
+onbuildingtheauthenticationlayer(JWT,OAuth2,FaceAPI)andbasicbackend
+infrastructure(SpringBoot,MongoDB,Redis).TheWebSocketrealtimesync,
+paymentgatewayconnections,andseatbookingenginewereimplementedduring
+middlesprints.Theadmindashboard,AIchatbot,Grafanamonitoring,andUIpolish
+wereallcoveredinthelastsprints.Afunctionalversionofthesystemwasalways
+accessibleforreviewateverylevelthankstothisstructure.
+5.5.3 Size of the Team and Cooperation
+Theprojectwascreatedbyasmallteam,whichmakesAgile'slightweight
+coordinationmechanismsperfect.Withoutthebureaucraticburdenofmorecomplex
+approacheslikeSpiral,dailystandupsandweeklysprintreviewskepteveryonein
+synconpriorities.Throughouttheproject,theteamhadcompleteversioncontroland
+taskvisibilitythankstotheusageofGitwithfeaturebranchprocessesandGitHub
+Issuesasalightweightbacklog.
+5.5.4 Comparing Software Development Methodologies
+Criteria Waterfall Spriral RAD Agile
+Development
+Style
+Sequential,
+linear
+Iterativeand
+riskdriven
+Iterative,
+prototypefirst
+Iterative,sprint
+based
+Flexibilityto
+Requirement
+Changes
+VeryLow Moderate High High
+Risk
+Management Low VeryHigh Moderate High
+SpeedofFirst
+Delivery Slow Moderate Fast Fast
+Suitabilityfor
+SmallTeams Yes No(overhead) Yes Yes
+
+--- PDF PAGE 33 ---
+1 33
+Upfront
+Documentation
+Required
+Extensive Extensive Minimal Light
+Stakeholder/
+User
+Involvement
+Mostlyatstart Percycle Continuous Continuous
+Scalabilityof
+Architecture
+Planned
+upfront
+Planned
+upfront
+Often
+sacrificed
+Evolveswith
+sprints
+ScopeControl Strict(fixedscope) Perspiral Scopecreeprisk Controlledviabacklog
+Suitablefor
+WebApp
+Projects
+No Possible Yes Yes
+Academic/
+Semester
+TimelineFit
+Possible Tooheavy Yes Yes
+Tooling&
+Community
+Support
+Widelyknown Limited Moderate Verystrong(GitHub,Jira)
+Table2:SoftwareDevelopmentMethodologyComparison
+6. Design and Implementation of product
+6.1 Fundamental Design Systems and Computational Logic
+6.1.1 Real time Session Coordination via STOMP Websocket
+Figure18:Realtimeseatlockingandticketbookingprocess.
+Overview:
+FromthetimeauserchoosesaseatuntiltheSpringBootAPI,Redis,andWebSocket
+collaboratetohandletherequest,theticketingsystemisseatreservationprocessis
+
+--- PDF PAGE 34 ---
+1 34
+depictedinthesequencediagram.Inadditiontoupdatingseatstatusinrealtimeand
+alertinguserswhenconflictsarise,thesystemguaranteesthatonlyoneusermayhold
+aseatatatime.
+6.1.2 Mathematical Foundations of Face ID Recognition
+Figure19:CosineSimilarityFormulaforFaceIDAuthentication
+Overview:
+TheCosineSimilarityalgorithmisusedintheFaceIDauthenticationprocessto
+comparetheregisteredembeddingwiththefaceembeddingthatwastakenfromthe
+liveimage.Toascertainwhetherthetwofacialembeddingsbelongtothesame
+individual,thealgorithmusesasimilaritycriterionof0.96.Lowerscoresare
+discarded,whereasthoseabovethecutoffareaccepted.
+6.1.3 Biometric Face Verification Pipeline
+
+--- PDF PAGE 35 ---
+1 35
+Figure20:BiometricFaceVerificationPipelineforFaceIDAuthentication.
+Overview:
+TheentireHAKCineverseFaceIDidentificationprocess.Usingface-api.js,the
+browserrecordstheuserisfacialfeaturesandtransmitstheextractedfeaturevectorto
+theSpringBootbackend.Afterretrievingtheregisteredfacialembeddingfrom
+MongoDB,thebackendcomputesthecosinesimilarityand,ifthesimilarityscore
+meetstheauthenticationthreshold,issuesaJWTtoken.Ifnot,theloginrequestis
+denied.
+6.1.4 Color Tokens and Dark Mode Glassmorphism Design System
+Figure21:DarkModeColorPalette
+
+--- PDF PAGE 36 ---
+1 36
+Overview:
+HAKCineverseusesglassmorphismeffectsinconjunctionwithadarkmodedesign
+systemtoproduceacontemporaryandcaptivatingfilmexperience.Whilesemi
+transparentelementswithbackdropblurimproveinterfacedepthandgeneralusability,
+consistentcolortokenscreateadistinctvisualhierarchy.
+6.2 Feature and Screenshots
+6.2.1 Customer Onboarding and Authentication Process
+1. Account Login and OAuth2 integration
+Figure22:LoginScreen
+Overview:
+Acenteredlogincardwithablurredbackgroundoveramovietheaterbackdropis
+featuredontheauthenticationenteringscreen.Ithasclientsidevalidationand
+standardloginandpasswordinputs.GoogleandFacebookOAuth2signinbuttonsare
+locateddirectlybeneaththemainform.Usersareinformedabouttheuseofstateless
+sessiontokens(JWT)byasecuritynoticeatthebottom.
+2. Profile Setting Face ID Setup
+
+--- PDF PAGE 37 ---
+1 37
+Figure23: FaceIDregister
+Overview:
+Thispage,whichcanbefoundintheusersettings,allowstheregistrationoffacedata
+forpasswordlesslogin.Itshowsalivecamerastreamthatrecognizestheuser'sface
+andhelpsthemrecordandstoretheirfacialcoordinates.
+3. Face ID login modal
+
+--- PDF PAGE 38 ---
+1 38
+Figure24:FaceIDLogin
+Overview:
+ThisoverlaymodalappearsandturnsonthewebcamwhenuserschooseFaceIDsign
+in.Uponsuccessfulverification,thesystempromptlysignstheuserinbyscanning
+theirfaceandcomparingitwithregisteredprofiles.
+6.2.2 Customer Movie Discovery and Search flow
+1. Main Homepage
+
+
+--- PDF PAGE 39 ---
+1 39
+Figure25:Homepage
+Overview:
+Thehomepagedisplaysamoviebannercarouselwithdirectticketbookingbuttons
+andpromotedfilms.A3Dtunneltransitioneffectappearsbelowthebanner,followed
+bymoviecardslikemysterymoviecards,thenahorizontalmoviecarouselwith
+populartitlesandamoviegridwithtabbedsectionsforbothcurrentlyshowingand
+upcomingfilms.
+2. Autocomplete & Results
+
+--- PDF PAGE 40 ---
+1 40
+Figure26:Searchhistory
+Figure27:MovieResult
+Overview:
+Whenyouclickthesearchbox,aclearalloptionandrecentsearchhistoryare
+displayed.Enteringkeywordsyieldsfastsearchrecommendationsandaresultspage
+withgenre,language,andreleaseyearfilteringchoices.
+3. Movie Detail Screen
+
+--- PDF PAGE 41 ---
+1 41
+Figure28:MovieDetail
+Overview:
+Comprehensivemoviemetadata,suchascastlists,runtime,ratingtags,andan
+integratedtrailer,aredisplayedonthispage.Userscanreadcommentsandaddtheir
+
+--- PDF PAGE 42 ---
+1 42
+ownratingsinthecustomerreviewareabelow.
+6.2.3 Core Ticket Booking and Checkout flow
+1. Showtime Selection
+Figure29:Cinemachoose
+
+--- PDF PAGE 43 ---
+1 43
+Figure30:Cinemapage
+Overview:
+Afterselectingamovie,usershavethreeoptionstochooseasuitabletheatertowatch
+it.Theycanselectthetheater,thedate,andtheirpreferredtimeslot.Timeslotsare
+groupedbytheatertype,displayingdetailsofthedurationandstartingticketprices.
+2. Showtime selection
+
+
+--- PDF PAGE 44 ---
+1 44
+Figure31:Cinemadetailpage
+Overview:
+Afterselectingamovietheater,userswillberedirectedtothetheater'sdetailspage
+withcompleteinformation.Belowthat,theshowtimesforvariousmoviestheuser
+wantstowatchwillbedisplayed,indifferentformatsdependingonwhichformatthe
+theatercurrentlyhasavailable.
+3. Seat Selection
+Figure32:Seatselection
+
+--- PDF PAGE 45 ---
+1 45
+Figure33: OtherUsersseescreen
+Overview:
+Themovietheaterlayoutiscolorcodedbyseatcategory(Regular,VIP,orCouple)on
+theinteractivemap.Doublebookingsareavoidedbyupdatingseatschosenbyother
+usersinrealtime.Oncethecurrentuserhasselectedseats,otheruserswillseethose
+seatslocked.
+6.2.4 Combo and Concession Store
+1. Combo Selection
+
+
+--- PDF PAGE 46 ---
+1 46
+Figure34:ComboSelectionpage
+Overview:
+Theavailablemealandbeveragecombinationsareshowninthisphasealongwith
+picturesanddescriptions.Comboquantitiescanbechangedbyusers,andthetotal
+orderinvoiceisupdatedviaasidepanel.
+2. Voucher Selection
+
+
+--- PDF PAGE 47 ---
+1 47
+Figure35:Voucher&Discount
+Overview:
+Locatedwithinthepaymentsummarysection,thistableliststheuser'sexisting
+coupons.Userscanclicktoapplyactivecouponstheyredeemedduringdailycheck
+instoreducetheirtotalbill.
+3. Payment Gateway
+Figure36:PaymentMethod
+Overview:
+Creditcard,Momo,ZaloPay,andQRpaymentchoicesaredisplayedonthisscreen,
+whichmanagespaymentselection.Tofinishthetransaction,selectingamethodtakes
+theusertothesecurepaymentgate.
+
+--- PDF PAGE 48 ---
+1 48
+4. UI of each payment gateway
+Figure37:Momopayment
+Figure38:VietQRPayment
+
+--- PDF PAGE 49 ---
+1 49
+Figure39:ZaloPayPayment
+Figure40:StripePayment
+Overview:
+Thesearefourpagesforeachpaymenttransaction,eachdisplayingaQRcodeforthe
+usertocompletethepayment.MomoandStripeCheckoutcanrecognizepayments,
+butbankingandZaloPayrequiremanualconfirmationfromtheadmin.This
+functionalitywillbeimprovedtobeautomatedinthefuture.
+5. Payment Success and E ticket
+
+--- PDF PAGE 50 ---
+1 50
+Figure41:WebsocketNotification
+Overview:
+Afterpaymentverification,userswillberedirectedtotheEticketpagewitha
+pendingstatusanduserwillreceivenotificationbookingsuccess.Ticketinformation
+willthenbesentviaemail,includingbookingdetailsandaspecialQRcode.
+6. Admin approve the ticket and send email
+Figure42:Websocketnotificationadminapprovedticket
+Overview:
+Afteradminapprovethependingticket,usersidewillshownotificationticket
+
+--- PDF PAGE 51 ---
+1 51
+approvesuccessbyadmin.Afterthat,ticketinformationwithQRcodewillsendto
+useremail.
+6.2.5 Gamification and Customer Support Flow
+1. Gamification
+Figure43:DailySpinWheel
+Overview:
+Avibrantsegmentdividedwheelcanbeseenontheluckyspinwheelsite.Onceaday,
+userscanspintowinprizesthatareinstantlyaddedtotheiraccounts,suchasloyalty
+pointsordiscountcoupons.
+2. Loyalty Dashboard
+Figure44:Loyalty
+
+--- PDF PAGE 52 ---
+1 52
+Overview:
+Theuser'scurrentmembershiprank,advancementtothenexttier,andtotalloyalty
+pointsareallshownonthedashboard.Thehistoryofpointsgainedandspentis
+displayedinaledgertable.
+3. AI Chatbox Drawer
+Figure45:ChatAIAssistant
+Overview:
+Thisslideoutdrawer,whichisaccessibleoneveryclientpage,hasavirtualassistant.
+Forfastanswersregardingmovies,policies,orticketpurchases,userscantype
+inquiriesorclickideas.Beside,anongoingdialoguewithinthechatbotpanelis
+displayedonthisscreen.Inresponse,theAIprovidesclickableactionbuttonsforeasy
+navigation,movierecommendationswithposterthumbnails,andstructuredmessages.
+6.2.6 Admin Dashboard and Analytics
+1. Control panel
+
+--- PDF PAGE 53 ---
+1 53
+Figure46:Dashboard
+Overview:
+Operationaldata,suchasdailyticketsales,totalrevenue,currentscreenings,andopen
+supporttickets,aredisplayedontheadministratorportalhomepage.Chartstracking
+salestrendsareshownbelow.
+2. Movie Management
+
+--- PDF PAGE 54 ---
+1 54
+Figure47:Moviemanagement
+Overview:
+Thisboarddisplaysalistoffilmsinatableformatthatcanbesearchedbyfilmtitle,
+actor'sname,ordirector'sname.Administratorscanuploadnewposters,change
+releasestatus,andadd,edit,ordeletefilms.
+2.1.1 Add new movie form and validation
+Figure48:Addnewfilm
+
+--- PDF PAGE 55 ---
+1 55
+Figure49:Checkvalidation
+Overview
+Newmovieswillbeaddedtothispopupwindow,andadministratorsneedtocheck
+thevalidityofallfieldstoavoiddisplayingincompletemovieinformationtousers.
+2.1.2 Edit movie form and validation
+
+--- PDF PAGE 56 ---
+1 56
+Figure50:Editmovie
+
+--- PDF PAGE 57 ---
+1 57
+Figure51:Checkvalidation
+Overview:
+Similarly,editingmovieinformationwillalsobeaddedtothispopupwindow,and
+administratorsneedtocheckthevalidityofallfieldstoavoiddisplayingincomplete
+movieinformationtousers.
+2.1.3 Add Cinema theater form
+
+--- PDF PAGE 58 ---
+1 58
+Figure52:AddTheaterform
+Overview:
+Inthispopupwindow,theadminwilldecidewhichcinemasareallowedtoshowthat
+film,acinemacanhaveonefilmormultiplefilms.
+2.1.4 Add related article form and Validation
+
+--- PDF PAGE 59 ---
+1 59
+Figure53:AddnewArticlesform
+
+--- PDF PAGE 60 ---
+1 60
+Figure54:Validaton
+Overview:
+Inthispopup,articlesrelatedtothefilmwillbeaddedanddisplayedbelowafter
+beingadded.Itwillalsoperformvalidationtoensurethearticlesarecompleteandnot
+missinganyinformation.
+3. Cinema Management
+Figure55:CinemaManagement
+
+--- PDF PAGE 61 ---
+1 61
+Overview:
+Thisisthecinemamanagementpage,whichcanbesearchedbycinemaname,
+address,orcitynameinthesearchbar.Adminscanadd,edit,andviewdetailsfor
+multiplecinemabrancheshere.Furthermore,adminscanaddindividualmoviesand
+showtimesforeachcinemahere.
+3.1.1 Add new cinema Form and validation
+Figure56:AddnewCinemaForm
+
+--- PDF PAGE 62 ---
+1 62
+Figure57:Checkvalidation
+Overview:
+Administratorscanaddalltheinformationneededtocreateatheater,suchascontact
+information,technicaldetails,amenities,andpictures,usingtheAddNewCinema
+form.Beforesubmission,thesystemverifiesthenecessaryfieldsanddisplayserror
+warningsifanyaremissing.
+
+--- PDF PAGE 63 ---
+1 63
+3.1.2 Edit Cinema form and validation
+Figure58:EditCinemaform
+
+--- PDF PAGE 64 ---
+1 64
+Figure59:Checkvalidation
+Overview:
+Similartotheaddnewform,heretheadmincaneditthetheaterinformationand
+checkvalidationbeforeexportingthetheaterdatatothesystem.
+
+--- PDF PAGE 65 ---
+1 65
+3.1.3Addmoviefilmandshowtimetocinematheater
+Figure60:Addshowtimeform
+
+--- PDF PAGE 66 ---
+1 66
+Overview:
+Thisisapopupwindowfortheadmintoaddorremovemoviesfromthetheater.
+Afteraddingamovie,theadminwilladdthemoviescheduleandothernecessary
+informationtodisplaytotheuser.
+4. Ticket Management
+Figure61:Ticketmanagement
+Overview:
+Thispageallowsadministratorstomanageallticketbookingsinthesystemthrough
+search,filtering,andstatusoptions.Itdisplaysdetailedbookinginformation,
+includingmovie,cinema,seat,price,user,andticketstatus,whileprovidingactionsto
+viewandupdateticketrecords.
+5. News Management
+
+--- PDF PAGE 67 ---
+1 67
+Figure62:NewManagement
+Overview:
+Administratorscancreate,search,classify,andmanagenewsarticlesusingtheNews
+Managementinterface.Otherwise,admincancreate,deleteandviewdetailofeach
+newsContentmanagementismadeeasyandconvenientbydisplayingarticlesas
+cardswithimages,titles,publicationdates,andstatus.
+5.1.1 Add News form and validation
+
+--- PDF PAGE 68 ---
+1 68
+Figure63:Createnewsform
+
+--- PDF PAGE 69 ---
+1 69
+Figure64:CheckValidation
+Overview:
+Administratorscanenterallarticledetails,includingtitle,summary,content,author,
+category,tags,andphotos,usingtheCreateNewsinterface.Thesystemensures
+authenticitybeforecreatingthearticlebysupportinginputdatavalidationandgiving
+errormessageswhennecessaryfieldsarenotfilledout.
+
+--- PDF PAGE 70 ---
+1 70
+5.1.2 Edit news form and check validation
+Figure65:Editnewsform
+
+--- PDF PAGE 71 ---
+1 71
+Figure66:Checkvalidation
+Overview:
+Administratorscanchangethetitle,content,author,category,tags,photos,and
+featuredstatusofalreadypublisheditemsusingtheEditNewsinterface.Before
+savingchanges,thesystemverifiestheaccuracyofthesupplieddatabyproviding
+errorwarningsforanymissingmandatoryfields.
+6 Combo Management
+6.1.1 Combo Management
+
+--- PDF PAGE 72 ---
+1 72
+Figure67:Combomanagement
+Overview:
+Popcornanddrinkcomboscanbeadded,searched,andmanagedbyadministrators
+usingtheComboManagementinterface.Foreaseoftracking,thelistofcombosis
+presentedwithpictures,costs,ingredients,andavailabilitystatus.
+6.1.2
+Figure68:CreateComboform
+
+--- PDF PAGE 73 ---
+1 73
+Figure69:CheckValidation
+Overview:
+Administratorscanenterdata,createnewandviewdetailsofdrinkandpopcorn
+combosusingtheAddNewCombointerface.Beforesaving,thesystemverifiesthe
+inputdataanddisplayserrorwarningsifanynecessaryfieldsaremissingorthedata
+isincorrect.
+
+--- PDF PAGE 74 ---
+1 74
+6.2.3 Edit Combo form
+Figure70:Createcomboform
+
+--- PDF PAGE 75 ---
+1 75
+Figure71:Checkvalidation
+Overview:
+Administratorscanmodifycombinationdetails,suchasname,price,description,
+photos,productlist,andactivitystatus,usingtheEditcombinationinterface.Before
+savingchanges,thesystemverifiestheinputdataandshowserrorwarningsifany
+mandatoryfieldsaremissingorincorrect.
+
+--- PDF PAGE 76 ---
+1 76
+7. Seat Map Layout Editor
+7.1.1 Seat layout
+Seatlayout
+Figure72:Createshowtimeformoviefilm
+Overview:
+Adminscansetuphalllayoutswiththistool.Ithasagridbuilderwhere
+administratorsmaychoosewhichcellstousefordefaultpricing,rownames,andseat
+categories.
+7.1.2 Showtime Scheduler
+Figure73:Seatandshowtimesetuppage
+
+--- PDF PAGE 77 ---
+1 77
+Overview:
+Acalendarinterfaceforschedulingmoviescreenings.Adminsdraganddrop
+showtimecardsontoavisualtimelinerepresentingdifferenttheaterhalls,checking
+forschedulingoverlaps.
+8. User management
+8.1.1 User management page
+Figure74:Usermanagement
+Overview:
+Thispageshowinformationofuseraccount.Otherwise,admincancreatenew
+user,editandviewdetails.Beside,administratorscanchangepasswordforuserwho
+forgotpassword.
+8.2.2 Create new user form and validation
+Figure75:Createnewform
+
+--- PDF PAGE 78 ---
+1 78
+Figure76:Checkvalidation
+Overview:
+Administrators can enter data to establish new user accounts using the establish New
+User interface. Before creating an account, the system verifies the provided data and
+showserrorwarningsifanyrequiredfieldsaremissingorincorrect.
+8.2.3 Edit user form and validation
+Figure77:Edituserform
+
+--- PDF PAGE 79 ---
+1 79
+Figure78:Resetpasswordandcheckvalidationform
+Overview:
+AdministratorscanedituserdataandresetpasswordsusingtheEditUserinterface.
+Beforesavingmodifications,thesystemverifiesinputdataandshowserrormessages
+forneededfields.
+9. E ticket confirmed and QR code
+
+--- PDF PAGE 80 ---
+1 80
+Figure79:ETICKET
+Overview:
+Thepictureshowstheconfirmationemailthatclientsreceivefollowingasuccessful
+payment,whichcontainsdetailsaboutthetheater,showtime,seats,paymenttype,and
+totalcost.Inordertofacilitatespeedyticketcollectionandauthentication,theemail
+alsoincludesaQRcodethatpatronscanscanatthetheater.
+6.3 Product Implementation
+6.3.1 Locking Redis Seats using TTL
+SeatLocking
+
+--- PDF PAGE 81 ---
+1 81
+privatestaticfinalDurationLOCK_TTL=Duration.ofMinutes(5);
+publicvoidlockSeats(StringshowtimeId,List<String>seatIds,StringuserId){
+List<String>lockedKeys=newArrayList<>();
+for(StringseatId:seatIds){
+Stringkey=SeatLockUtils.lockKey(showtimeId,seatId);
+StringcurrentOwner=redisTemplate.opsForValue().get(key);
+if(currentOwner!=null){
+if(currentOwner.equals(userId)){
+redisTemplate.expire(key,LOCK_TTL);
+continue;
+}
+releaseLockedKeys(lockedKeys);
+thrownewConflictException("Seatisbeingheldbyanotheruser");
+}
+//AtomicSETifNotExists—preventsraceconditions
+Booleansuccess=redisTemplate.opsForValue().setIfAbsent(key,userId,LOCK_TTL);
+if(!Boolean.TRUE.equals(success)){
+releaseLockedKeys(lockedKeys);
+thrownewConflictException("Cannotlockseat");
+}
+lockedKeys.add(key);
+}
+broadcastSeatUpdate(showtimeId,seatIds,userId,"LOCKED");
+}
+Overview:
+Thefundamentalconcurrencysafeseatreservationtechniqueisthisone.InRedis,the
+keyoperationisanatomiccompareandsetcommandthatonlywritesalockkeyifit
+doesnotalreadyexist.Thisavoidsatraditionalracesituationinwhichtwouserstry
+toreservethesameseatatthesametime.A5minuteexpirationperiodisbuiltinto
+eachlock,guaranteeinganautomaticreleaseintheeventthattheconsumerwithdraws
+fromthecheckoutprocess.Theservernotifiesallconnectedclientssothattheirseat
+mapsupdateinstantlywhenallrequestedseatshavebeensuccessfullylocked.
+6.3.2 Subcription to Websocket Seat Updates
+
+--- PDF PAGE 82 ---
+1 82
+useEffect(()=>{
+if(isOpen&&showtime?.id){
+fetchSeats();
+connectWebSocket(userId);
+constunsubscribe=subscribeToSeatUpdates(showtime.id,(update)=>{
+const{seatIds,lockedBy,action}=update;
+if(!seatIds||!Array.isArray(seatIds))return;
+//MergeincomingWebSocketeventintolocalseatstate
+setSeats(prev=>prev.map(seat=>{
+if(!seatIds.map(String).includes(String(seat.id)))returnseat;
+if(action==='LOCKED'){
+return{...seat,booked:true,bookedBy:lockedBy||'other'};
+}elseif(action==='RELEASED'){
+return{...seat,booked:false,bookedBy:null};
+}
+returnseat;
+}));
+//Forcedeselectanyseatslockedbyacompetinguser
+if(action==='LOCKED'&&lockedBy!==userId){
+setSelectedSeats(prev=>
+prev.filter(s=>!seatIds.map(String).includes(String(s.id)))
+);
+}
+});
+wsUnsubscribeRef.current=unsubscribe;
+}
+return()=>{
+if(typeofwsUnsubscribeRef.current==='function'){
+wsUnsubscribeRef.current();
+}
+};
+},[isOpen,showtime?.id]);
+Overview:
+Thefrontendsubscribestoarealtimemessagingchannelforthatparticularshowtime
+whentheseatselectionscreenopens.Everyincomingnotificationincludesdetails
+abouttheseatsthatweremodified,wholockedthem,andiftheywerereleasedor
+locked.Then,withoutrefreshingtheentirepage,thecomponentselectivelymodifies
+onlytheimpactedseatsintheinterface.Crucially,thesysteminstantlyeliminatesa
+seatthatthecurrentuserhasalreadychosenfromtheirchoicesifanothercustomer
+locksit,preventinganyefforttopayforaseatthatisnolongeraccessible.
+
+--- PDF PAGE 83 ---
+1 83
+6.3.3 Cosine Similarity for Biometric Face Matching
+publicstaticfinaldoubleSIMILARITY_THRESHOLD=0.96;
+publicstaticdoublecosineSimilarity(List<Double>a,List<Double>b){
+if(a==null||b==null||a.isEmpty()||b.size()!=a.size()){
+return0.0;
+}
+doubledotProduct=0.0;
+doublenorm1=0.0;
+doublenorm2=0.0;
+for(inti=0;i<a.size();i++){
+doublev1=a.get(i);
+doublev2=b.get(i);
+dotProduct+=v1*v2;
+norm1+=v1*v1;
+norm2+=v2*v2;
+}
+doubledenominator=Math.sqrt(norm1)*Math.sqrt(norm2);
+returndenominator==0.0?0.0:dotProduct/denominator;
+}
+Overview:
+Anormalized128dimensionalfacedescriptorvector,whichisacondensednumerical
+representationoftheuser'sfacialfeatures,isextractedfromawebcamframebythe
+browserwhenaclientusesFaceIDlogin.Thebackendreceivesthisvectorand
+computesthecosinesimilaritybetweenitandthepreviouslyregistereddescriptorby
+retrievingitfromthedatabase.Thismathematicalmetricisunaffectedbylighting
+conditionssinceitmeasurestheangulardistancebetweentwovectorsregardlessof
+theirmagnitude.Aperfectmatchresultsinascoreof1.0,thesystembalances
+security(rejectingimposters)withusability(toleratingslightpostureandangle
+changes)byacceptingscoresatorabove0.96asaverifiedidentification.
+6.3.4 BM25 Full Text Search with Elasticsearch
+publicList<Movie>searchMoviesByTitle(Stringq){
+String qNoSign = MovieSyncService.removeDiacritics(q); // Strip Vietnamese
+diacritics
+Stringfuzziness=q.trim().length()<=3?"0":"AUTO";
+intprefixLen=q.trim().length()<=3?0:2;
+//MatchonoriginalVietnamesequerywithfieldboosting
+QuerymultiMatchOriginal=Query.of(qb->qb
+.multiMatch(mm->mm
+.query(q)
+.fields("title^4","englishTitle^3","director^2","actors")
+.type(TextQueryType.BestFields)
+.fuzziness(fuzziness)
+
+--- PDF PAGE 84 ---
+1 84
+.prefixLength(prefixLen)));
+//Matchondiacriticstrippedquery
+QuerymultiMatchNoSign=Query.of(qb->qb
+.multiMatch(mm->mm
+.query(qNoSign)
+.fields("titleNoSign^3","directorNoSign^2","actorsNoSign")
+.fuzziness(fuzziness)
+.prefixLength(prefixLen)));
+//CombinebothquerieswithORlogic(minimumShouldMatch=1)
+QueryboolQuery=Query.of(qb->qb
+.bool(b->b.should(multiMatchOriginal).should(multiMatchNoSign)
+.minimumShouldMatch("1")));
+SearchHits<MovieIndex>hits=elasticsearchOperations.search(
+NativeQuery.builder().withQuery(boolQuery).build(),MovieIndex.class);
+//RetrieverankedIDs,thenhydratefromMongoDBtogetfulldocuments
+List<String>ids=hits.getSearchHits().stream()
+.map(h->h.getContent().getId()).toList();
+List<Movie>mongoMovies=movieRepository.findAllById(ids);
+Map<String,Movie>movieMap=mongoMovies.stream()
+.collect(Collectors.toMap(Movie::getId,m->m));
+//PreservetheElasticsearchBM25rankingorder
+returnids.stream().map(movieMap::get).filter(Objects::nonNull).toList();
+}
+Overview:
+Thissearchtechniqueusesadualpassapproachthatwascreatedespeciallyfor
+Vietnamesetext.DuetotheuseofdiacriticalmarkingsinVietnamese(e.g.,"Nhà"vs.
+"Nha"),twoparallelqueriesarecreated:onethatmatchestheoriginalVietnamese
+inputandanotherthatmatchesaversionthathasbeenstrippedofthediacriticalmarks.
+ORlogicisusedtointegratebothrequestssothatthesearchissatisfiedbyeither
+match.Titlematchesarerankedhigherthanactorordirectormatchesthankstofield
+weighting.Themostpertinentfilmsarereturnedfirstviathesearchengine'sBM25
+scoringsystem,whichranksresultsbasedonwordfrequencyandinversedocument
+frequency.Thewholemoviedataisthenloadedfromthemaindatabaseusingthe
+ratedIDs,maintainingtherelevancebasedorderinginsteadofthedatabase'sdefault
+sort.
+6.3.5 Filter chain for Stateless JWT Security
+@Bean
+publicSecurityFilterChainsecurityFilterChain(HttpSecurityhttp,
+JwtAuthenticationFilterjwtAuthenticationFilter)throwsException{
+http
+.csrf(csrf->csrf.disable())
+
+--- PDF PAGE 85 ---
+1 85
+.sessionManagement(session->session
+.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+.authorizeHttpRequests(auth->auth
+//Publicendpoints—notokenrequired
+.requestMatchers("/api/users/login","/api/users/register",
+"/api/users/verify-face","/api/auth/**").permitAll()
+.requestMatchers(HttpMethod.GET,
+"/api/movies/**","/api/showtimes/**",
+"/api/cinemas/**","/api/combos/**").permitAll()
+//Paymentgatewaywebhooks
+.requestMatchers("/api/momo/**","/api/zalopay/**",
+"/api/stripe/**").permitAll()
+//Adminonlyendpoints
+.requestMatchers("/api/admin/**").hasRole("ADMIN")
+//Allotherroutesrequireauthentication
+.anyRequest().authenticated()
+)
+.addFilterBefore(jwtAuthenticationFilter,
+UsernamePasswordAuthenticationFilter.class);
+returnhttp.build();
+}
+Overview:
+Becausethesecuritylayerissetupinstatelessmode,eachAPIcallisseparately
+verifiedbycheckingaJSONWebTokenthatisattachedtotherequestheader,the
+serverdoesnotmaintainsessiondatainbetweenrequests.Beforeeveryinbound
+requestreachesanybusinesslogic,itisinterceptedbyabespokeauthenticationfilter.
+Theconfigurationestablishesathreetieredaccessmodel:paymentwebhooksthat
+verifytheirowncryptographicsignaturesinsteadoftokens,publicendpointsthatare
+accessibletounauthenticatedvisitors(moviebrowsing,search,login,face
+verification),andadminonlyendpointsthatareonlyavailabletouserswhosetoken
+hasanadministratorroleclaim.
+6.3.6 Seat Price Calculation by Seat Type
+constgetSeatPrice=(seat)=>{
+if(seat.price&&seat.price>0){
+returnseat.price;
+}
+//Fallback:calculatebasedonseattypemultipliers
+constbasePrice=showtime.price||100000;
+constseatType=getSeatType(seat);
+switch(seatType){
+case'VIP': returnbasePrice*1.5;
+case'COUPLE':returnbasePrice*2.0;
+case'REGULAR':
+default:returnbasePrice;
+
+--- PDF PAGE 86 ---
+1 86
+}
+};
+constgetTotalPrice=()=>{
+returnselectedSeats.reduce((total,seat)=>{
+returntotal+getSeatPrice(seat);
+},0);
+};
+Overview:
+Atwotierresolutionapproachisusedinseatpricing.First,thevaluetakes
+precedenceiftheadministratorhasspecificallysetaperseatpricinginthebackend.
+Aclientsidemultipliermechanismisusedifnocustompricingisspecified.Thebase
+ticketpricefortheshowtimeismultipliedbyatypespecificfactor,whichis1.0xfor
+regularseats,1.5xforVIPseats,and2.0xforcoupleseats.Theentireinvoiceisthen
+computedbyaddingupthepricesofalltheseatsthatarecurrentlyselected,shownin
+realtimeinthebookingsummarypanel,andsentasthefinalsumtothepayment
+checkoutstage.
+6.3.7 MoMo Payment Webhook HMAC-SHA256 Verification
+public boolean verifyWebhookSignature(Map<String, Object> payload, String
+receivedSignature){
+try{
+//MoMoIPNrawsignaturestring—fieldsmustbeinalphabeticalorder
+StringrawSignature="accessKey="+accessKey
++"&amount="+payload.get("amount")
++"&extraData="+payload.getOrDefault("extraData","")
++"&message="+payload.getOrDefault("message","")
++"&orderId="+payload.get("orderId")
++"&orderInfo="+payload.getOrDefault("orderInfo","")
++"&orderType="+payload.getOrDefault("orderType","")
++"&partnerCode="+payload.getOrDefault("partnerCode","")
++"&payType="+payload.getOrDefault("payType","")
++"&requestId="+payload.getOrDefault("requestId","")
++"&responseTime="+payload.getOrDefault("responseTime","")
++"&resultCode="+payload.getOrDefault("resultCode","")
++"&transId="+payload.getOrDefault("transId","");
+Stringcomputed=HmacUtils.hmacSha256(secretKey,rawSignature);
+returncomputed.equals(receivedSignature);
+}catch(Exceptione){
+returnfalse;
+}
+}
+Overview:
+Theapplication'swebhookendpointreceivesaservertoservercallback(IPN,or
+InstantPaymentNotification)fromMoMo'spaymentgatewayuponcompletionofa
+
+--- PDF PAGE 87 ---
+1 87
+transaction.Thebackendhastoauthenticatethatthecallbackactuallycamefrom
+MoMoinordertostopfakepaymentconfirmations.Themethodusestheshared
+secretkeytocomputeanHMAC-SHA256cryptographichashafterreconstructinga
+rawsignaturestringbyconcatenatingallpayloadelementsinstrictalphabeticalorder
+(asspecifiedbyMoMo'sAPIspecification).Thepaymentisverifiedaslegitimateif
+thecalculatedhashandthesignatureobtainedfromMoMomatch.Thismethod
+makessurethatevenifanattackerfindsoutthecallbackURL,theywon'tbeableto
+createalegitimateconfirmationwithoutthesecretkey.
+6.3.8 Transactional Ticket Booking with Lock Validation
+@Transactional
+publicTicketbookTicket(Ticketticket){
+List<String>seatIds=splitSeatIds(ticket.getSeatId());
+if(seatIds.isEmpty()){
+thrownewBadRequestException("SeatIDsarerequired");
+}
+//VerifythattherequestinguseractuallyholdstheRedislockfortheseseats
+seatLockService.validateSeatsLockedByUser(
+ticket.getShowtimeId(),seatIds,ticket.getUserId());
+//Doublechecknoseatisalreadypermanentlybookedinthedatabase
+for(StringseatId:seatIds){
+Seatseat=seatRepository.findById(seatId)
+.orElseThrow(()->newResourceNotFoundException("Seat","id",seatId));
+if(Boolean.TRUE.equals(seat.isBooked())){
+throw new BadRequestException("Seat already booked: " +
+seat.getSeatNumber());
+}
+}
+//MarkeachseataspermanentlybookedinMongoDB
+for(StringseatId:seatIds){
+Seatseat=seatRepository.findById(seatId).orElseThrow();
+seat.setBooked(true);
+seat.setBookedBy(ticket.getUserId());
+seat.setBookedAt(DateUtils.nowIso());
+seatRepository.save(seat);
+}
+TicketsavedTicket=ticketRepository.save(ticket);
+//ReleasethetemporaryRedislocks—seatsarenowpermanentlycommitted
+seatLockService.releaseSeats(ticket.getShowtimeId(),seatIds,ticket.getUserId());
+returnsavedTicket;
+}
+Overview:
+Oncetheconsumerhasfinishedpaying,thisprocedurecompletesthelastbooking
+transaction.Itusesathreelayervalidationpipelinetomakesurethecustomerstillhas
+
+--- PDF PAGE 88 ---
+1 88
+thetemporarycachelockfortherequestedseats,doublecheckthedatabaseseat
+recordstomakesuretheyhaven'tbeenpermanentlyreservedbyanothertransaction,
+andwritethebookingatomically.Nopartialbookingsareevermadethankstothe
+transactionalannotation,whichguaranteesthatifanystepfails,theentireprocessis
+rolledback.Sincetheseatsarenowpermanentlycommitted,thetemporarylocksare
+expresslyreleasedafterthetickethasbeensaved.Zerogapcoveragebetween
+temporaryandpermanentreservationsisensuredbythislockthencommitthen
+releasepattern.
+6.3.9 JWT Role Based Authentication Filter
+@Override
+protectedvoiddoFilterInternal(HttpServletRequestrequest,
+HttpServletResponseresponse,FilterChainfilterChain)
+throwsServletException,IOException{
+StringauthHeader=request.getHeader("Authorization");
+if(authHeader!=null&&authHeader.startsWith("Bearer")){
+Stringtoken=authHeader.substring(7);
+if(jwtService.isTokenValid(token)
+&&SecurityContextHolder.getContext().getAuthentication()==null){
+StringsubjectId=jwtService.getSubjectFromToken(token);
+Stringrole=jwtService.getRoleFromToken(token);
+if("ADMIN".equals(role)){
+adminRepository.findById(subjectId).ifPresent(admin->{
+SecurityContextHolder.getContext().setAuthentication(
+newUsernamePasswordAuthenticationToken(
+admin,null,
+List.of(newSimpleGrantedAuthority("ROLE_ADMIN"))));
+});
+}else{
+userRepository.findById(subjectId).ifPresent(user->{
+SecurityContextHolder.getContext().setAuthentication(
+newUsernamePasswordAuthenticationToken(
+user,null,
+List.of(newSimpleGrantedAuthority("ROLE_USER"))));
+});
+}
+}
+}
+filterChain.doFilter(request,response);
+}
+Overview:
+BeforeeveryincomingHTTPrequestreachesanybusinesslogic,itisinterceptedby
+thisfilter.Itdecodestheroleclaimcontainedinthetokenpayloadafterextractingthe
+
+--- PDF PAGE 89 ---
+1 89
+authenticationtokenfromtherequestheaderandverifyingitsintegrityandexpiration.
+Thefilterloadstherelevantaccountfromtherelevantdatabasecollectionand
+registersitinthesecuritycontextbasedontherole(administratororregularuser).
+Thismakesitpossibleforalldownstreamaccesscontrolteststoaccuratelyconfirm
+theuser'spermissions.InordertoensureefficiencythroughoutchainedAPIcalls,an
+extrasecuritymeasurestopsreauthenticationonrequeststhathavepreviouslybeen
+validated.
+6.4 Evaluation of product
+Systemstability,realtimesyncperformance,biometricaccuracy,anduserexperience
+acrosscustomerandadministrativeportalsareallconsideredwhileevaluatingHAK
+Cineverse.Thesolutionshowedexcellentfunctionalstabilityinrealtimeseatlocking,
+multigatewaypayments,andgamificationmechanicsthroughthoroughendtoend
+testing.Certaintechnicaltradeoffsinclientsidefacerecognitionandmobilelayout
+responsivenessrevealobviousareasforfurtheroptimizationwhileattaining
+productiongradecapability.Theprojectismainaccomplishments,constraints,and
+futuredevelopmentplanaredescribedintheensuingsubsections.
+6.4.1 Successes and Advantages
+Highoperationalperformanceandafullstackcinemamanagementplatformare
+effectivelydeliveredbyHAKCineverse.Themainachievementofthesystemisits
+WebSocketdrivenseatlockingmechanism,whichissupportedbyRedisatomiclocks
+andsuccessfullypreventsdoublebookingunderconcurrentuseractivity.Additionally,
+theincorporationofmultigatewaypaymentprocessing(Stripe,MoMo,ZaloPay,
+VietQR),biometricFaceIDverification,andgamificationfeaturesliketheDailySpin
+Wheelgreatlyincreasesuserengagement.Lastly,DockerCompose'scomplete
+containerizationguaranteesdependable,onecommanddeploymentthroughout
+productionsettings.
+6.4.2 Restrictions and Potential Improvements
+HAKCineversedemonstratesanumberofacknowledgedtechnologicallimitationsin
+termsofperformance,userexperience,andsystemarchitecture,eventhoughithas
+achievedproductiongradecapabilities.First,ratherthanrelyingonhighprecision
+detection,theclientsideFaceIDbiometricpipelineusesalightweightbrowsermodel
+intendedforexecutionspeed.Becauseofthis,identificationaccuracydeteriorates
+whenuserswearglassesorotherfaceaccessories,whenambientilluminationispoor,
+orwhencameraanglesaresteep.Asaresult,consumersaresometimesforcedtouse
+regularpasswordauthentication.Furthermore,thecurrentapproachisstillsusceptible
+tophotospoofingattacksbecausefacialfeatureextractiontakesplacesolelywithin
+theclientbrowserwithoutserversidelivenessverification.
+Second,whiletheprogramUIadaptseffectivelytotypicaldesktopandtablet
+viewports,complexinteractivecomponentsespeciallythedense10x15seatselection
+gridandmulticolumnadministrativedatatablessufferfromimpairedusabilityon
+mobilescreensunder480pxwidth.Third,duetotheplatform'scompleteonline
+operationandlackofaProgressiveWebAppserviceworkerlayer,offlineticket
+readingandQRcoderetrievalarenotavailableduringsporadicnetworkconnectivity.
+Lastly,theadministrativeanalyticsportal'suseofembeddedthirdpartyiframes
+resultsinanoperationalrelianceontheavailabilityofexternalservicesandaninitial
+loadlatencyofthreetofiveseconds.
+
+--- PDF PAGE 90 ---
+1 90
+6.4.3 Upcoming Development Strategies
+Scalingthesystemintoanenterprisereadyplatformwillbethemaingoalof
+upcomingeditionsofHAKCineverse.Inordertoenhancemobilecheckoutandpush
+notifications,developmentplanscallforcreatinganativecrossplatformmobile
+applicationusingReactNative.Additionally,biometricaccuracyandliveness
+detectionwillbeimprovedbymovingfacedescriptorprocessingtoaspecialized
+serversidemicroservice.Thesystem'sarchitecturalevolutionwillbecompletedby
+addingServiceWorkercachingforofflineticketdisplayandeventuallybreaking
+downthemonolithicbackendintomicroservicesmanagedbyKubernetes.
+7. Conclusion
+7.1 Information acquired from this project
+Anextensive,multidisciplinarylearningexperiencecoveringdistributedbackend
+architecture,contemporaryfrontenddevelopment,biometricmachinelearning,
+databasedesign,andDevOpscontainerizationwasmadepossiblebytheengineering
+anddeploymentofHAKCineverse.Itwasnecessarytogobeyondtheoretical
+softwareengineeringconceptstoaddresschallengingrealworldsoftwareintegration
+issuesinordertobuildanenterprisegrademovieticketingsystemfromthegroundup.
+MasteredconcurrencycontrolbyusingSTOMPWebSocketbroadcastsinconjunction
+withRedisatomiclockstogetridofseatracesituations.Deepinsightintocreating
+robustdistributedsystemswasgainedbycontrollinglockTTLexpirationand
+synchronizingrealtimeUIdataacrossactiveusersessions.
+integratedbackendCosineSimilarityvectormatchingon128Dfacialdescriptorswith
+browserbasedfacedetection.Thisexperiencebroughttolightmagnitude
+normalization,featurecomparisoninvariance,andthetradeoffsbetweenserverside
+precisionandclientsideinferencetime.
+UsedElasticsearchandtheBM25scoringalgorithmtoimplementamultifield
+Vietnamesemoviesearch.Adeeperpracticalunderstandingofenterprisesearch
+infrastructureswasachievedbyexecutingdualpassqueriesoveroriginaland
+diacriticalstrippedfieldswhilemaintainingrelevanceranking.
+DevelopedpaymentconnectorsutilizingHMAC-SHA256signatureverificationfor
+secureIPNwebhooksforStripe,MoMo,ZaloPay,andVietQR.UsingJSONWeb
+TokenstoconfigurestatelessSpringSecuritystrengthenedbestpracticesforrole
+basedaccesscontrolandauthentication.
+Dividedcontrollers,servicelogic,andrepositoryinterfacesamongdozensofREST
+endpointsinamaintainabletiereddesign.UsingDockerComposetoorchestrate
+SpringBoot,MongoDB,Redis,Elasticsearch,Grafana,andPrometheusallowedfora
+practicalunderstandingofmulticontainerdeployment.
+7.2 The outcome of this endeavor
+HAKCineverse,afullyoperational,productionreadycinemaEticketingand
+administrationplatformdesignedtoovercomemajoroperationalflawsfoundinwell
+knownmarketplatforms,isthemainoutcomeofthisproject.
+
+--- PDF PAGE 91 ---
+1 91
+Theplatformistwoprimaryappsarebackedbyasinglebackend.AReactinterface
+formoviefinding,seatlocking,multichannelpayments,FaceIDlogin,andaloyalty
+spinwheelisprovidedbytheclientwebapplication.Inaddition,theadministrative
+managementinterfaceenablesmovietheateremployeestomanageticketscanners,
+revenuereporting,catalogs,showtimes,roomlayouts,andGrafanasystemmonitoring.
+ASpringBootRESTservicewithMongoDB,Redis,Elasticsearch,andSTOMP
+WebSocketsunderpinsboth.
+HAKCineversemeetsseveralkeyperformanceindicators.Byavoidingbooking
+disputesanddeliveringseatstatusupdatesinunder500milliseconds,theRedisseat
+lockingsystemensuresnoduplicatebookings.Passwordlesslogintakesonlytwo
+secondswithaconfidencescoreof0.96thankstobiometricfacialrecognition.
+Furthermore,automatedpaymentwebhooksareprocessed,andElasticsearchprovides
+adynamiccustomerloyaltytoolandinstant,nonsignalsensitivemoviesearch
+capabilities.
+AcomparativeanalysisshowsthatHAKCineversesurpassesmarketleadersin
+technicalinnovationwhileachievingfeatureparitywiththem.WhileHAKCineverse
+providesrealtime,subsecondWebSocketsynchronization,legacysystemsrelyon
+pollingbasedseatchanges.Additionally,Elasticsearchdiacriticalsearchand
+passwordlessFaceIDverificationtaketheplaceofantiquatedloginandsearch
+techniques,andDockercontainerizationoffersanimproveddeploymentenvironment.
+7.3 Further Development of This Project
+ThearchitectureofHAKCineversewasintendedtobeextensible,evenifitisa
+comprehensivedemonstrationplatform.Theprojectcanprogressalongfourmain
+pathsinthefuture:academicresearch,commercialization,functionalextension,and
+productrefinement.
+Improvinguserexperienceandsystemresiliencearethemaingoalsofnearterm
+improvements.Forviewportssmallerthan480pixels,mobilefirstlayout
+modificationswilloptimizeinteractiveseatgridsanddatatables.QRcoderetrieval
+andofflineticketcachingwillbemadepossiblebyTouchpointsforProgressiveWeb
+AppinteractionwithServiceWorkers.Lastly,serversideantispoofinglivenesstests
+likeeyeblinkorheadmovementverificationcanimprovebiometricsecurity.
+ThecommercialpotentialofHAKCineverseformarketadoptionissubstantial.
+IndependentmovietheaterchainswillbeabletouseHAKCineverseasaturnkey
+whitelabelticketingplatformifthebackendisredesignedtoaccommodatemulti
+tenancy.AcomprehensiveB2Bcinemaadministrationecosystemwillbeproducedby
+extendingtheadminsitetoincorporateboxofficePOStechnology,automatic
+concessioninventorytracking,anddynamicpricingalgorithms.
+Theplatformisserviceecosystemwillgrowwithlongtermfeatureimprovements.
+Pushnotificationsandmobilewalletpassesaremadepossiblebycreatingcross
+platformnativemobileappswithReactNative.Customerengagementwillalsobe
+increasedbyintegratingAIrecommendationmodelsbasedonwatchinghistoryand
+socialelementslikegroupticketpurchasing.
+
+--- PDF PAGE 92 ---
+1 92
+Thisprojectistechnicalunderpinningcreatesanumberofexcitingnewresearch
+opportunities.Autoscalingduringhighdemandpremierereleaseswillbemade
+possiblebybreakingdowntheSpringBootmonolithintoKubernetesmanaged
+microservices.WhileedgecomputedPythonbiometrics(DeepFace)canfurther
+minimizefacialidentificationlatency,morestudyintoblockchainbasedNFTsmart
+contractscaneradicatesecondarymarketticketscalping.
+REFERENCE
+Abrahams,P.,2018.MicroserviceswithSpringBootandSpringCloud.Birmingham:
+PacktPublishing.
+Alur,D.,Crupi,J.andMalks,D.,2003.CoreJ2EEPatterns:BestPracticesand
+DesignStrategies.2nded.UpperSaddleRiver,NJ:PrenticeHall.
+Banks,A.andPorcello,E.,2020.LearningReact:ModernPatternsforDeveloping
+ReactApps.2nded.Sebastopol,CA:O'ReillyMedia.
+Brikman,Y.,2019.Terraform:Up&Running:WritingInfrastructureasCode.2nded.
+Sebastopol,CA:O'ReillyMedia.
+Carlson,J.L.,2013.RedisinAction.ShelterIsland,NY:ManningPublications.
+Chodorow,K.,2013.MongoDB:TheDefinitiveGuide.2nded.Sebastopol,CA:
+O'ReillyMedia.
+Duckett,J.,2014.JavaScriptandJQuery:InteractiveFront-EndWebDevelopment.
+Indianapolis,IN:JohnWiley&Sons.
+Fette,I.andMelnikov,A.,2011.RFC6455:TheWebSocketProtocol.Internet
+EngineeringTaskForce(IETF).Available
+at:https://datatracker.ietf.org/doc/html/rfc6455[Accessed15July2026].
+Fielding,R.T.,2000.ArchitecturalStylesandtheDesignofNetwork-basedSoftware
+Architectures.PhDthesis.UniversityofCalifornia,Irvine.
+Fowler,M.,2018.Refactoring:ImprovingtheDesignofExistingCode.2nded.
+Boston,MA:Addison-Wesley.
+Gamma,E.,Helm,R.,Johnson,R.andVlissides,J.,1994.DesignPatterns:Elements
+ofReusableObject-OrientedSoftware.Reading,MA:Addison-Wesley.
+Gormley,C.andTong,Z.,2015.Elasticsearch:TheDefinitiveGuide.Sebastopol,CA:
+O'ReillyMedia.
+Jones,M.,Bradley,J.andSakimura,N.,2015.RFC7519:JSONWebToken(JWT).
+InternetEngineeringTaskForce(IETF).Available
+at:https://datatracker.ietf.org/doc/html/rfc7519[Accessed12July2026].
+
+--- PDF PAGE 93 ---
+1 93
+Krawczyk,H.,Bellare,M.andCanetti,R.,1997.RFC2104:HMAC:Keyed-Hashing
+forMessageAuthentication.InternetEngineeringTaskForce(IETF).Available
+at:https://datatracker.ietf.org/doc/html/rfc2104[Accessed14July2026].
+Martin,R.C.,2008.CleanCode:AHandbookofAgileSoftwareCraftsmanship.
+UpperSaddleRiver,NJ:PrenticeHall.
+Martin,R.C.,2017.CleanArchitecture:ACraftsman'sGuidetoSoftwareStructure
+andDesign.Boston,MA:Addison-Wesley.
+MoMoDeveloperNetwork,2024.MoMoPaymentGatewayIntegrationAPI
+Documentation.Availableat:https://developers.momo.vn[Accessed18July2026].
+Nygard,M.T.,2018.ReleaseIt!:DesignandDeployProduction-ReadySoftware.2nd
+ed.Raleigh,NC:PragmaticBookshelf.
+Pressman,R.S.andMaxim,B.R.,2019.SoftwareEngineering:APractitioner's
+Approach.9thed.NewYork:McGraw-HillEducation.
+Rescorla,E.,2018.RFC8446:TheTransportLayerSecurity(TLS)ProtocolVersion
+1.3.InternetEngineeringTaskForce(IETF).Available
+at:https://datatracker.ietf.org/doc/html/rfc8446[Accessed10July2026].
+Robertson,S.andZaragoza,H.,2009.'Theprobabilisticrelevanceframework:BM25
+andbeyond',FoundationsandTrends®inInformationRetrieval,3(4),pp.333-389.
+Sandler,M.,Howard,A.,Meng,L.,Chen,B.andChen,L.C.,2018.'MobileNetV2:
+Invertedresidualsandlinearbottlenecks',inProceedingsoftheIEEE/CVF
+ConferenceonComputerVisionandPatternRecognition(CVPR),SaltLakeCity,UT,
+18-23June2018.Piscataway,NJ:IEEE,pp.4510-4520.
+Schroff,F.,Kalenichenko,D.andPhilbin,J.,2015.'FaceNet:Aunifiedembedding
+forfacerecognitionandclustering',inProceedingsoftheIEEEConferenceon
+ComputerVisionandPatternRecognition(CVPR),Boston,MA,7-12June2015.
+Piscataway,NJ:IEEE,pp.815-823.
+Schwaber,K.andSutherland,J.,2020.TheScrumGuide:TheDefinitiveGuideto
+Scrum:TheRulesoftheGame.Scrum.org.Available
+at:https://scrumguides.org[Accessed5July2026].
+Stripe,Inc.,2024.StripeAPIReference:WebhooksandCryptographicSignatures.
+Availableat:https://stripe.com/docs/api[Accessed18July2026].
+Subramanian,V.,2019.ProMERNStack:FullStackWebAppDevelopmentwith
+Mongo,Express,React,andNode.2nded.Berkeley,CA:Apress.
+Turnbull,J.,2014.TheDockerBook:ContainerizationistheNewVirtualization.
+NewYork:JamesTurnbull.
+Walls,C.,2019.SpringBootinAction.ShelterIsland,NY:ManningPublications
+
+--- PDF PAGE 94 ---
+1 94
+Wieruch,R.,2020.TheRoadtoReact:Yourjourneytomasterplainyetpragmatic
+React.js.Berlin:RobinWieruch.
+ZaloPayDeveloperPortal,2024.ZaloPayMerchantPaymentIntegrationGuidelines.
+Availableat:https://developer.zalopay.vn[Accessed18July2026].
+Appendix 1
+Assetlinks
+Github link:https://github.com/anhkhoahuynh270705-boop/React-Springboot
+Use case link:
+https://drive.google.com/file/d/1MgDzWjVqMq_lSX8qSSOCvgwrZFsWdmPO/view?
+usp=sharing
+Class diagram link:
+https://drive.google.com/file/d/18grYMPvNv3caL7wA128OU6l8b9L3dKd3/view?us
+p=sharing
+Appendix 2
+DeclarationofAIUse:
+IhaveusedAIwhileundertakingmyassignmentinthefollowingways:
+Todevelopresearchquestionsonthetopic–YES
+Tocreateanoutlineofthetopic–NO
+Toexplainconcepts–NO
+Tosupportmyuseoflanguage–YES

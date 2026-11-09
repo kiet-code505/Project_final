@@ -17,6 +17,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<User> Users => Set<User>();
     public DbSet<Booking> Bookings => Set<Booking>();
     public DbSet<BookingPassenger> BookingPassengers => Set<BookingPassenger>();
+    public DbSet<VnpayPayment> VnpayPayments => Set<VnpayPayment>();
 
     // Enum lưu dạng chuỗi giống @Enumerated(EnumType.STRING)
     protected override void ConfigureConventions(ModelConfigurationBuilder b)
@@ -27,6 +28,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         b.Properties<TransportType>().HaveConversion<string>();
         b.Properties<VehicleType>().HaveConversion<string>();
         b.Properties<BookingStatus>().HaveConversion<string>();
+        b.Properties<VnpayPaymentStatus>().HaveConversion<string>();
     }
 
     protected override void OnModelCreating(ModelBuilder m)
@@ -50,6 +52,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         m.Entity<User>().HasIndex(u => u.Email).IsUnique();
 
         m.Entity<Booking>().HasIndex(b => b.BookingCode).IsUnique();
+        m.Entity<VnpayPayment>().HasIndex(p => p.TransactionRef).IsUnique();
+        m.Entity<VnpayPayment>().HasOne(p => p.Booking).WithMany(b => b.Payments).HasForeignKey(p => p.BookingId).OnDelete(DeleteBehavior.Restrict);
         m.Entity<Booking>().HasOne(b => b.User).WithMany(u => u.Bookings).HasForeignKey(b => b.UserId);
         m.Entity<Booking>().HasMany(b => b.Passengers).WithOne(p => p.Booking).HasForeignKey(p => p.BookingId).OnDelete(DeleteBehavior.Cascade);
     }

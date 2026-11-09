@@ -1,0 +1,293 @@
+@model TourIndexViewModel
+@{
+    ViewData["Title"] = "Quản lý tour";
+    ViewData["Description"] = "Quản lý danh sách tour du lịch: thông tin chung, lịch trình, hình ảnh và lịch khởi hành.";
+
+    string Link(int? page = null, string? sortBy = null, string? sortDir = null,
+                string? status = "__keep", string? start = "__keep", string? end = "__keep",
+                string? search = "__keep", int? pageSize = null)
+    {
+        var qs = new Dictionary<string, string?>
+        {
+            ["search"] = search == "__keep" ? Model.Search : search,
+            ["startLocationId"] = start == "__keep" ? Model.StartLocationId?.ToString() : start,
+            ["endLocationId"] = end == "__keep" ? Model.EndLocationId?.ToString() : end,
+            ["status"] = status == "__keep" ? Model.Status?.ToString().ToLower() : status,
+            ["sortBy"] = sortBy ?? Model.SortBy,
+            ["sortDir"] = sortDir ?? Model.SortDir,
+            ["page"] = (page ?? Model.Page).ToString(),
+            ["pageSize"] = (pageSize ?? Model.PageSize).ToString(),
+        };
+        return "/admin/tours" + Microsoft.AspNetCore.Http.QueryString.Create(qs.Where(kv => !string.IsNullOrEmpty(kv.Value)));
+    }
+
+    string SortLink(string col) =>
+        Link(page: 1, sortBy: col, sortDir: Model.SortBy == col && Model.SortDir == "ASC" ? "DESC" : "ASC");
+    string SortIcon(string col) =>
+        Model.SortBy != col ? "arrow-up-down" : Model.SortDir == "ASC" ? "arrow-up" : "arrow-down";
+
+    var currentUrl = Context.Request.Path + Context.Request.QueryString;
+    var fromItem = Model.TotalItems == 0 ? 0 : (Model.Page - 1) * Model.PageSize + 1;
+    var toItem = Math.Min(Model.Page * Model.PageSize, Model.TotalItems);
+    var hasFilter = !string.IsNullOrEmpty(Model.Search) || Model.StartLocationId != null
+                    || Model.EndLocationId != null || Model.Status != null;
+}
+
+<header class="page-header">
+    <div class="title-block">
+        <div class="title-icon"><i data-lucide="map"></i></div>
+        <div>
+            <h1>Quản lý tour</h1>
+            <p>Thông tin chung, lịch trình theo ngày và thư viện ảnh</p>
+        </div>
+    </div>
+    <div class="header-actions">
+        <a href="/admin/tours/create" class="btn btn-primary" id="btnCreateTour"><i data-lucide="plus"></i> Thêm tour</a>
+    </div>
+</header>
+
+@* ── STAT CARDS ── *@
+<section class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon stat-blue"><i data-lucide="package"></i></div>
+        <div>
+            <div class="stat-label">Tổng tour</div>
+            <div class="stat-value" data-count="@Model.StatTotal">@Model.StatTotal</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon stat-green"><i data-lucide="check-circle-2"></i></div>
+        <div>
+            <div class="stat-label">Đang hoạt động</div>
+            <div class="stat-value" data-count="@Model.StatActive">@Model.StatActive</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon stat-rose"><i data-lucide="power-off"></i></div>
+        <div>
+            <div class="stat-label">Tạm dừng</div>
+            <div class="stat-value" data-count="@Model.StatInactive">@Model.StatInactive</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon stat-amber"><i data-lucide="calendar-days"></i></div>
+        <div>
+            <div class="stat-label">Có lịch khởi hành</div>
+            <div class="stat-value" data-count="@Model.StatWithDepartures">@Model.StatWithDepartures</div>
+        </div>
+    </div>
+</section>
+
+@* ── TOOLBAR (GET form) ── *@
+<form class="toolbar" method="get" action="/admin/tours" id="filterForm">
+    <input type="hidden" name="sortBy" value="@Model.SortBy" />
+    <input type="hidden" name="sortDir" value="@Model.SortDir" />
+    @if (Model.Status != null)
+    {
+        <input type="hidden" name="status" value="@Model.Status.ToString()!.ToLower()" />
+    }
+
+    <label class="search-box">
+        <i data-lucide="search"></i>
+        <input type="search" name="search" id="searchInput" value="@Model.Search"
+               placeholder="Tìm theo mã tour, tên tour, điểm tham quan…" autocomplete="off" />
+        @if (!string.IsNullOrEmpty(Model.Search))
+        {
+            <a class="clear-btn" href="@Link(page: 1, search: null)" title="Xoá tìm kiếm"><i data-lucide="x"></i></a>
+        }
+    </label>
+
+    <div class="filter-group">
+        <i data-lucide="filter"></i>
+        <select name="startLocationId" class="select js-auto-submit" id="startLocSelect" aria-label="Điểm khởi hành">
+            <option value="">Mọi điểm khởi hành</option>
+            @foreach (var l in Model.LocationOptions)
+            {
+                <option value="@l.LocationId" selected="@(Model.StartLocationId == l.LocationId)">@l.LocationName</option>
+            }
+        </select>
+        <select name="endLocationId" class="select js-auto-submit" id="endLocSelect" aria-label="Điểm đến">
+            <option value="">Mọi điểm đến</option>
+            @foreach (var l in Model.LocationOptions)
+            {
+                <option value="@l.LocationId" selected="@(Model.EndLocationId == l.LocationId)">@l.LocationName</option>
+            }
+        </select>
+        <div class="segmented" role="tablist">
+            <a class="@(Model.Status == null ? "seg-active" : "")" href="@Link(page: 1, status: null)">Tất cả</a>
+            <a class="@(Model.Status == true ? "seg-active" : "")" href="@Link(page: 1, status: "true")">Hoạt động</a>
+            <a class="@(Model.Status == false ? "seg-active" : "")" href="@Link(page: 1, status: "false")">Tạm dừng</a>
+        </div>
+        <select name="pageSize" class="select js-auto-submit" id="pageSizeSelect">
+            @foreach (var s in new[] { 10, 20, 50 })
+            {
+                <option value="@s" selected="@(Model.PageSize == s)">@s / trang</option>
+            }
+        </select>
+    </div>
+</form>
+
+@if (Model.Items.Count == 0)
+{
+    <div class="empty">
+        <div class="empty-icon"><i data-lucide="map"></i></div>
+        @if (hasFilter)
+        {
+            <h3>Không tìm thấy tour phù hợp</h3>
+            <p>Thử đổi từ khoá hoặc bỏ bớt bộ lọc</p>
+            <a href="/admin/tours" class="btn btn-ghost"><i data-lucide="rotate-ccw"></i> Xoá bộ lọc</a>
+        }
+        else
+        {
+            <h3>Chưa có tour nào</h3>
+            <p>Tạo tour đầu tiên để bắt đầu bán hàng</p>
+            <a href="/admin/tours/create" class="btn btn-primary"><i data-lucide="plus"></i> Thêm tour đầu tiên</a>
+        }
+    </div>
+}
+else
+{
+    <div class="table-card">
+        <div class="table-wrap">
+            <table class="table" id="toursTable">
+                <thead>
+                    <tr>
+                        <th>Ảnh</th>
+                        <th><a class="sortable @(Model.SortBy == "tourName" ? "sorted" : "")" href="@SortLink("tourName")">Tour <i data-lucide="@SortIcon("tourName")"></i></a></th>
+                        <th>Hành trình</th>
+                        <th>Thời lượng</th>
+                        <th><a class="sortable @(Model.SortBy == "departures" ? "sorted" : "")" href="@SortLink("departures")">Nội dung <i data-lucide="@SortIcon("departures")"></i></a></th>
+                        <th>Trạng thái</th>
+                        <th><a class="sortable @(Model.SortBy == "updatedAt" ? "sorted" : "")" href="@SortLink("updatedAt")">Cập nhật <i data-lucide="@SortIcon("updatedAt")"></i></a></th>
+                        <th class="actions-col">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{ var idx = 0; }
+                    @foreach (var item in Model.Items)
+                    {
+                        var t = item.Tour;
+                        <tr style="animation-delay:@(Math.Min(idx++ * 0.03, 0.3).ToString(System.Globalization.CultureInfo.InvariantCulture))s">
+                            <td>
+                                <a class="thumb thumb-lg" href="/admin/tours/@t.TourID">
+                                    @if (!string.IsNullOrEmpty(item.MainImageUrl))
+                                    {
+                                        <img src="@item.MainImageUrl" alt="@t.TourName" loading="lazy" onerror="this.remove()" />
+                                    }
+                                    <i data-lucide="image"></i>
+                                </a>
+                            </td>
+                            <td>
+                                <div class="loc-name tour-name-cell">
+                                    <a href="/admin/tours/@t.TourID" title="@t.TourName"><strong>@t.TourName</strong></a>
+                                    <span class="slug-chip"><i data-lucide="hash"></i>@t.TourCode</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="route-cell">
+                                    <span class="route-pin route-start" title="Điểm khởi hành"><i data-lucide="plane-takeoff"></i>@(t.StartLocation?.LocationName ?? "—")</span>
+                                    <i data-lucide="arrow-right" class="route-arrow"></i>
+                                    <span class="route-pin route-end" title="Điểm đến"><i data-lucide="map-pin"></i>@(t.EndLocation?.LocationName ?? "—")</span>
+                                </div>
+                            </td>
+                            <td class="meta-cell">
+                                <div class="duration-cell"><i data-lucide="clock"></i>@t.Duration</div>
+                                <div class="muted small-line" title="@t.Transportation">@t.Transportation</div>
+                            </td>
+                            <td>
+                                <div class="tour-stats">
+                                    <span class="tour-stat" title="Số ngày lịch trình"><i data-lucide="list-ordered"></i>@item.ItineraryCount</span>
+                                    <span class="tour-stat" title="Số ảnh"><i data-lucide="image"></i>@item.ImageCount</span>
+                                    <span class="tour-stat" title="Lịch khởi hành"><i data-lucide="calendar-days"></i>@item.DepartureCount</span>
+                                </div>
+                            </td>
+                            <td>
+                                <form method="post" action="/admin/tours/@t.TourID/toggle-status" class="inline-form">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="returnUrl" value="@currentUrl" />
+                                    <button type="submit" class="status-pill @(t.Status ? "status-on" : "status-off")"
+                                            title="Bấm để @(t.Status ? "tạm dừng" : "kích hoạt")" id="toggle-@t.TourID">
+                                        <i data-lucide="@(t.Status ? "check-circle-2" : "power-off")"></i>
+                                        @(t.Status ? "Hoạt động" : "Tạm dừng")
+                                    </button>
+                                </form>
+                            </td>
+                            <td class="meta-cell">@((t.UpdatedAt ?? t.CreatedAt)?.ToString("dd/MM/yyyy") ?? "—")</td>
+                            <td class="actions-col">
+                                <div class="row-actions">
+                                    <a class="icon-btn" href="/admin/tours/@t.TourID" title="Xem chi tiết" id="view-@t.TourID"><i data-lucide="eye"></i></a>
+                                    <a class="icon-btn icon-edit" href="/admin/tours/@t.TourID/edit" title="Chỉnh sửa" id="edit-@t.TourID"><i data-lucide="pencil"></i></a>
+                                    <button type="button" class="icon-btn icon-delete js-delete-tour" data-id="@t.TourID"
+                                            data-name="@t.TourName" data-departures="@item.DepartureCount"
+                                            title="Xoá" id="delete-@t.TourID"><i data-lucide="trash-2"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <footer class="table-foot">
+            <span class="muted">Hiển thị <strong>@fromItem–@toItem</strong> trên <strong>@Model.TotalItems</strong> tour</span>
+            @if (Model.TotalPages > 1)
+            {
+                var start = Math.Max(1, Math.Min(Model.Page - 3, Model.TotalPages - 6));
+                var end = Math.Min(Model.TotalPages, start + 6);
+                <nav class="pagination" aria-label="Phân trang">
+                    <a class="page-btn @(Model.Page <= 1 ? "disabled" : "")" href="@Link(page: Model.Page - 1)"><i data-lucide="chevron-left"></i> Trước</a>
+                    @for (var p = start; p <= end; p++)
+                    {
+                        <a class="page-num @(p == Model.Page ? "active" : "")" href="@Link(page: p)">@p</a>
+                    }
+                    <a class="page-btn @(Model.Page >= Model.TotalPages ? "disabled" : "")" href="@Link(page: Model.Page + 1)">Sau <i data-lucide="chevron-right"></i></a>
+                </nav>
+            }
+        </footer>
+    </div>
+}
+
+@* ── CONFIRM DELETE MODAL ── *@
+<div class="modal-backdrop" id="confirmModal" hidden>
+    <form class="confirm-modal" method="post" action="" id="deleteForm">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="returnUrl" value="@currentUrl" />
+        <div class="confirm-icon"><i data-lucide="alert-triangle"></i></div>
+        <h3 id="confirmTitle">Xoá tour này?</h3>
+        <p id="confirmMessage">Chỉ có thể xóa tour chưa có lịch trình, hình ảnh, lịch khởi hành hoặc booking. Bạn có thể tạm dừng tour để ngừng hiển thị.</p>
+        <div class="confirm-actions">
+            <button type="button" class="btn btn-ghost" data-close>Huỷ</button>
+            <button type="submit" class="btn btn-danger" id="confirmDeleteBtn"><i data-lucide="trash-2"></i> Xác nhận xoá</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        (() => {
+            // Đổi dropdown → submit form lọc ngay
+            document.querySelectorAll('.js-auto-submit').forEach(s =>
+                s.addEventListener('change', () => document.getElementById('filterForm').submit()));
+
+            const modal = document.getElementById('confirmModal');
+            const form = document.getElementById('deleteForm');
+            const msg = document.getElementById('confirmMessage');
+            const title = document.getElementById('confirmTitle');
+
+            document.querySelectorAll('.js-delete-tour').forEach(btn => btn.addEventListener('click', () => {
+                const { id, name, departures } = btn.dataset;
+                form.action = `/admin/tours/${id}/delete`;
+                title.textContent = `Xoá tour "${name}"?`;
+                msg.textContent = Number(departures) > 0
+                    ? `Không thể xóa tour đang có ${departures} lịch khởi hành. Bạn có thể tạm dừng tour để ngừng hiển thị.`
+                    : 'Chỉ có thể xóa tour chưa có lịch trình, hình ảnh, lịch khởi hành hoặc booking. Hành động xóa không thể hoàn tác.';
+                modal.hidden = false;
+            }));
+
+            modal.addEventListener('click', e => {
+                if (e.target === modal || e.target.closest('[data-close]')) modal.hidden = true;
+            });
+            document.addEventListener('keydown', e => { if (e.key === 'Escape') modal.hidden = true; });
+        })();
+    </script>
+}

@@ -1,0 +1,5 @@
+**/appsettings.Vnpay.*.local.json
+artifacts/ipn-tunnel/cloudflared.exe
+artifacts/ipn-tunnel/bin/
+artifacts/ipn-tunnel/obj/
+artifacts/ipn-tunnel/tunnel.log

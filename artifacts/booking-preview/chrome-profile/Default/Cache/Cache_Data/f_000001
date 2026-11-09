@@ -1,0 +1,299 @@
+<!DOCTYPE html><html lang="vi"><head>
+    <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><title>Tour kiểm thử đặt chỗ tự động · Future Travel</title><meta name="description" content="Khám phá chuyến đi, ưu đãi du lịch và điểm đến yêu thích cùng Future Travel." /><link rel="icon" href="/images/home/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin /><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet" /><link rel="stylesheet" href="/css/home-components.css?v=ynUDOO3n6D5L4hGnu9SFt2U7T5X_cjMT0ujWEDbDc84" /><link rel="stylesheet" href="/css/home.css?v=4AoXmD6TBfkWOfdSp68w2ZPDXitIZ-SNBCFBSl4ao7A" />
+<link rel="stylesheet" href="/css/account-menu.css?v=P6r6dNYZka8VXR8mTfaDOmjKGoplkhm745bGisgQbsw" /></head><body class="user-home" data-solid-header="true">
+<a class="skip-link" href="#main-content">Đến nội dung chính</a>
+<header class="user-header" id="user-header"><a class="user-logo" href="/" aria-label="Future Travel - Trang chủ"><img id="user-logo" src="/images/home/future-logo-light.svg" alt="Future Travel" /></a><button class="menu-toggle" type="button" aria-label="Mở menu" aria-expanded="false" aria-controls="user-navigation"><i data-lucide="menu"></i></button><nav id="user-navigation" aria-label="Điều hướng chính"><a href="/" class="">Trang chủ</a><a href="/tours" class="active">Chuyến đi</a><span aria-disabled="true" title="Sắp ra mắt">✈ Vé máy bay</span><span aria-disabled="true" title="Sắp ra mắt">Vui chơi giải trí</span><span aria-disabled="true" title="Sắp ra mắt">Vé tàu</span></nav><div class="user-header-right"><a class="user-phone" href="tel:19002045"><i data-lucide="phone"></i>1900 2045</a>    <a class="user-login" href="/login">Đăng nhập</a><a class="user-register" href="/register">Đăng ký</a>
+</div></header>
+<main id="main-content"><link rel="stylesheet" href="/css/tour-detail-components.css?v=Pb9cuaAaBw5Zzu6q0s5dpRL_CqkWvlibpEfo3gToFPk" />
+<link rel="stylesheet" href="/css/tour-detail.css?v=UzVOawTzLL7-x6xPXt6PqATGtlly2TUywaBk9iwAISw" />
+<div class="td-layout"><main class="mainContent">
+    <nav class="breadcrumb" aria-label="Đường dẫn"><a href="/">Du lịch</a> / <a href="/tours?startLocationID=1">Vịnh Củ Chi</a> / <a href="/tours?endLocationID=2">Vịnh Hạ Long</a> / <span>BOOK-CHECK-288B9DE8A631408C</span></nav>
+    <h1 class="tourTitle">Tour kiểm thử đặt chỗ tự động</h1>
+    <div class="detailLayout">
+        <div class="leftColumn">
+ <div class="detail-empty-image"><i data-lucide="image"></i><p>Hình ảnh tour đang được cập nhật.</p></div> 
+            <section class="td-calendar" id="departures" data-initial-month="2026-12" data-selected-departure="">
+                <div class="calendarContainer"><h2 class="sectionTitle">LỊCH KHỞI HÀNH</h2>
+                    <div class="calendarWrapper"><div class="monthSelector"><h3>Chọn tháng</h3>
+                            <a class="monthBtn active" href="#month-2026-12" data-month-select="2026-12">12/2026</a>
+                            <a class="monthBtn " href="#month-2027-01" data-month-select="2027-01">1/2027</a>
+                    </div><div class="calendarGridArea">
+                            <section id="month-2026-12" data-month-panel="2026-12" aria-label="Tháng 12 năm 2026">
+                                <div class="calendarHeader"><button type="button" data-month-step="-1" aria-label="Tháng trước">‹</button><strong>THÁNG 12/2026</strong><button type="button" data-month-step="1" aria-label="Tháng sau">›</button></div>
+                                <div class="weekDays"> <span>T2</span>  <span>T3</span>  <span>T4</span>  <span>T5</span>  <span>T6</span>  <span>T7</span>  <span>CN</span> </div>
+                                <div class="daysGrid">
+ <div class="emptyDay" aria-hidden="true"></div>                                         <div class="dayCell "><span class="dateNum">1</span>
+</div>
+                                        <div class="dayCell "><span class="dateNum">2</span>
+</div>
+                                        <div class="dayCell "><span class="dateNum">3</span>
+</div>
+                                        <div class="dayCell "><span class="dateNum">4</span>
+</div>
+                                        <div class="dayCell "><span class="dateNum">5</span>
+</div>
+                                        <div class="dayCell "><span class="dateNum">6</span>
+</div>
+                                        <div class="dayCell "><span class="dateNum">7</span>
+</div>
+                                        <div class="dayCell "><span class="dateNum">8</span>
+</div>
+                                        <div class="dayCell "><span class="dateNum">9</span>
+</div>
+                                        <div class="dayCell "><span class="dateNum">10</span>
+</div>
+                                        <div class="dayCell "><span class="dateNum">11</span>
+</div>
+                                        <div class="dayCell "><span class="dateNum">12</span>
+</div>
+                                        <div class="dayCell "><span class="dateNum">13</span>
+</div>
+                                        <div class="dayCell "><span class="dateNum">14</span>
+</div>
+                                        <div class="dayCell "><span class="dateNum">15</span>
+</div>
+                                        <div class="dayCell "><span class="dateNum">16</span>
+</div>
+                                        <div class="dayCell "><span class="dateNum">17</span>
+</div>
+                                        <div class="dayCell "><span class="dateNum">18</span>
+</div>
+                                        <div class="dayCell "><span class="dateNum">19</span>
+</div>
+                                        <div class="dayCell "><span class="dateNum">20</span>
+</div>
+                                        <div class="dayCell "><span class="dateNum">21</span>
+</div>
+                                        <div class="dayCell "><span class="dateNum">22</span>
+</div>
+                                        <div class="dayCell "><span class="dateNum">23</span>
+</div>
+                                        <div class="dayCell "><span class="dateNum">24</span>
+</div>
+                                        <div class="dayCell "><span class="dateNum">25</span>
+</div>
+                                        <div class="dayCell "><span class="dateNum">26</span>
+</div>
+                                        <div class="dayCell "><span class="dateNum">27</span>
+</div>
+                                        <div class="dayCell hasTour"><span class="dateNum">28</span>
+                                            <a class="departure-choice " href="?departureId=35#departure-detail" data-select-departure="35" data-bookable="true" data-month="2026-12" aria-label="Chọn lịch 28/12/2026 00:00, 5.000.000 ₫, còn 1 chỗ"><span class="priceTag">5tr</span></a>
+</div>
+                                        <div class="dayCell hasTour"><span class="dateNum">29</span>
+                                            <a class="departure-choice " href="?departureId=36#departure-detail" data-select-departure="36" data-bookable="true" data-month="2026-12" aria-label="Chọn lịch 29/12/2026 00:00, 5.000.000 ₫, còn 1 chỗ"><span class="priceTag">5tr</span></a>
+</div>
+                                        <div class="dayCell hasTour"><span class="dateNum">30</span>
+                                            <a class="departure-choice " href="?departureId=37#departure-detail" data-select-departure="37" data-bookable="true" data-month="2026-12" aria-label="Chọn lịch 30/12/2026 00:00, 5.000.000 ₫, còn 5 chỗ"><span class="priceTag">5tr</span></a>
+</div>
+                                        <div class="dayCell hasTour"><span class="dateNum">31</span>
+                                            <a class="departure-choice " href="?departureId=38#departure-detail" data-select-departure="38" data-bookable="true" data-month="2026-12" aria-label="Chọn lịch 31/12/2026 00:00, 5.000.000 ₫, còn 5 chỗ"><span class="priceTag">5tr</span></a>
+</div>
+                                </div>
+                            </section>
+                            <section id="month-2027-01" data-month-panel="2027-01" aria-label="Tháng 1 năm 2027">
+                                <div class="calendarHeader"><button type="button" data-month-step="-1" aria-label="Tháng trước">‹</button><strong>THÁNG 1/2027</strong><button type="button" data-month-step="1" aria-label="Tháng sau">›</button></div>
+                                <div class="weekDays"> <span>T2</span>  <span>T3</span>  <span>T4</span>  <span>T5</span>  <span>T6</span>  <span>T7</span>  <span>CN</span> </div>
+                                <div class="daysGrid">
+ <div class="emptyDay" aria-hidden="true"></div>  <div class="emptyDay" aria-hidden="true"></div>  <div class="emptyDay" aria-hidden="true"></div>  <div class="emptyDay" aria-hidden="true"></div>                                         <div class="dayCell "><span class="dateNum">1</span>
+</div>
+                                        <div class="dayCell hasTour"><span class="dateNum">2</span>
+                                            <a class="departure-choice " href="?departureId=40#departure-detail" data-select-departure="40" data-bookable="false" data-month="2027-01" aria-label="Chọn lịch 02/01/2027 00:00, Liên hệ, còn 5 chỗ"><span class="priceTag">Liên hệ</span></a>
+</div>
+                                        <div class="dayCell hasTour"><span class="dateNum">3</span>
+                                            <a class="departure-choice " href="?departureId=41#departure-detail" data-select-departure="41" data-bookable="true" data-month="2027-01" aria-label="Chọn lịch 03/01/2027 00:00, 4.000.000 ₫, còn 4 chỗ"><span class="priceTag">4tr</span></a>
+</div>
+                                        <div class="dayCell hasTour"><span class="dateNum">4</span>
+                                            <a class="departure-choice " href="?departureId=42#departure-detail" data-select-departure="42" data-bookable="true" data-month="2027-01" aria-label="Chọn lịch 04/01/2027 00:00, 5.000.000 ₫, còn 5 chỗ"><span class="priceTag">5tr</span></a>
+</div>
+                                        <div class="dayCell hasTour"><span class="dateNum">5</span>
+                                            <a class="departure-choice " href="?departureId=43#departure-detail" data-select-departure="43" data-bookable="true" data-month="2027-01" aria-label="Chọn lịch 05/01/2027 00:00, 5.000.000 ₫, còn 5 chỗ"><span class="priceTag">5tr</span></a>
+</div>
+                                        <div class="dayCell "><span class="dateNum">6</span>
+</div>
+                                        <div class="dayCell "><span class="dateNum">7</span>
+</div>
+                                        <div class="dayCell "><span class="dateNum">8</span>
+</div>
+                                        <div class="dayCell "><span class="dateNum">9</span>
+</div>
+                                        <div class="dayCell "><span class="dateNum">10</span>
+</div>
+                                        <div class="dayCell "><span class="dateNum">11</span>
+</div>
+                                        <div class="dayCell "><span class="dateNum">12</span>
+</div>
+                                        <div class="dayCell "><span class="dateNum">13</span>
+</div>
+                                        <div class="dayCell "><span class="dateNum">14</span>
+</div>
+                                        <div class="dayCell "><span class="dateNum">15</span>
+</div>
+                                        <div class="dayCell "><span class="dateNum">16</span>
+</div>
+                                        <div class="dayCell "><span class="dateNum">17</span>
+</div>
+                                        <div class="dayCell "><span class="dateNum">18</span>
+</div>
+                                        <div class="dayCell "><span class="dateNum">19</span>
+</div>
+                                        <div class="dayCell "><span class="dateNum">20</span>
+</div>
+                                        <div class="dayCell "><span class="dateNum">21</span>
+</div>
+                                        <div class="dayCell "><span class="dateNum">22</span>
+</div>
+                                        <div class="dayCell "><span class="dateNum">23</span>
+</div>
+                                        <div class="dayCell "><span class="dateNum">24</span>
+</div>
+                                        <div class="dayCell "><span class="dateNum">25</span>
+</div>
+                                        <div class="dayCell "><span class="dateNum">26</span>
+</div>
+                                        <div class="dayCell "><span class="dateNum">27</span>
+</div>
+                                        <div class="dayCell "><span class="dateNum">28</span>
+</div>
+                                        <div class="dayCell "><span class="dateNum">29</span>
+</div>
+                                        <div class="dayCell "><span class="dateNum">30</span>
+</div>
+                                        <div class="dayCell "><span class="dateNum">31</span>
+</div>
+                                </div>
+                            </section>
+                        <p class="note">Quý khách vui lòng chọn ngày phù hợp để xem giá và phương tiện.</p>
+                    </div></div>
+                    <div id="departure-detail" aria-live="polite">
+                        <section class="departure-detail-panel" data-departure-panel="35" hidden="hidden">
+                            <h3>Khởi hành 28/12/2026 00:00 <span class="slots-label">Còn 1 chỗ</span></h3>
+                            <h4>Phương tiện di chuyển</h4>
+ <p class="detail-muted">Thông tin vận chuyển đang được cập nhật.</p>                             <div class="transport-grid"></div>
+                            <h4>Bảng giá theo hành khách</h4>
+ <div class="detail-table-wrap"><table class="detail-prices"><thead><tr><th>Hành khách</th><th>Độ tuổi / Ghi chú</th><th>Giá gốc</th><th>Giá bán</th></tr></thead><tbody> <tr><th>Người lớn</th><td>Từ 12 tuổi</td><td>5.000.000 ₫</td><td><strong>5.000.000 ₫</strong></td></tr>  <tr><th>Trẻ em</th><td>Từ 2 đến 11 tuổi</td><td>2.500.000 ₫</td><td><strong>2.500.000 ₫</strong></td></tr>  <tr><th>Em bé</th><td>Dưới 2 tuổi</td><td>500.000 ₫</td><td><strong>500.000 ₫</strong></td></tr> </tbody></table></div>                         </section>
+                        <section class="departure-detail-panel" data-departure-panel="36" hidden="hidden">
+                            <h3>Khởi hành 29/12/2026 00:00 <span class="slots-label">Còn 1 chỗ</span></h3>
+                            <h4>Phương tiện di chuyển</h4>
+ <p class="detail-muted">Thông tin vận chuyển đang được cập nhật.</p>                             <div class="transport-grid"></div>
+                            <h4>Bảng giá theo hành khách</h4>
+ <div class="detail-table-wrap"><table class="detail-prices"><thead><tr><th>Hành khách</th><th>Độ tuổi / Ghi chú</th><th>Giá gốc</th><th>Giá bán</th></tr></thead><tbody> <tr><th>Người lớn</th><td>Từ 12 tuổi</td><td>5.000.000 ₫</td><td><strong>5.000.000 ₫</strong></td></tr>  <tr><th>Trẻ em</th><td>Từ 2 đến 11 tuổi</td><td>2.500.000 ₫</td><td><strong>2.500.000 ₫</strong></td></tr>  <tr><th>Em bé</th><td>Dưới 2 tuổi</td><td>500.000 ₫</td><td><strong>500.000 ₫</strong></td></tr> </tbody></table></div>                         </section>
+                        <section class="departure-detail-panel" data-departure-panel="37" hidden="hidden">
+                            <h3>Khởi hành 30/12/2026 00:00 <span class="slots-label">Còn 5 chỗ</span></h3>
+                            <h4>Phương tiện di chuyển</h4>
+ <p class="detail-muted">Thông tin vận chuyển đang được cập nhật.</p>                             <div class="transport-grid"></div>
+                            <h4>Bảng giá theo hành khách</h4>
+ <div class="detail-table-wrap"><table class="detail-prices"><thead><tr><th>Hành khách</th><th>Độ tuổi / Ghi chú</th><th>Giá gốc</th><th>Giá bán</th></tr></thead><tbody> <tr><th>Người lớn</th><td>Từ 12 tuổi</td><td>5.000.000 ₫</td><td><strong>5.000.000 ₫</strong></td></tr>  <tr><th>Trẻ em</th><td>Từ 2 đến 11 tuổi</td><td>2.500.000 ₫</td><td><strong>2.500.000 ₫</strong></td></tr>  <tr><th>Em bé</th><td>Dưới 2 tuổi</td><td>500.000 ₫</td><td><strong>500.000 ₫</strong></td></tr> </tbody></table></div>                         </section>
+                        <section class="departure-detail-panel" data-departure-panel="38" hidden="hidden">
+                            <h3>Khởi hành 31/12/2026 00:00 <span class="slots-label">Còn 5 chỗ</span></h3>
+                            <h4>Phương tiện di chuyển</h4>
+ <p class="detail-muted">Thông tin vận chuyển đang được cập nhật.</p>                             <div class="transport-grid"></div>
+                            <h4>Bảng giá theo hành khách</h4>
+ <div class="detail-table-wrap"><table class="detail-prices"><thead><tr><th>Hành khách</th><th>Độ tuổi / Ghi chú</th><th>Giá gốc</th><th>Giá bán</th></tr></thead><tbody> <tr><th>Người lớn</th><td>Từ 12 tuổi</td><td>5.000.000 ₫</td><td><strong>5.000.000 ₫</strong></td></tr>  <tr><th>Trẻ em</th><td>Từ 2 đến 11 tuổi</td><td>2.500.000 ₫</td><td><strong>2.500.000 ₫</strong></td></tr>  <tr><th>Em bé</th><td>Dưới 2 tuổi</td><td>500.000 ₫</td><td><strong>500.000 ₫</strong></td></tr> </tbody></table></div>                         </section>
+                        <section class="departure-detail-panel" data-departure-panel="40" hidden="hidden">
+                            <h3>Khởi hành 02/01/2027 00:00 <span class="slots-label">Còn 5 chỗ</span></h3>
+                            <h4>Phương tiện di chuyển</h4>
+ <p class="detail-muted">Thông tin vận chuyển đang được cập nhật.</p>                             <div class="transport-grid"></div>
+                            <h4>Bảng giá theo hành khách</h4>
+ <div class="detail-table-wrap"><table class="detail-prices"><thead><tr><th>Hành khách</th><th>Độ tuổi / Ghi chú</th><th>Giá gốc</th><th>Giá bán</th></tr></thead><tbody> <tr><th>Trẻ em</th><td>Từ 2 đến 11 tuổi</td><td>2.500.000 ₫</td><td><strong>2.500.000 ₫</strong></td></tr>  <tr><th>Em bé</th><td>Dưới 2 tuổi</td><td>500.000 ₫</td><td><strong>500.000 ₫</strong></td></tr> </tbody></table></div>                         </section>
+                        <section class="departure-detail-panel" data-departure-panel="41" hidden="hidden">
+                            <h3>Khởi hành 03/01/2027 00:00 <span class="slots-label">Còn 4 chỗ</span></h3>
+                            <h4>Phương tiện di chuyển</h4>
+ <p class="detail-muted">Thông tin vận chuyển đang được cập nhật.</p>                             <div class="transport-grid"></div>
+                            <h4>Bảng giá theo hành khách</h4>
+ <div class="detail-table-wrap"><table class="detail-prices"><thead><tr><th>Hành khách</th><th>Độ tuổi / Ghi chú</th><th>Giá gốc</th><th>Giá bán</th></tr></thead><tbody> <tr><th>Người lớn</th><td>Từ 12 tuổi</td><td>5.000.000 ₫</td><td><strong>4.000.000 ₫</strong></td></tr>  <tr><th>Trẻ em</th><td>Từ 2 đến 11 tuổi</td><td>2.500.000 ₫</td><td><strong>2.500.000 ₫</strong></td></tr>  <tr><th>Em bé</th><td>Dưới 2 tuổi</td><td>500.000 ₫</td><td><strong>500.000 ₫</strong></td></tr> </tbody></table></div>                         </section>
+                        <section class="departure-detail-panel" data-departure-panel="42" hidden="hidden">
+                            <h3>Khởi hành 04/01/2027 00:00 <span class="slots-label">Còn 5 chỗ</span></h3>
+                            <h4>Phương tiện di chuyển</h4>
+ <p class="detail-muted">Thông tin vận chuyển đang được cập nhật.</p>                             <div class="transport-grid"></div>
+                            <h4>Bảng giá theo hành khách</h4>
+ <div class="detail-table-wrap"><table class="detail-prices"><thead><tr><th>Hành khách</th><th>Độ tuổi / Ghi chú</th><th>Giá gốc</th><th>Giá bán</th></tr></thead><tbody> <tr><th>Người lớn</th><td>Từ 12 tuổi</td><td>5.000.000 ₫</td><td><strong>5.000.000 ₫</strong></td></tr>  <tr><th>Trẻ em</th><td>Từ 2 đến 11 tuổi</td><td>2.500.000 ₫</td><td><strong>2.500.000 ₫</strong></td></tr>  <tr><th>Em bé</th><td>Dưới 2 tuổi</td><td>500.000 ₫</td><td><strong>500.000 ₫</strong></td></tr> </tbody></table></div>                         </section>
+                        <section class="departure-detail-panel" data-departure-panel="43" hidden="hidden">
+                            <h3>Khởi hành 05/01/2027 00:00 <span class="slots-label">Còn 5 chỗ</span></h3>
+                            <h4>Phương tiện di chuyển</h4>
+ <p class="detail-muted">Thông tin vận chuyển đang được cập nhật.</p>                             <div class="transport-grid"></div>
+                            <h4>Bảng giá theo hành khách</h4>
+ <div class="detail-table-wrap"><table class="detail-prices"><thead><tr><th>Hành khách</th><th>Độ tuổi / Ghi chú</th><th>Giá gốc</th><th>Giá bán</th></tr></thead><tbody> <tr><th>Người lớn</th><td>Từ 12 tuổi</td><td>5.000.000 ₫</td><td><strong>5.000.000 ₫</strong></td></tr>  <tr><th>Trẻ em</th><td>Từ 2 đến 11 tuổi</td><td>2.500.000 ₫</td><td><strong>2.500.000 ₫</strong></td></tr>  <tr><th>Em bé</th><td>Dưới 2 tuổi</td><td>500.000 ₫</td><td><strong>500.000 ₫</strong></td></tr> </tbody></table></div>                         </section>
+                    </div>
+                </div>
+            </section>
+
+            <section class="td-information"><div class="infoContainer"><h2 class="sectionTitle">THÔNG TIN THÊM VỀ CHUYẾN ĐI</h2><div class="infoGrid"> <div class="infoItem"><div class="iconWrapper"><i data-lucide="map"></i></div><div class="textWrapper"><h3 class="label">Điểm tham quan</h3><div class="content" data-rich-text>Dữ liệu kiểm thử tạm</div></div></div>  <div class="infoItem"><div class="iconWrapper"><i data-lucide="utensils"></i></div><div class="textWrapper"><h3 class="label">Ẩm thực</h3><div class="content" data-rich-text>Đang cập nhật</div></div></div>  <div class="infoItem"><div class="iconWrapper"><i data-lucide="users"></i></div><div class="textWrapper"><h3 class="label">Đối tượng thích hợp</h3><div class="content" data-rich-text>Đang cập nhật</div></div></div>  <div class="infoItem"><div class="iconWrapper"><i data-lucide="sun"></i></div><div class="textWrapper"><h3 class="label">Thời gian lý tưởng</h3><div class="content" data-rich-text>Đang cập nhật</div></div></div>  <div class="infoItem"><div class="iconWrapper"><i data-lucide="bus"></i></div><div class="textWrapper"><h3 class="label">Phương tiện</h3><div class="content" data-rich-text>Xe khách</div></div></div>  <div class="infoItem"><div class="iconWrapper"><i data-lucide="hotel"></i></div><div class="textWrapper"><h3 class="label">Lưu trú</h3><div class="content" data-rich-text>Đang cập nhật</div></div></div> </div></div></section>
+
+            <section class="td-itinerary"><div class="itineraryContainer"><h2 class="sectionTitle">LỊCH TRÌNH</h2>
+ <p class="detail-empty">Lịch trình chi tiết của tour này chưa được cập nhật.</p>             <div class="listWrapper"></div></div></section>
+
+            <div id="tour-policies"><div data-default-policy><section class="td-policy"><div class="policyContainer"><h2 class="sectionTitle">NHỮNG THÔNG TIN CẦN LƯU Ý</h2>
+    <p class="detail-muted">Chính sách du lịch mùa hè 2026</p>
+    <div class="detail-policy-grid">
+ <details><summary>Giá tour bao gồm <i data-lucide="chevron-down"></i></summary><div data-rich-text>Đang cập nhật</div></details>  <details><summary>Giá tour không bao gồm <i data-lucide="chevron-down"></i></summary><div data-rich-text>Đang cập nhật</div></details>  <details><summary>Điều kiện thanh toán <i data-lucide="chevron-down"></i></summary><div data-rich-text>Đặt cọc 50%</div></details>  <details><summary>Điều kiện hủy tour <i data-lucide="chevron-down"></i></summary><div data-rich-text>Đang cập nhật</div></details>  <details><summary>Liên hệ &amp; hỗ trợ <i data-lucide="chevron-down"></i></summary><div class="branch-contact"><strong>Chi nhánh TP.HCM</strong><p>TP.Thủ Đức</p><p>Hotline: <a href="tel:0772056242">0772056242</a></p><p>Email: <a href="mailto:phamgiakiet1911@gmail.com">phamgiakiet1911@gmail.com</a></p></div></details>     </div>
+</div></section>
+</div>
+ <div data-departure-policy="35" hidden="hidden"><section class="td-policy"><div class="policyContainer"><h2 class="sectionTitle">NHỮNG THÔNG TIN CẦN LƯU Ý</h2>
+    <p class="detail-muted">Chính sách du lịch mùa hè 2026</p>
+    <div class="detail-policy-grid">
+ <details><summary>Giá tour bao gồm <i data-lucide="chevron-down"></i></summary><div data-rich-text>Đang cập nhật</div></details>  <details><summary>Giá tour không bao gồm <i data-lucide="chevron-down"></i></summary><div data-rich-text>Đang cập nhật</div></details>  <details><summary>Điều kiện thanh toán <i data-lucide="chevron-down"></i></summary><div data-rich-text>Đặt cọc 50%</div></details>  <details><summary>Điều kiện hủy tour <i data-lucide="chevron-down"></i></summary><div data-rich-text>Đang cập nhật</div></details>  <details><summary>Liên hệ &amp; hỗ trợ <i data-lucide="chevron-down"></i></summary><div class="branch-contact"><strong>Chi nhánh TP.HCM</strong><p>TP.Thủ Đức</p><p>Hotline: <a href="tel:0772056242">0772056242</a></p><p>Email: <a href="mailto:phamgiakiet1911@gmail.com">phamgiakiet1911@gmail.com</a></p></div></details>     </div>
+</div></section>
+</div>  <div data-departure-policy="36" hidden="hidden"><section class="td-policy"><div class="policyContainer"><h2 class="sectionTitle">NHỮNG THÔNG TIN CẦN LƯU Ý</h2>
+    <p class="detail-muted">Chính sách du lịch mùa hè 2026</p>
+    <div class="detail-policy-grid">
+ <details><summary>Giá tour bao gồm <i data-lucide="chevron-down"></i></summary><div data-rich-text>Đang cập nhật</div></details>  <details><summary>Giá tour không bao gồm <i data-lucide="chevron-down"></i></summary><div data-rich-text>Đang cập nhật</div></details>  <details><summary>Điều kiện thanh toán <i data-lucide="chevron-down"></i></summary><div data-rich-text>Đặt cọc 50%</div></details>  <details><summary>Điều kiện hủy tour <i data-lucide="chevron-down"></i></summary><div data-rich-text>Đang cập nhật</div></details>  <details><summary>Liên hệ &amp; hỗ trợ <i data-lucide="chevron-down"></i></summary><div class="branch-contact"><strong>Chi nhánh TP.HCM</strong><p>TP.Thủ Đức</p><p>Hotline: <a href="tel:0772056242">0772056242</a></p><p>Email: <a href="mailto:phamgiakiet1911@gmail.com">phamgiakiet1911@gmail.com</a></p></div></details>     </div>
+</div></section>
+</div>  <div data-departure-policy="37" hidden="hidden"><section class="td-policy"><div class="policyContainer"><h2 class="sectionTitle">NHỮNG THÔNG TIN CẦN LƯU Ý</h2>
+    <p class="detail-muted">Chính sách du lịch mùa hè 2026</p>
+    <div class="detail-policy-grid">
+ <details><summary>Giá tour bao gồm <i data-lucide="chevron-down"></i></summary><div data-rich-text>Đang cập nhật</div></details>  <details><summary>Giá tour không bao gồm <i data-lucide="chevron-down"></i></summary><div data-rich-text>Đang cập nhật</div></details>  <details><summary>Điều kiện thanh toán <i data-lucide="chevron-down"></i></summary><div data-rich-text>Đặt cọc 50%</div></details>  <details><summary>Điều kiện hủy tour <i data-lucide="chevron-down"></i></summary><div data-rich-text>Đang cập nhật</div></details>  <details><summary>Liên hệ &amp; hỗ trợ <i data-lucide="chevron-down"></i></summary><div class="branch-contact"><strong>Chi nhánh TP.HCM</strong><p>TP.Thủ Đức</p><p>Hotline: <a href="tel:0772056242">0772056242</a></p><p>Email: <a href="mailto:phamgiakiet1911@gmail.com">phamgiakiet1911@gmail.com</a></p></div></details>     </div>
+</div></section>
+</div>  <div data-departure-policy="38" hidden="hidden"><section class="td-policy"><div class="policyContainer"><h2 class="sectionTitle">NHỮNG THÔNG TIN CẦN LƯU Ý</h2>
+    <p class="detail-muted">Chính sách du lịch mùa hè 2026</p>
+    <div class="detail-policy-grid">
+ <details><summary>Giá tour bao gồm <i data-lucide="chevron-down"></i></summary><div data-rich-text>Đang cập nhật</div></details>  <details><summary>Giá tour không bao gồm <i data-lucide="chevron-down"></i></summary><div data-rich-text>Đang cập nhật</div></details>  <details><summary>Điều kiện thanh toán <i data-lucide="chevron-down"></i></summary><div data-rich-text>Đặt cọc 50%</div></details>  <details><summary>Điều kiện hủy tour <i data-lucide="chevron-down"></i></summary><div data-rich-text>Đang cập nhật</div></details>  <details><summary>Liên hệ &amp; hỗ trợ <i data-lucide="chevron-down"></i></summary><div class="branch-contact"><strong>Chi nhánh TP.HCM</strong><p>TP.Thủ Đức</p><p>Hotline: <a href="tel:0772056242">0772056242</a></p><p>Email: <a href="mailto:phamgiakiet1911@gmail.com">phamgiakiet1911@gmail.com</a></p></div></details>     </div>
+</div></section>
+</div>  <div data-departure-policy="40" hidden="hidden"><section class="td-policy"><div class="policyContainer"><h2 class="sectionTitle">NHỮNG THÔNG TIN CẦN LƯU Ý</h2>
+    <p class="detail-muted">Chính sách du lịch mùa hè 2026</p>
+    <div class="detail-policy-grid">
+ <details><summary>Giá tour bao gồm <i data-lucide="chevron-down"></i></summary><div data-rich-text>Đang cập nhật</div></details>  <details><summary>Giá tour không bao gồm <i data-lucide="chevron-down"></i></summary><div data-rich-text>Đang cập nhật</div></details>  <details><summary>Điều kiện thanh toán <i data-lucide="chevron-down"></i></summary><div data-rich-text>Đặt cọc 50%</div></details>  <details><summary>Điều kiện hủy tour <i data-lucide="chevron-down"></i></summary><div data-rich-text>Đang cập nhật</div></details>  <details><summary>Liên hệ &amp; hỗ trợ <i data-lucide="chevron-down"></i></summary><div class="branch-contact"><strong>Chi nhánh TP.HCM</strong><p>TP.Thủ Đức</p><p>Hotline: <a href="tel:0772056242">0772056242</a></p><p>Email: <a href="mailto:phamgiakiet1911@gmail.com">phamgiakiet1911@gmail.com</a></p></div></details>     </div>
+</div></section>
+</div>  <div data-departure-policy="41" hidden="hidden"><section class="td-policy"><div class="policyContainer"><h2 class="sectionTitle">NHỮNG THÔNG TIN CẦN LƯU Ý</h2>
+    <p class="detail-muted">Chính sách du lịch mùa hè 2026</p>
+    <div class="detail-policy-grid">
+ <details><summary>Giá tour bao gồm <i data-lucide="chevron-down"></i></summary><div data-rich-text>Đang cập nhật</div></details>  <details><summary>Giá tour không bao gồm <i data-lucide="chevron-down"></i></summary><div data-rich-text>Đang cập nhật</div></details>  <details><summary>Điều kiện thanh toán <i data-lucide="chevron-down"></i></summary><div data-rich-text>Đặt cọc 50%</div></details>  <details><summary>Điều kiện hủy tour <i data-lucide="chevron-down"></i></summary><div data-rich-text>Đang cập nhật</div></details>  <details><summary>Liên hệ &amp; hỗ trợ <i data-lucide="chevron-down"></i></summary><div class="branch-contact"><strong>Chi nhánh TP.HCM</strong><p>TP.Thủ Đức</p><p>Hotline: <a href="tel:0772056242">0772056242</a></p><p>Email: <a href="mailto:phamgiakiet1911@gmail.com">phamgiakiet1911@gmail.com</a></p></div></details>     </div>
+</div></section>
+</div>  <div data-departure-policy="42" hidden="hidden"><section class="td-policy"><div class="policyContainer"><h2 class="sectionTitle">NHỮNG THÔNG TIN CẦN LƯU Ý</h2>
+    <p class="detail-muted">Chính sách du lịch mùa hè 2026</p>
+    <div class="detail-policy-grid">
+ <details><summary>Giá tour bao gồm <i data-lucide="chevron-down"></i></summary><div data-rich-text>Đang cập nhật</div></details>  <details><summary>Giá tour không bao gồm <i data-lucide="chevron-down"></i></summary><div data-rich-text>Đang cập nhật</div></details>  <details><summary>Điều kiện thanh toán <i data-lucide="chevron-down"></i></summary><div data-rich-text>Đặt cọc 50%</div></details>  <details><summary>Điều kiện hủy tour <i data-lucide="chevron-down"></i></summary><div data-rich-text>Đang cập nhật</div></details>  <details><summary>Liên hệ &amp; hỗ trợ <i data-lucide="chevron-down"></i></summary><div class="branch-contact"><strong>Chi nhánh TP.HCM</strong><p>TP.Thủ Đức</p><p>Hotline: <a href="tel:0772056242">0772056242</a></p><p>Email: <a href="mailto:phamgiakiet1911@gmail.com">phamgiakiet1911@gmail.com</a></p></div></details>     </div>
+</div></section>
+</div>  <div data-departure-policy="43" hidden="hidden"><section class="td-policy"><div class="policyContainer"><h2 class="sectionTitle">NHỮNG THÔNG TIN CẦN LƯU Ý</h2>
+    <p class="detail-muted">Chính sách du lịch mùa hè 2026</p>
+    <div class="detail-policy-grid">
+ <details><summary>Giá tour bao gồm <i data-lucide="chevron-down"></i></summary><div data-rich-text>Đang cập nhật</div></details>  <details><summary>Giá tour không bao gồm <i data-lucide="chevron-down"></i></summary><div data-rich-text>Đang cập nhật</div></details>  <details><summary>Điều kiện thanh toán <i data-lucide="chevron-down"></i></summary><div data-rich-text>Đặt cọc 50%</div></details>  <details><summary>Điều kiện hủy tour <i data-lucide="chevron-down"></i></summary><div data-rich-text>Đang cập nhật</div></details>  <details><summary>Liên hệ &amp; hỗ trợ <i data-lucide="chevron-down"></i></summary><div class="branch-contact"><strong>Chi nhánh TP.HCM</strong><p>TP.Thủ Đức</p><p>Hotline: <a href="tel:0772056242">0772056242</a></p><p>Email: <a href="mailto:phamgiakiet1911@gmail.com">phamgiakiet1911@gmail.com</a></p></div></details>     </div>
+</div></section>
+</div> </div>
+        </div>
+        <aside class="rightColumn" aria-label="Giá và thông tin khởi hành">
+            <div class="bookingSidebar">
+                <div data-default-sidebar><div class="priceBox">Giá từ:  <del class="originalPrice">5.000.000 ₫</del> </div><div class="finalPrice">4.000.000 ₫<span class="unit"> / khách</span></div><div class="infoGrid"><p class="infoRow"><i data-lucide="barcode"></i>Mã tour: <strong>BOOK-CHECK-288B9DE8A631408C</strong></p><p class="infoRow"><i data-lucide="map-pin"></i>Khởi hành: <strong>Vịnh Củ Chi</strong></p><p class="infoRow"><i data-lucide="clock"></i>3 ngày 2 đêm</p><p class="infoRow"><i data-lucide="calendar-days"></i>Vui lòng chọn ngày đi</p></div></div>
+                    <div data-sidebar-departure="35" hidden="hidden"><div class="priceBox">Giá người lớn: </div><div class="finalPrice">5.000.000 ₫<span class="unit"> / khách</span></div><div class="infoGrid"><p class="infoRow"><i data-lucide="barcode"></i>Mã tour: <strong>BOOK-CHECK-288B9DE8A631408C</strong></p><p class="infoRow"><i data-lucide="map-pin"></i>Khởi hành: <strong>Vịnh Củ Chi</strong></p><p class="infoRow"><i data-lucide="calendar-days"></i>Ngày đi: <strong>28/12/2026</strong></p><p class="infoRow"><i data-lucide="clock"></i>3 ngày 2 đêm</p><p class="infoRow"><i data-lucide="users"></i><strong>Còn 1 chỗ</strong></p></div></div>
+                    <div data-sidebar-departure="36" hidden="hidden"><div class="priceBox">Giá người lớn: </div><div class="finalPrice">5.000.000 ₫<span class="unit"> / khách</span></div><div class="infoGrid"><p class="infoRow"><i data-lucide="barcode"></i>Mã tour: <strong>BOOK-CHECK-288B9DE8A631408C</strong></p><p class="infoRow"><i data-lucide="map-pin"></i>Khởi hành: <strong>Vịnh Củ Chi</strong></p><p class="infoRow"><i data-lucide="calendar-days"></i>Ngày đi: <strong>29/12/2026</strong></p><p class="infoRow"><i data-lucide="clock"></i>3 ngày 2 đêm</p><p class="infoRow"><i data-lucide="users"></i><strong>Còn 1 chỗ</strong></p></div></div>
+                    <div data-sidebar-departure="37" hidden="hidden"><div class="priceBox">Giá người lớn: </div><div class="finalPrice">5.000.000 ₫<span class="unit"> / khách</span></div><div class="infoGrid"><p class="infoRow"><i data-lucide="barcode"></i>Mã tour: <strong>BOOK-CHECK-288B9DE8A631408C</strong></p><p class="infoRow"><i data-lucide="map-pin"></i>Khởi hành: <strong>Vịnh Củ Chi</strong></p><p class="infoRow"><i data-lucide="calendar-days"></i>Ngày đi: <strong>30/12/2026</strong></p><p class="infoRow"><i data-lucide="clock"></i>3 ngày 2 đêm</p><p class="infoRow"><i data-lucide="users"></i><strong>Còn 5 chỗ</strong></p></div></div>
+                    <div data-sidebar-departure="38" hidden="hidden"><div class="priceBox">Giá người lớn: </div><div class="finalPrice">5.000.000 ₫<span class="unit"> / khách</span></div><div class="infoGrid"><p class="infoRow"><i data-lucide="barcode"></i>Mã tour: <strong>BOOK-CHECK-288B9DE8A631408C</strong></p><p class="infoRow"><i data-lucide="map-pin"></i>Khởi hành: <strong>Vịnh Củ Chi</strong></p><p class="infoRow"><i data-lucide="calendar-days"></i>Ngày đi: <strong>31/12/2026</strong></p><p class="infoRow"><i data-lucide="clock"></i>3 ngày 2 đêm</p><p class="infoRow"><i data-lucide="users"></i><strong>Còn 5 chỗ</strong></p></div></div>
+                    <div data-sidebar-departure="40" hidden="hidden"><div class="priceBox">Giá người lớn: </div><div class="finalPrice">Liên hệ<span class="unit"> / khách</span></div><div class="infoGrid"><p class="infoRow"><i data-lucide="barcode"></i>Mã tour: <strong>BOOK-CHECK-288B9DE8A631408C</strong></p><p class="infoRow"><i data-lucide="map-pin"></i>Khởi hành: <strong>Vịnh Củ Chi</strong></p><p class="infoRow"><i data-lucide="calendar-days"></i>Ngày đi: <strong>02/01/2027</strong></p><p class="infoRow"><i data-lucide="clock"></i>3 ngày 2 đêm</p><p class="infoRow"><i data-lucide="users"></i><strong>Còn 5 chỗ</strong></p></div></div>
+                    <div data-sidebar-departure="41" hidden="hidden"><div class="priceBox">Giá người lớn:  <del class="originalPrice">5.000.000 ₫</del> </div><div class="finalPrice">4.000.000 ₫<span class="unit"> / khách</span></div><div class="infoGrid"><p class="infoRow"><i data-lucide="barcode"></i>Mã tour: <strong>BOOK-CHECK-288B9DE8A631408C</strong></p><p class="infoRow"><i data-lucide="map-pin"></i>Khởi hành: <strong>Vịnh Củ Chi</strong></p><p class="infoRow"><i data-lucide="calendar-days"></i>Ngày đi: <strong>03/01/2027</strong></p><p class="infoRow"><i data-lucide="clock"></i>3 ngày 2 đêm</p><p class="infoRow"><i data-lucide="users"></i><strong>Còn 4 chỗ</strong></p></div></div>
+                    <div data-sidebar-departure="42" hidden="hidden"><div class="priceBox">Giá người lớn: </div><div class="finalPrice">5.000.000 ₫<span class="unit"> / khách</span></div><div class="infoGrid"><p class="infoRow"><i data-lucide="barcode"></i>Mã tour: <strong>BOOK-CHECK-288B9DE8A631408C</strong></p><p class="infoRow"><i data-lucide="map-pin"></i>Khởi hành: <strong>Vịnh Củ Chi</strong></p><p class="infoRow"><i data-lucide="calendar-days"></i>Ngày đi: <strong>04/01/2027</strong></p><p class="infoRow"><i data-lucide="clock"></i>3 ngày 2 đêm</p><p class="infoRow"><i data-lucide="users"></i><strong>Còn 5 chỗ</strong></p></div></div>
+                    <div data-sidebar-departure="43" hidden="hidden"><div class="priceBox">Giá người lớn: </div><div class="finalPrice">5.000.000 ₫<span class="unit"> / khách</span></div><div class="infoGrid"><p class="infoRow"><i data-lucide="barcode"></i>Mã tour: <strong>BOOK-CHECK-288B9DE8A631408C</strong></p><p class="infoRow"><i data-lucide="map-pin"></i>Khởi hành: <strong>Vịnh Củ Chi</strong></p><p class="infoRow"><i data-lucide="calendar-days"></i>Ngày đi: <strong>05/01/2027</strong></p><p class="infoRow"><i data-lucide="clock"></i>3 ngày 2 đêm</p><p class="infoRow"><i data-lucide="users"></i><strong>Còn 5 chỗ</strong></p></div></div>
+                <div class="detail-sidebar-actions"> <a class="detail-date-button" href="#departures">Chọn ngày khởi hành</a><a class="detail-contact-button" href="#departures" id="book-tour-link" data-tour-code="BOOK-CHECK-288B9DE8A631408C">Chọn ngày để đặt tour</a> </div>
+            </div>
+        </aside>
+    </div>
+    <section class="detail-contact" id="tour-contact"><i data-lucide="headset"></i><div><h2>Bạn cần tư vấn thêm về chuyến đi?</h2><p>Liên hệ để được hỗ trợ lựa chọn lịch khởi hành và giá phù hợp.</p></div><a href="tel:19002045">1900 2045</a></section>
+ <section class="detail-related"><h2>CÁC CHƯƠNG TRÌNH KHÁC</h2><div class="detail-related-grid"> <a class="detail-related-card" href="/tour/CT-HL"><img src="https://res.cloudinary.com/dmzk4q2qe/image/upload/v1790652297/tourism_app_tours/CT-HL/k6bqupob5ogsmshp8l86.jpg" alt="Tour cần Thơ -Hạ long" loading="lazy" /><div><h3>Tour cần Thơ -Hạ long</h3><p>Khởi hành: Cần Thơ · 3 ngày 2 đêm</p><strong>5.000.000 ₫</strong><span>Xem chi tiết →</span></div></a>  <a class="detail-related-card" href="/tour/H-HL"><img src="https://res.cloudinary.com/dmzk4q2qe/image/upload/v1790650055/tourism_app_tours/H-HL/jqrnsb6fsaaiy1r7gtlz.png" alt="Tour Huế - Hạ Long" loading="lazy" /><div><h3>Tour Huế - Hạ Long</h3><p>Khởi hành: Huế · 3 ngày 2 đêm</p><strong>5.000.000 ₫</strong><span>Xem chi tiết →</span></div></a>  <a class="detail-related-card" href="/tour/KG-HL"><img src="https://res.cloudinary.com/dmzk4q2qe/image/upload/v1790649560/tourism_app_tours/KG-HL/sjnvkrnt6zbdwgrsvpet.jpg" alt="Tour Kiên Giang - Hạ Long" loading="lazy" /><div><h3>Tour Kiên Giang - Hạ Long</h3><p>Khởi hành: Kiên Giang · 3 ngày 2 đêm</p><strong>4.000.000 ₫</strong><span>Xem chi tiết →</span></div></a> </div></section> </main></div>
+</main>
+<div class="home-footer"><footer class="footer" id="contact"><div class="footerContainer">
+    <div class="topSection"><div class="logoColumn"><div class="brandHeader"><div class="brandIcon"><i data-lucide="plane"></i></div><span class="logo">FUTURE TRAVEL</span></div><p class="brandTagline">Đồng hành cùng bạn trên mọi chuyến đi.</p><a class="hotlineBox" href="tel:19001234"><div class="hotlineIcon"><i data-lucide="phone"></i></div><div><div class="hotlineLabel">Hotline 24/7</div><div class="hotlineNumber">1900 1234</div></div></a></div>
+    <div class="linkColumns"><div class="linkColumn"><h3 class="columnTitle">Về Future</h3><ul class="menuList"><li><a class="menuLink" href="/#about">Về chúng tôi</a></li><li><a class="menuLink" href="tel:19001234">Liên hệ</a></li><li><a class="menuLink" href="tel:19001234">Trợ giúp</a></li></ul></div><div class="linkColumn"><h3 class="columnTitle">Sản phẩm</h3><ul class="menuList"><li><a class="menuLink" href="/tours">Tour du lịch</a></li><li><a class="menuLink" href="/#special-tours">Chuyến đi ưu đãi</a></li><li><a class="menuLink" href="/#destinations">Điểm đến yêu thích</a></li></ul></div><div class="linkColumn"><h3 class="columnTitle">Khám phá</h3><ul class="menuList"><li><a class="menuLink" href="/#destinations">Du lịch trong nước</a></li><li><a class="menuLink" href="/#about">Tại sao chọn Future?</a></li></ul></div></div></div>
+    <div class="middleSection"><div class="paymentBlock"><h3 class="blockTitle"><i data-lucide="credit-card"></i> Đối tác thanh toán</h3><div class="paymentLogos"> <div class="paymentCard"><img src="/images/home/VISA.png" alt="VISA" loading="lazy" /></div>  <div class="paymentCard"><img src="/images/home/mastercard.png" alt="mastercard" loading="lazy" /></div>  <div class="paymentCard"><img src="/images/home/JCB.png" alt="JCB" loading="lazy" /></div>  <div class="paymentCard"><img src="/images/home/VietcomBank.png" alt="VietcomBank" loading="lazy" /></div>  <div class="paymentCard"><img src="/images/home/TechcomBank.png" alt="TechcomBank" loading="lazy" /></div>  <div class="paymentCard"><img src="/images/home/MBBank.png" alt="MBBank" loading="lazy" /></div>  <div class="paymentCard"><img src="/images/home/MoMo.png" alt="MoMo" loading="lazy" /></div>  <div class="paymentCard"><img src="/images/home/ZaLoPay.png" alt="ZaLoPay" loading="lazy" /></div>  <div class="paymentCard"><img src="/images/home/VNPAY.png" alt="VNPAY" loading="lazy" /></div> </div></div><div class="socialBlock"><h3 class="blockTitle">Kết nối</h3><div class="socialRow"><a class="socialIconBtn" href="https://www.facebook.com/profile.php?id=61590489687138" target="_blank" rel="noopener noreferrer" aria-label="Facebook">f</a><a class="socialIconBtn" href="https://www.youtube.com/@thoaiuc6257" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i data-lucide="youtube"></i></a></div></div></div>
+    <div class="copyright"><p class="copyrightText">© 2026 <strong>Future Travel</strong> · Công ty TNHH Future Việt Nam · MST: 0313580179</p></div>
+</div></footer></div>
+<script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script><script src="/js/home.js?v=frybdMTZzeFIryNrr-5P80UOG8cC_I7rIb3s1zKBTbk"></script><script src="/js/auth.js?v=guuLKwM0JkSFdOL3Thnh2ZL6YNGlkmIbte_gxSEFOOM"></script> <script src="/js/tour-detail.js?v=miI_cHRS9adsmyuKZnlK1IxPo_EMRgIWwaqs8TBdkko"></script> 
+</body></html>

@@ -1,0 +1,11 @@
+@if (User.Identity?.IsAuthenticated == true)
+{
+    <details class="account-menu"><summary><i data-lucide="circle-user-round"></i><span class="account-name">@User.Identity.Name</span><i data-lucide="chevron-down"></i></summary><div class="account-dropdown"><strong>@User.Identity.Name</strong><span>@User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value</span>
+        @if (User.IsInRole("ADMIN")) { <a href="/admin/tours"><i data-lucide="layout-dashboard"></i> Trang quản trị</a> }
+        <form method="post" action="/logout">@Html.AntiForgeryToken()<button type="submit"><i data-lucide="log-out"></i> Đăng xuất</button></form>
+    </div></details>
+}
+else
+{
+    <a class="user-login" href="/login">Đăng nhập</a><a class="user-register" href="/register">Đăng ký</a>
+}

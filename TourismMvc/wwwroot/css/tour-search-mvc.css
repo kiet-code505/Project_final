@@ -1,0 +1,57 @@
+.tour-search .pageWrapper { font-family: Inter, 'Be Vietnam Pro', sans-serif; }
+.tour-search fieldset { border: 0; margin: 0; padding: 0; }
+.tour-search .heroSection { overflow: visible; }
+.tour-search .searchInputGroup { min-width: 0; }
+.tour-search .searchInput { min-width: 0; }
+.tour-search .filterGroup { min-width: min(220px, 100%); }
+.tour-search .filterOption { display: inline-flex; align-items: center; gap: 6px; }
+.tour-search .filterOption input { accent-color: #1a6ef8; }
+.tour-search .filterOption:has(input:checked) { background: #1a6ef8; border-color: #1a6ef8; color: #fff; }
+.tour-search .filterGroupLabel svg, .tour-search .filterToggle svg, .tour-search .filterChip svg { width: 15px; height: 15px; }
+.tour-search .start-location-label { margin-top: 16px; }
+.tour-search .location-select { width: 100%; border: 1px solid #e5e7eb; border-radius: 8px; padding: 10px; background: white; color: #1a1a2e; }
+.tour-search .filter-actions { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.tour-search .clear-filters { color: #64748b; font-size: 13px; text-decoration: underline; }
+.tour-search .search-result-tools, .tour-search .search-result-tools form { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.tour-search .sort-select { border: 1px solid #e5e7eb; border-radius: 8px; padding: 8px; color: #334155; background: white; font-size: 13px; }
+.tour-search .sort-submit { border: 0; border-radius: 8px; padding: 8px 12px; background: #1a6ef8; color: white; font-size: 13px; }
+.tour-search .tourCardBody { display: flex; flex-direction: column; flex: 1; }
+.tour-search .tourCard { display: flex; flex-direction: column; min-width: 0; }
+.tour-search .tourCardTitle { min-height: 46px; }
+.tour-search .tourCardMeta { flex-wrap: wrap; gap: 6px 14px; }
+.tour-search .tourCardMeta svg { width: 13px; height: 13px; }
+.tour-search .tourCardFooter { margin-top: auto; gap: 8px; }
+.tour-search .tourCardFooter svg { width: 14px; height: 14px; }
+.tour-search .search-departure { display: flex; gap: 6px; align-items: center; font-size: 12px; color: #64748b; margin-bottom: 12px; }
+.tour-search .search-departure svg { width: 14px; height: 14px; color: #1a6ef8; }
+.tour-search .emptyIcon svg { width: 64px; height: 64px; color: #94a3b8; }
+.tour-search .emptyState h2 { font-size: 24px; margin: 0 0 8px; }
+.tour-search .search-pagination { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-top: 32px; flex-wrap: wrap; }
+.tour-search .search-pagination nav { display: flex; gap: 8px; }
+.tour-search .search-pagination nav a { display: grid; place-items: center; min-width: 36px; min-height: 36px; border: 1px solid #e5e7eb; border-radius: 8px; background: white; color: #64748b; }
+.tour-search .search-pagination nav .selected { color: white; border-color: #1a6ef8; background: #1a6ef8; }
+.tour-search .search-validation.validation-summary-errors { color: #be123c; margin-bottom: 16px; }
+.tour-search .priceValue { white-space: nowrap; }
+.tour-search .resetBtn { display: inline-block; }
+.tour-search .detailBtn { white-space: nowrap; }
+@media (max-width: 600px) {
+    .tour-search .heroSection { height: 340px; padding-top: 72px; }
+    .tour-search .heroTitle { font-size: 28px; }
+    .tour-search .heroSub { font-size: 14px; }
+    .tour-search .heroContent { padding: 0 16px; }
+    .tour-search .searchBar { padding-left: 14px; }
+    .tour-search .searchBtn { padding: 12px 14px; font-size: 13px; gap: 5px; }
+    .tour-search .searchInput { font-size: 13px; }
+    .tour-search .searchInputGroup { gap: 6px; }
+    .tour-search .searchInputGroup svg, .tour-search .searchBtn svg { width: 16px; height: 16px; }
+    .tour-search .container { padding: 0 16px; }
+    .tour-search .tourGrid { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+    .tour-search .filterPanel { padding: 16px; gap: 18px; }
+    .tour-search .filterGroup { flex-basis: 100%; }
+    .tour-search .filterOption { font-size: 13px; padding: 7px 12px; }
+    .tour-search .search-result-tools { justify-content: space-between; width: 100%; gap: 10px; }
+    .tour-search .search-result-tools form { gap: 6px; }
+    .tour-search .sort-submit { padding: 8px; }
+    .tour-search .search-pagination { justify-content: center; }
+    .tour-search .search-pagination .resultCount { width: 100%; text-align: center; }
+}
